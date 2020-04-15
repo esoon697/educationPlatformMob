@@ -11,8 +11,15 @@
     "build": "node build/build.js"
   },
   "dependencies": {
+    "fastclick": "^1.0.6",
+    "lib-flexible": "^0.3.2",
+    "mint-ui": "^2.2.13",
+    "postcss-pxtorem": "^5.1.1",
+    "swiper": "^5.3.7",
     "vue": "^2.5.2",
-    "vue-router": "^3.0.1"
+    "vue-awesome-swiper": "^4.1.0",
+    "vue-router": "^3.0.1",
+    "vuex": "^3.1.3"
   },
   "devDependencies": {
     "autoprefixer": "^7.1.2",
@@ -20,10 +27,13 @@
     "babel-eslint": "^8.2.1",
     "babel-helper-vue-jsx-merge-props": "^2.0.3",
     "babel-loader": "^7.1.1",
+    "babel-plugin-component": "^1.1.1",
     "babel-plugin-syntax-jsx": "^6.18.0",
     "babel-plugin-transform-runtime": "^6.22.0",
     "babel-plugin-transform-vue-jsx": "^3.5.0",
+    "babel-polyfill": "^6.26.0",
     "babel-preset-env": "^1.3.2",
+    "babel-preset-es2015": "^6.24.1",
     "babel-preset-stage-2": "^6.22.0",
     "chalk": "^2.0.1",
     "copy-webpack-plugin": "^4.0.1",
@@ -41,6 +51,8 @@
     "file-loader": "^1.1.4",
     "friendly-errors-webpack-plugin": "^1.6.1",
     "html-webpack-plugin": "^2.30.1",
+    "less": "^3.11.1",
+    "less-loader": "^5.0.0",
     "node-notifier": "^5.1.2",
     "optimize-css-assets-webpack-plugin": "^3.2.0",
     "ora": "^1.2.0",
@@ -69,5 +81,19 @@
     "> 1%",
     "last 2 versions",
     "not ie <= 8"
-  ]
+  ],
+  "postcss": {
+    "plugins": {
+      "autoprefixer": {},
+      "postcss-pxtorem": {
+        "rootValue": 37.5,
+        "propList": [
+          "*"
+        ],
+        "selectorBlackList": [
+          "van-"
+        ]
+      }
+    }
+  }
 }
