@@ -81,17 +81,6 @@ export default {
     swiper: directive
   },
   props: {},
-  // data () {
-  //   return {
-  //     selected: '1',
-  //     swiperOptions: {
-  //       pagination: {
-  //         el: '.swiper-pagination'
-  //       }
-  //       // Some Swiper option/callback...
-  //     }
-  //   }
-  // },
   data () {
     return {
       selected: '1',
@@ -108,7 +97,7 @@ export default {
         direction: 'vertical',
         // 自动切换图配置
         autoplay: {
-          delay: 5000,
+          delay: 3000,
           stopOnLastSlide: true,
           disableOnInteraction: true
         },
@@ -152,8 +141,8 @@ export default {
 .nav-main{
   background-color: #fff;
   .navBar-box{
-    width: 50%;
-    margin-bottom: 12px;
+    // width: 50%;
+    margin-bottom: 10px;
     // margin-bottom: 3%;
     .mint-navbar .mint-tab-item{
       .mint-tab-item-label{
@@ -167,10 +156,14 @@ export default {
         font-weight:bold!important;
       }
     }
+    @media screen and (min-width: 1200px){
+      width: 50%;
+    }
   }
   .swiper-box{
     width: 100%;
     height: 200px;
+    // height: 15%;
     background-color: #fff;
     padding: 4%;
     box-sizing: border-box;
@@ -178,6 +171,9 @@ export default {
     border-bottom: 1px solid rgba(227,229,230,1);
     @media screen and (min-width: 1200px){
       height: 360px;
+    }
+    @media screen and (min-width: 1460px){
+      height: 500px;
     }
     .swiper{
       width: 100%;
@@ -224,6 +220,9 @@ export default {
   .content-outer-box{
     padding: 4% 4% 0 4%;
     background-color: #F2F4F5;
+    &:last-child{
+      padding-bottom: 4%;
+    }
     .content-box{
       width: 100%;
       background-color: #fff;

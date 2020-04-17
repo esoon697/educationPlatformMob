@@ -1,11 +1,5 @@
 <template>
   <div class="header-main">
-    <!-- <mt-header title="首页">
-      <router-link to="/" slot="left">
-        <mt-button icon="back"></mt-button>
-      </router-link>
-      <mt-button icon="more" slot="right"></mt-button>
-    </mt-header> -->
     <slot name="left"></slot>
     <span class="centerPart ellipsis" :title="title">{{title}}</span>
     <slot name="right"></slot>
