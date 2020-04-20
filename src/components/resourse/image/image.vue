@@ -1,13 +1,13 @@
 <template>
   <div class="image-main">
-    image
+    <img :src="url" alt="">
   </div>
 </template>
 
 <script>
 export default {
   components: {},
-  props: {},
+  props: ['url'],
   data () {
     return {
     }

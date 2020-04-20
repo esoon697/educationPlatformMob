@@ -1,7 +1,7 @@
 <template>
   <div class="video-box" @click.prevent="videoPlay">
-    <video id="video" class="video-player" controls loop>
-      <source src="http://182.148.48.236:54321/source/video_audio/first.mp4" type="video/mp4" />
+    <video :id="'video'+index" class="video-player" controls loop>
+      <source :src="url" type="video/mp4" />
     </video>
     <div class="videoplaybtn" v-show="!isPlay">
       <img :src="base+'courses_video_play.png'"/>
@@ -13,19 +13,24 @@
 <script>
 export default {
   components: {},
-  props: {},
+  props: ['url', 'index'],
   data () {
     return {
-      isPlay: false
+      isPlay: false,
+      n: 0
     }
   },
-  created () {},
-  mounted () {},
+  created () {
+  },
+  mounted () {
+  },
   computed: {},
   methods: {
     videoPlay () {
-      let player = document.querySelector('#video')
-      console.log(player.currentSrc)
+      let index = this.index
+      // let player = document.querySelectorAll('.video-player')[index]
+      let player = document.querySelector('#video' + index)
+      console.log(player)
       if (!player.currentSrc) {
         this.$error('暂无资源，敬请期待！')
         return
@@ -35,9 +40,11 @@ export default {
         return
       }
       if (player.paused) {
+        // console.log(player.paused)
         player.play()
         this.isPlay = true
       } else {
+        // console.log(player.paused)
         player.pause()
         this.isPlay = false
       }
