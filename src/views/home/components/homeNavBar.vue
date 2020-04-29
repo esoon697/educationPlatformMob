@@ -1,6 +1,6 @@
 <template>
   <div class="nav-main">
-    <div class="navBar-box">
+    <div class="homeNavBar-box">
       <mt-navbar v-model="selected">
         <mt-tab-item id="1">个人中心</mt-tab-item>
         <mt-tab-item id="2">在线帮助</mt-tab-item>
@@ -11,10 +11,12 @@
       <mt-tab-container-item id="1">
         <div class="swiper-box">
           <div class="swiper">
-            <mt-swipe :auto="0">
-              <mt-swipe-item>1</mt-swipe-item>
-              <mt-swipe-item>2</mt-swipe-item>
-              <mt-swipe-item>3</mt-swipe-item>
+            <mt-swipe :auto="5000" :speed="800">
+              <mt-swipe-item v-for="(banner, index) in banners" :key="index">
+                <img class="home-banner" :src="banner.url" alt="">
+              </mt-swipe-item>
+              <!-- <mt-swipe-item>2</mt-swipe-item>
+              <mt-swipe-item>3</mt-swipe-item> -->
             </mt-swipe>
           </div>
         </div>
@@ -22,20 +24,8 @@
           <img class="notice-left" :src="base+'notice_left.png'">
           <div class="notice-mid">
             <swiper ref="noticeSwiper" :options="swiperOptions">
-              <swiper-slide>
-                <span class="notice">hello</span>
-              </swiper-slide>
-              <swiper-slide>
-                <span class="notice">hello1</span>
-              </swiper-slide>
-              <swiper-slide>
-                <span class="notice">hello2</span>
-              </swiper-slide>
-              <swiper-slide>
-                <span class="notice">hello3</span>
-              </swiper-slide>
-              <swiper-slide>
-                <span class="notice">hello4</span>
+              <swiper-slide v-for="n in 5" :key="n">
+                <span class="notice" @click="showDetails">{{'hello噢噢噢噢噢噢噢噢哦哦哦哦哦哦哦哦哦哦哦哦哦哦哦啊'+n}}</span>
               </swiper-slide>
               <!-- 滚动条 -->
               <!-- <div class="swiper-scrollbar"></div> -->
@@ -118,12 +108,26 @@ export default {
         observer: true,
         // 修改swiper的父元素时，自动初始化swiper
         observeParents: true
-      }
+      },
+      banners: [
+        {
+          id: 1,
+          url: this.base + 'home-banner1.jpg'
+        },
+        {
+          id: 2,
+          url: this.base + 'home-banner2.jpg'
+        },
+        {
+          id: 3,
+          url: this.base + 'home-banner3.jpg'
+        }
+      ]
     }
   },
   created () {},
   mounted () {
-    console.log('Current Swiper instance object', this.swiper)
+    // console.log('Current Swiper instance object', this.swiper)
     // this.$nextTick(() => {
     //   this.swiper.slideTo(3, 1000, false)
     // })
@@ -133,18 +137,33 @@ export default {
       return this.$refs.noticeSwiper.$swiper
     }
   },
-  methods: {},
+  methods: {
+    showDetails (event) {
+      let message = event.target.innerHTML
+      console.log(event.target.innerHTML)
+      this.$MessageBox({
+        title: '通知详情',
+        message: message,
+        showCancelButton: true,
+        // confirmButtonText: '',
+        cancelButtonText: '',
+        confirmButtonClass: 'confirm-button',
+        cancelButtonClass: 'iconfont icon-close'
+      })
+    }
+  },
   watch: {}
 }
 </script>
 <style lang="less">
 .nav-main{
   background-color: #fff;
-  .navBar-box{
-    // width: 50%;
+  .homeNavBar-box{
     margin-bottom: 10px;
     // margin-bottom: 3%;
     .mint-navbar .mint-tab-item{
+      display: flex;
+      justify-content: center;
       .mint-tab-item-label{
         font-size:15px!important;
         font-family:Alibaba PuHuiTi!important;
@@ -152,8 +171,21 @@ export default {
       }
     }
     .is-selected{
+      border-bottom: none!important;
       .mint-tab-item-label{
         font-weight:bold!important;
+        position: relative;
+        &::after{
+          content: '';
+          display: block;
+          width: 80%;
+          height: 3px;
+          border-radius: 1.5px;
+          background-color: #0089FF;
+          position: absolute;
+          bottom: -85%;
+          left: 15%;
+        }
       }
     }
     @media screen and (min-width: 1200px){
@@ -180,35 +212,50 @@ export default {
       height: 100%;
       background-color: #aaa;
       border-radius: 10px;
+      .home-banner{
+        width: 100%;
+      }
     }
   }
   .notice-box{
+    width: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100%;
     height: 44px;
     // overflow: hidden;
     padding: 0 4%;
+    box-sizing: border-box;
     .notice-left{
+      // flex: 1;
       width: 59.5px;
       height: 14px;
     }
     .notice-mid{
       flex: 1;
+      // max-width: 75%;
       height: 100%;
       display: flex;
       justify-content: center;
-      // .swiper-slide{
-      //   height: 44px!important;
-      // }
+      overflow: hidden;
+      .swiper-container{
+        width: 100%;
+      }
       .notice{
+        display: inline-block;
+        width: 100%;
         font-size: 18px;
         font-family:Alibaba PuHuiTi;
         font-weight:bold;
         color:rgba(83,93,103,1);
         line-height: 44px;
         text-align: center;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        padding: 0 10px;
+        box-sizing: border-box;
+        cursor: pointer;
       }
     }
     .notice-right{
@@ -278,5 +325,16 @@ export default {
       }
     }
   }
+}
+.icon-close{
+  position: absolute;
+  top: 0;
+  right: 0;
+  color: red;
+  font-size: 32px;
+  width: auto;
+}
+.confirm-button{
+  font-size: 14px;
 }
 </style>

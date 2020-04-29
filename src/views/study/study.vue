@@ -14,7 +14,7 @@
         <ContentContainner v-for="m in 3" :key="m" :contentTitle="'一年级9月  入学教育'">
           <div slot="content" class="menu-box">
             <ul>
-              <li class="menu-item" v-for="n in 6" :key="n"> 1—9—1 开启新生活—新生入学导航</li>
+              <li class="menu-item" v-for="n in 6" :key="n" @click="goStudy(m, n)"> 1—9—1 开启新生活—新生入学导航</li>
             </ul>
           </div>
         </ContentContainner>
@@ -47,7 +47,11 @@ export default {
   created () {},
   mounted () {},
   computed: {},
-  methods: {},
+  methods: {
+    goStudy (m, n) {
+      console.log(m, n)
+    }
+  },
   watch: {}
 }
 </script>
@@ -59,11 +63,6 @@ export default {
   .mint-navbar .mint-tab-item{
     display: flex;
     justify-content: center;
-    .mint-tab-item-label{
-      // font-size:15px!important;
-      // font-family:Alibaba PuHuiTi!important;
-      // color:rgba(17,31,44,1);
-    }
   }
   .is-selected{
     border-bottom: none!important;
@@ -102,6 +101,10 @@ export default {
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
+    &:active{
+      background-color: #eee;
+      opacity: .8;
+    }
   }
   .isSelect{
     font-size: 14px;

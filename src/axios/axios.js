@@ -3,9 +3,9 @@ import axios from 'axios'
 // import qs from 'qs'
 import router from '../router'
 import Vue from 'vue'
-import { Message } from 'ant-design-vue'
-Vue.use(Message)
-Vue.prototype.$message = Message
+// import { Message } from 'ant-design-vue'
+// Vue.use(Message)
+// Vue.prototype.$message = Message
 
 let config = {
   timeout: 60 * 1000 // Timeout
@@ -15,9 +15,12 @@ let config = {
 if (process.env.NODE_ENV == 'development') {
   // dev开发环境
   config.baseURL = 'api'
+  // config.baseURL = 'http://10.10.10.211:7004'
+  // config.baseURL = 'http://10.10.10.240:8001'
 } else if (process.env.NODE_ENV == 'production') {
   // build生产环境
   // config.baseURL = 'xxx'
+  config.baseURL = 'http://10.10.10.240:8001'
 }
 
 const _axios = axios.create(config)
@@ -49,11 +52,14 @@ let self = Vue.prototype
 // Add a response interceptor
 _axios.interceptors.response.use(
   function (response) {
-    if (response.data.code == 200) {
+    if (response.status == 200) {
       // 接口状态正常
       return Promise.resolve(response)
-    } else if (response.data.code == 402) {
-      self.$message.warning('登录已过期，请重新登录')
+    } else if (response.status == 402) {
+      self.$Toast({
+        message: '登录已过期，请重新登录',
+        iconClass: 'iconfont icon-yellow-warning'
+      })
       localStorage.removeItem('token')
       router.replace(
         {
@@ -63,12 +69,18 @@ _axios.interceptors.response.use(
       )
     } else {
       // 接口状态异常
-      self.$message.error(response.data.message)
+      self.$Toast({
+        message: response.data.message + '接口状态异常',
+        iconClass: 'iconfont icon-red-error'
+      })
       return Promise.resolve(response)
     }
   },
   function (err) {
-    self.$error(err.message)
+    self.$Toast({
+      message: err,
+      iconClass: 'iconfont icon-red-error'
+    })
     return Promise.reject(err)
   }
 )

@@ -23,7 +23,7 @@
           <div class="content-title">主题班会课（线上课程资源）</div>
           <div class="content-inner-box">
             <div class="content-resources">
-              <div class="video-box" @click.prevent="videoPlay">
+              <!-- <div class="video-box" @click.prevent="videoPlay">
                 <video id="video" class="video-player" controls loop>
                   <source src="http://182.148.48.236:54321/source/video_audio/first.mp4" type="video/mp4" />
                 </video>
@@ -31,6 +31,9 @@
                   <img :src="base+'courses_video_play.png'"/>
                 </div>
                 <div class="play-block"></div>
+              </div> -->
+              <div class="video-box">
+                <div id='previewArea'></div>
               </div>
               <p class="course-title">班主任主题班会课（二年级）</p>
               <div class="course-intro">《中职班主任主题班会课》共计68学时，按照中职学校1-5学期每个月的班主任重点工作进行编排，选择了68个贴合中职学生学习、生活</div>
@@ -70,6 +73,7 @@
   </div>
 </template>
 
+<script src='//player.polyv.net/script/polyvplayer.min.js'></script>
 <script>
 export default {
   components: {},
@@ -82,13 +86,24 @@ export default {
       isPlay: false
     }
   },
-  created () {},
+  created () {
+    this.$nextTick(() => {
+      this.init()
+    })
+  },
   mounted () {
     let navBox = document.querySelector('.nav-box')
     this.navBoxWidth = navBox.clientWidth + 'px'
   },
   computed: {},
   methods: {
+    init () {
+      this.plPlayer = polyvObject('#previewArea').previewPlayer({
+        'width': '100%',
+        'height': '338',
+        'vid': 'jl91nkk5m5027lc431cln7kc365nn2p37_l'
+      })
+    },
     getActive (n) {
       if (this.isActive === n) {
         this.isActive = ''
@@ -145,7 +160,7 @@ export default {
     display: flex;
     flex-direction: column;
     background-color: #fff;
-    z-index: 3;
+    z-index: 1000;
     // padding: 4%;
     .nav-bar{
       position: relative;
@@ -155,14 +170,12 @@ export default {
       align-items: center;
       background-color: #fff;
       .nav-item{
-        height: 100%;
         flex: 1;
         display: flex;
         justify-content: center;
         align-items: center;
         cursor: pointer;
         .nav-menu{
-          // width: 100vm;
           top: 47.5px;
           left: 0;
           position: absolute;
@@ -383,13 +396,13 @@ export default {
     position: absolute;
     background:rgba(0,0,0,1);
     opacity:0.5;
-    z-index: 2;
+    z-index: 999;
   }
   .fade-menu-enter-active{
     transition: all .5s
   }
   .fade-menu-enter{
-    transform: translateY(-100%);
+    transform: translateY(-50%);
     opacity: 0;
   }
   .fade-bg-enter-active{

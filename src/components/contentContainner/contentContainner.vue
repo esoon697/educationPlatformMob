@@ -3,11 +3,6 @@
     <div class="content-box">
       <div class="content-title">{{contentTitle}}</div>
       <div class="content-inner-box">
-        <!-- <div class="content-card" v-for="n in 6" :key="n">
-          <img class="card-top" :src="base+'card_eg.jpg'" alt="">
-          <p class="card-mid">主题班会课（线上课程资源）</p>
-          <div class="card-bottom">68学时</div>
-        </div> -->
         <slot name="content"></slot>
       </div>
     </div>

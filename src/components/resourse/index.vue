@@ -1,35 +1,35 @@
 <template>
   <div class="resourse-main">
-    <swiper ref="resourseSwiper" :options="swiperOptions">
+    <i class="iconfont icon-xingzhuang"></i>
+    <swiper ref="resourseSwiper" :options="swiperOptions" @slideChangeTransitionEnd="slideChangeTransitionEnd">
       <swiper-slide v-for="(resourse, index) in resourses" :key="index">
+        <!-- 图片资源组件 -->
         <ImageEl v-if="resourse.type==0" :url='resourse.url'/>
+        <!-- 视频资源组件 -->
         <Video v-if="resourse.type==1" :url='resourse.url' :index='index'/>
-        <Task v-if="resourse.type==2" :url='resourse.url'/>
+        <!-- 互动资源组件 -->
+        <Task v-if="resourse.type==2" :url='resourse.url' :taskType="resourse.taskType" :index="index"/>
       </swiper-slide>
-      <!-- <swiper-slide>
-        <Image v-if="courrentType==0"/>
-        <Video v-if="courrentType==1"/>
-        <Task v-if="courrentType==2"/>
-      </swiper-slide>
-      <swiper-slide>
-        <Image v-if="courrentType==0"/>
-        <Video v-if="courrentType==1"/>
-        <Task v-if="courrentType==2"/>
-      </swiper-slide> -->
       <!-- 滚动条 -->
-      <!-- <div class="swiper-scrollbar"></div> -->
-      <div class="swiper-pagination" slot="pagination"></div>
-      <!-- 上一项 -->
-      <div class="swiper-button-prev" slot="button-prev"></div>
-      <!-- 下一项 -->
-      <div class="swiper-button-next" slot="button-next">
-        <!-- <img v-show="isLast" src="http://182.148.48.236:54321/source/educationPlatformMob/tabBar_cion1.png"> -->
-      </div>
-      <div class="nextSection" v-if="isLast"></div>
-    </swiper>
-      <!-- 标页码 -->
+      <div class="swiper-scrollbar" slot="scrollbar"></div>
       <!-- <div class="swiper-pagination" slot="pagination"></div> -->
-      <!-- <div class="nextSection" v-if="activeIndex===resourses.length"></div> -->
+    </swiper>
+    <!-- 标页码 -->
+    <!-- <div class="swiper-pagination"></div> -->
+    <!-- 上一项 -->
+    <!-- <div class="swiper-button-prev" slot="button-prev"></div> -->
+    <!-- <div class="swiper-button-prev"></div> -->
+    <!-- 下一项 -->
+    <!-- <div class="swiper-button-next" slot="button-next"></div> -->
+    <!-- <div class="swiper-button-next"></div> -->
+    <div class="btn-group">
+      <div class="prev-btn" @click="prev">上一个</div>
+      <div class="next-btn" @click="next">下一个</div>
+    </div>
+    <!-- <transition name="fade-bg">
+      <div v-show="isActive" class="swiper-bg" @click="getActive('')">
+      </div>
+    </transition> -->
   </div>
 </template>
 
@@ -37,6 +37,7 @@
 import ImageEl from '../resourse/image/image'
 import Video from '../resourse/video/video'
 import Task from '../resourse/task/task'
+import { mapState } from 'vuex'
 // var active = 0
 export default {
   components: {ImageEl, Video, Task},
@@ -46,9 +47,10 @@ export default {
     return {
       courrentType: 1,
       isLast: false,
+      // formData: [],
       resourses: [
         {
-          url: this.base + 'courses-avatar1.jpg',
+          url: this.base + 'home-banner1.jpg',
           type: 0
         },
         {
@@ -57,15 +59,27 @@ export default {
           type: 1
         },
         {
+          url: this.base + 'home-banner2.jpg',
+          type: 0
+        },
+        {
+          type: 2,
+          taskType: 0
+        },
+        {
           url: 'http://182.148.48.236:54321/source/video_audio/first.mp4',
           type: 1
         },
         {
-          url: this.base + 'courses-avatar2.jpg',
-          type: 0
+          type: 2,
+          taskType: 1
         },
         {
-          url: this.base + 'courses-avatar3.jpg',
+          type: 2,
+          taskType: 0
+        },
+        {
+          url: this.base + 'home-banner3.jpg',
           type: 0
         }
       ],
@@ -75,6 +89,12 @@ export default {
         pagination: {
           el: '.swiper-pagination',
           clickable: true
+        },
+        // 滚动条配置
+        scrollbar: {
+          el: '.swiper-scrollbar',
+          hide: true,
+          draggable: true
         },
         // 设定初始化时slide的索引
         initialSlide: 0,
@@ -87,30 +107,27 @@ export default {
         //   disableOnInteraction: true
         // },
         // 箭头配置
-        navigation: {
-          nextEl: '.swiper-button-next',
-          prevEl: '.swiper-button-prev',
-          hideOnClick: true,
-          disabledClass: 'my-button-disabled'
-        },
+        // navigation: {
+        //   nextEl: '.swiper-button-next',
+        //   prevEl: '.swiper-button-prev',
+        //   hideOnClick: true,
+        //   disabledClass: 'my-button-disabled'
+        // },
         // 滑到最后一个隐藏前进按钮
-        on: {
-          slideChangeTransitionEnd: function () {
-            if (this.isEnd) {
-              console.log(this.navigation)
-              console.log(this.navigation.$nextEl)
-              // this.navigation.$nextEl.removeClass('swiper-button-next')
-              // this.navigation.$prevEl.removeClass('swiper-button-prev')
-              // this.navigation.$nextEl.css('background', 'url("http://182.148.48.236:54321/source/educationPlatformMob/tabBar_cion1.png") no-repeat')
-              // this.navigation.$nextEl.append('<img class="nextSection" src="http://182.148.48.236:54321/source/educationPlatformMob/tabBar_cion1.png" @click="nextSection">')
-              // let nextSection = document.querySelector('.nextSection')
-              // nextSection.addEventListener('on', nextSection, false)
-              // active = 1
-            } else {
-              this.navigation.$nextEl.css('display', 'block')
-            }
-          }
-        },
+        // on: {
+        //   slideChangeTransitionEnd: function () {
+        //     if (this.isEnd) {
+        //       console.log(this.navigation)
+        //       console.log(this.navigation.$nextEl)
+        //       // this.navigation.$nextEl.removeClass('swiper-button-next')
+        //       // this.navigation.$prevEl.removeClass('swiper-button-prev')
+        //     } else {
+        //       this.navigation.$nextEl.css('display', 'block')
+        //     }
+        //   }
+        // },
+        // 自适应内容高度
+        autoHeight: true,
         // 环状轮播
         // loop: true,
         // loopedSlides: 3,
@@ -128,45 +145,113 @@ export default {
   },
   created () {},
   mounted () {
-    // this.swiper.navigation.update()
-    // console.log(this.isLast)
-    console.log(this.swiper)
+    this.init()
   },
   computed: {
+    // 获取swiper对象
     swiper () {
       return this.$refs.resourseSwiper.$swiper
     },
-    activeIndex () {
-      return this.$refs.resourseSwiper.$swiper.activeIndex
-    }
+    ...mapState(['formData']) // state中formData对象
   },
   methods: {
-    nextSection () {
-      alert('nextSection')
+    // 初始化页面
+    init () {
+      this.swiper.scrollbar.$dragEl.css('background', '#0089FF')
+      // this.formData = this.storageGet('formData')
+    },
+    // 每页轮播切换结束时
+    slideChangeTransitionEnd () {
+      if (this.swiper.activeIndex === this.resourses.length - 1) {
+        this.isLast = true
+        console.log('isLast', this.isLast)
+      } else {
+        this.isLast = false
+      }
+    },
+    // 上一页
+    prev () {
+      this.swiper.slidePrev()
+    },
+    // 下一页
+    next () {
+      // 接口调用
+      this.swiper.slideNext()
+      if (this.isLast) {
+        this.$MessageBox.confirm('确定执行此操作?').then(action => {
+          this.$Toast({
+            message: '登录已过期，请重新登录',
+            iconClass: 'iconfont icon-yellow-warning',
+            duration: 3000
+          })
+          console.log('formData', this.formData)
+        }).catch(error => {
+          console.log(error)
+        })
+      }
     }
   }
 }
 </script>
 <style lang="less" scoped>
-.my-button-disabled{
-  display:none;
-}
-.swiper-button-next{
-  outline: none;
-}
-.swiper-button-prev{
-  outline: none;
-}
-.swiper-button-hidden{
-  opacity: 0;
-}
-.nextSection{
-  position: absolute;
-  top: 1%;
-  left: 1%;
-  // transform: translate(-50%, -50%);
-  // width: 45px;
-  // height: 45px;
-  // background: url(http://182.148.48.236:54321/source/educationPlatformMob/tabBar_cion1.png) no-repeat;
+.resourse-main{
+  position: relative;
+  // .swiper-wrapper{
+  //   width: 100%;
+  //   height: 100%;
+  // }
+  .my-button-disabled{
+    display:none;
+  }
+  .swiper-button-next{
+    outline: none;
+  }
+  .swiper-button-prev{
+    outline: none;
+  }
+  .swiper-button-hidden{
+    opacity: 0;
+  }
+  .btn-group{
+    display: flex;
+    justify-content: center;
+    padding: 2% 0;
+    border-bottom: 1px solid #F2F4F5;
+    .prev-btn, .next-btn{
+      padding: 8px 15px;
+      background-color: #aaa;
+      border-radius: 3px;
+      cursor: pointer;
+      &:active{
+        background-color: #aaa;
+        opacity: .8;
+      }
+    }
+    .prev-btn{
+      background-color: #EFEFEF;
+      color: #7D848B;
+      margin-right: 5%;
+    }
+    .next-btn{
+      background-color: #0089FF;
+      color: #FFFFFF;
+    }
+  }
+  .swiper-bg{
+    width: 100%;
+    height: 100vh;
+    // height: calc(100vh-48.5px);
+    position: absolute;
+    background:rgba(0,0,0,1);
+    opacity:0.5;
+    z-index: 2;
+  }
+  .fade-bg-enter-active{
+    transition: all .5s
+  }
+  .fade-bg-enter{
+    // transform: translateY(-100%);
+    opacity: 0;
+  }
 }
 </style>

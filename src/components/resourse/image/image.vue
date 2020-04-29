@@ -20,4 +20,12 @@ export default {
 }
 </script>
 <style lang="less" scoped>
+.image-main{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  img{
+    width: 100%;
+  }
+}
 </style>

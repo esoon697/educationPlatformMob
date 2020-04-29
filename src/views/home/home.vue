@@ -6,26 +6,36 @@
       </span>
       <span class="rightPart" slot="right">登录注册</span>
     </Header>
-    <NavBar/>
+    <HomeNavBar/>
   </div>
 </template>
 
 <script>
 import Header from '../../components/header/header'
-import NavBar from '../../components/navBar/navBar'
+import HomeNavBar from './components/homeNavBar'
 export default {
-  components: {Header, NavBar},
+  components: {Header, HomeNavBar},
   props: {},
   data () {
     return {
     }
   },
-  created () {},
+  created () {
+    // this.getEduInfo()
+  },
   mounted () {},
   computed: {},
   methods: {
     goBack () {
       console.log('back')
+    },
+    getEduInfo () {
+      this.$api.getEduInfo().then(res => {
+        console.log(res)
+        if (res.code == 200) {
+          console.log(res.data)
+        }
+      })
     }
   },
   watch: {}
