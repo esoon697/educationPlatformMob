@@ -2,15 +2,15 @@
   <div class="courses-main">
     <div class="nav-box">
       <div class="nav-bar">
-        <div class="nav-item" v-for="n in 4" :key="n" @click="getActive(n)">
-          <span class="nav-text" :class="isActive==n?'isActive':''">班主任</span>
-          <img :src="isActive==n?base+'courses_nav_icon_active.png':base+'courses_nav_icon.png'" alt="">
+        <div class="nav-item" v-for="coursesNav in coursesNavs" :key="coursesNav.navId" @click="getActive(coursesNav.navId)">
+          <span class="nav-text" :class="isActive==coursesNav.navId?'isActive':''">{{coursesNav.navName}}</span>
+          <img :src="isActive==coursesNav.navId?base+'courses_nav_icon_active.png':base+'courses_nav_icon.png'" alt="">
           <!-- 下拉菜单 -->
           <transition name="fade-menu">
-            <div class="nav-menu" v-show="isActive==n" :style="'width:'+navBoxWidth">
+            <div class="nav-menu" v-show="isActive==coursesNav.navId" :style="'width:'+navBoxWidth">
               <ul>
-                <li v-for="i in 6" :key="i" :class="isSelect==n+'-'+i?'isSelect':''" @click="getSelect(n, i)">
-                  <p>主题班会课（线上课程资源）</p>
+                <li v-for="course in coursesNav.courses" :key="course.courseId" :class="isSelect==coursesNav.navId+'-'+course.courseId?'isSelect':''" @click="getSelect(coursesNav.navId, course.courseId)">
+                  <p>{{course.courseName}}</p>
                 </li>
               </ul>
             </div>
@@ -80,6 +80,80 @@ export default {
   props: {},
   data () {
     return {
+      coursesNavs: [
+        {
+          navId: 1,
+          navName: '班主任',
+          courses: [
+            {
+              courseId: 1,
+              courseName: '主题班会课（线上课程资源）'
+            },
+            {
+              courseId: 2,
+              courseName: '班会拓展课（线上课程资源）'
+            },
+            {
+              courseId: 3,
+              courseName: '班主任实务工具包（辅助资源）'
+            },
+            {
+              courseId: 4,
+              courseName: '班主任职业能力构建与提升线下培训'
+            },
+            {
+              courseId: 5,
+              courseName: '班主任好管家（软件）'
+            },
+            {
+              courseId: 6,
+              courseName: '班主任每周一测（软件）'
+            }
+          ]
+        },
+        {
+          navId: 2,
+          navName: '中职素养',
+          courses: [
+            {
+              courseId: 1,
+              courseName: '中职素养（线上课程资源）'
+            },
+            {
+              courseId: 2,
+              courseName: '中职素养（线上课程资源）'
+            },
+          ]
+        },
+        {
+          navId: 3,
+          navName: '基础课程',
+          courses: [
+            {
+              courseId: 1,
+              courseName: '基础课程（线上课程资源）'
+            }
+          ]
+        },
+        {
+          navId: 4,
+          navName: '专家名师',
+          courses: [
+            {
+              courseId: 1,
+              courseName: '专家名师（线上课程资源）'
+            },
+            {
+              courseId: 2,
+              courseName: '专家名师（线上课程资源）'
+            },
+            {
+              courseId: 3,
+              courseName: '专家名师（线上课程资源）'
+            }
+          ]
+        },
+      ],
       isActive: '',
       isSelect: '1-1',
       navBoxWidth: '',
@@ -105,6 +179,7 @@ export default {
       })
     },
     getActive (n) {
+      console.log(n)
       if (this.isActive === n) {
         this.isActive = ''
       } else {

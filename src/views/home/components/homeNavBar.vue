@@ -11,7 +11,7 @@
       <mt-tab-container-item id="1">
         <div class="swiper-box">
           <div class="swiper">
-            <mt-swipe :auto="5000" :speed="800">
+            <mt-swipe :auto="3000" :speed="800">
               <mt-swipe-item v-for="(banner, index) in banners" :key="index">
                 <img class="home-banner" :src="banner.url" alt="">
               </mt-swipe-item>
@@ -25,7 +25,7 @@
           <div class="notice-mid">
             <swiper ref="noticeSwiper" :options="swiperOptions">
               <swiper-slide v-for="n in 5" :key="n">
-                <span class="notice" @click="showDetails">{{'hello噢噢噢噢噢噢噢噢哦哦哦哦哦哦哦哦哦哦哦哦哦哦哦啊'+n}}</span>
+                <span class="notice" @click="showDetails">{{'你好呀'+n}}</span>
               </swiper-slide>
               <!-- 滚动条 -->
               <!-- <div class="swiper-scrollbar"></div> -->
@@ -56,7 +56,9 @@
         </div>
       </mt-tab-container-item>
       <mt-tab-container-item id="2">
-        <mt-cell v-for="n in 4" :key="n" :title="'测试 ' + n" />
+        <div class="help-box">
+          敬请期待
+        </div>
       </mt-tab-container-item>
     </mt-tab-container>
   </div>
@@ -324,6 +326,14 @@ export default {
         }
       }
     }
+  }
+  .help-box{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 360px;
+    font-size: 24px;
+    color: #333;
   }
 }
 .icon-close{

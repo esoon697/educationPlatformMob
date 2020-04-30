@@ -1,20 +1,20 @@
 <template>
   <div class="home-main">
-    <Header :title='"首页"'>
+    <!-- <Header :title='"首页"'>
       <span class="leftPart" slot="left" @click="goBack()">
         <i class="iconfont icon-fanhui"></i>
       </span>
       <span class="rightPart" slot="right">登录注册</span>
-    </Header>
+    </Header> -->
     <HomeNavBar/>
   </div>
 </template>
 
 <script>
-import Header from '../../components/header/header'
+// import Header from '../../components/header/header'
 import HomeNavBar from './components/homeNavBar'
 export default {
-  components: {Header, HomeNavBar},
+  components: {HomeNavBar},
   props: {},
   data () {
     return {
