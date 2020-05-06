@@ -18,7 +18,7 @@ export default {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  padding-bottom: 50px;
+  padding-bottom: 55px;
 }
 .mint-toast-icon{
   font-size: 30px;

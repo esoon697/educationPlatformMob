@@ -14,8 +14,8 @@
         学习
       </mt-tab-item>
       <mt-tab-item id="/user" @click="gotoNav('/user')">
-        <img slot="icon" :src="selected=='/user'?base+'tabBar_cion3_active.png':base+'tabBar_cion3.png'">
-        学习
+        <img slot="icon" :src="selected=='/user'?base+'tabBar_cion4_active.png':base+'tabBar_cion4.png'">
+        我的
       </mt-tab-item>
     </mt-tabbar>
   </div>
@@ -67,7 +67,7 @@ export default {
   }
 }
 </script>
-<style lang="less" scoped>
+<style lang="less">
 .tabBar-main{
   // height: 50px;
   .tab-item{
@@ -81,6 +81,10 @@ export default {
   img{
     width: 20px;
     height: 20px;
+  }
+  .mint-tab-item-icon{
+    display: flex;
+    justify-content: center;
   }
 }
 </style>
