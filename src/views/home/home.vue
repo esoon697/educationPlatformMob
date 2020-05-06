@@ -1,48 +1,59 @@
 <template>
-  <div class="home-main">
-    <!-- <Header :title='"首页"'>
-      <span class="leftPart" slot="left" @click="goBack()">
-        <i class="iconfont icon-fanhui"></i>
-      </span>
-      <span class="rightPart" slot="right">登录注册</span>
-    </Header> -->
-    <HomeNavBar/>
+  <div class="user-main">
+    <div class="user-title">
+      <img class="left" src="" alt="">
+      <div class="right">
+        <p class="up">四川亚卓教育科技股份有限公司</p>
+        <p class="down">中职德育课程</p>
+      </div>
+    </div>
+    <div class="user-banner"></div>
+    <div class="btn-group"></div>
+    <div class="train-box"></div>
+    <div class="course-box"></div>
+    <div class="rank-box"></div>
   </div>
 </template>
 
 <script>
-// import Header from '../../components/header/header'
-import HomeNavBar from './components/homeNavBar'
 export default {
-  components: {HomeNavBar},
   props: {},
   data () {
     return {
     }
   },
   created () {
-    // this.getEduInfo()
   },
   mounted () {},
   computed: {},
   methods: {
-    goBack () {
-      console.log('back')
-    },
-    getEduInfo () {
-      this.$api.getEduInfo().then(res => {
-        console.log(res)
-        if (res.code == 200) {
-          console.log(res.data)
-        }
-      })
-    }
   },
   watch: {}
 }
 </script>
 <style lang="less" scoped>
-.home-main{
-  background:rgba(242,244,245,1);
+.user-main{
+  padding: 0 4%;
+  .user-title{
+    display: flex;
+    .left{}
+    .right{
+      display: flex;
+      flex-direction: column;
+      .up{
+        font-size:18px;
+        font-family:Alibaba PuHuiTi;
+        font-weight:bold;
+        color:rgba(25,31,37,1);
+      }
+      .down{
+        font-size:14px;
+        font-family:Alibaba PuHuiTi;
+        font-weight:400;
+        color:rgba(99,114,128,1);
+        line-height:26px;
+      }
+    }
+  }
 }
 </style>

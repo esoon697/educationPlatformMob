@@ -13,6 +13,10 @@
         <img slot="icon" :src="selected=='/study'?base+'tabBar_cion3_active.png':base+'tabBar_cion3.png'">
         学习
       </mt-tab-item>
+      <mt-tab-item id="/user" @click="gotoNav('/user')">
+        <img slot="icon" :src="selected=='/user'?base+'tabBar_cion3_active.png':base+'tabBar_cion3.png'">
+        学习
+      </mt-tab-item>
     </mt-tabbar>
   </div>
 </template>
@@ -54,6 +58,9 @@ export default {
           break
         case '/study':
           this.$router.push('/study')
+          break
+        case '/user':
+          this.$router.push('/user')
           break
       }
     }
