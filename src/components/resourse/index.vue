@@ -99,7 +99,7 @@ export default {
         // 设定初始化时slide的索引
         initialSlide: 0,
         // Slides的滑动方向，可设置水平(horizontal)或垂直(vertical)
-        direction: 'horizontal',
+        // direction: 'horizontal',
         // 自动切换图配置
         // autoplay: {
         //   delay: 3000,
@@ -127,7 +127,8 @@ export default {
         //   }
         // },
         // 自适应内容高度
-        autoHeight: true,
+        // autoHeight: true,
+        // height: window.innerHeight,
         // 环状轮播
         // loop: true,
         // loopedSlides: 3,

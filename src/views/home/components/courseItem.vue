@@ -50,7 +50,7 @@ export default {
       width: 50px;
       height: 18px;
       background:rgba(0,137,255,1);
-      border-radius:10px 0px 10px 0px;
+      border-radius:5px 0px 5px 0px;
       font-size:11px;
       font-family:Alibaba PuHuiTi;
       font-weight:400;

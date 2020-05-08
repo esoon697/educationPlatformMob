@@ -127,7 +127,9 @@ export default {
       ]
     }
   },
-  created () {},
+  created () {
+    this.init()
+  },
   mounted () {
     // console.log('Current Swiper instance object', this.swiper)
     // this.$nextTick(() => {
@@ -140,6 +142,17 @@ export default {
     }
   },
   methods: {
+    init () {
+      this.getEduInfo()
+    },
+    getEduInfo () {
+      this.$api.getEduInfo().then(res => {
+        console.log(res)
+        if (res.code == 200) {
+          console.log(res.data)
+        }
+      })
+    },
     showDetails (event) {
       let message = event.target.innerHTML
       console.log(event.target.innerHTML)
