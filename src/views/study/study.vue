@@ -11,7 +11,7 @@
       <!-- tab-container -->
       <mt-tab-container v-model="selected">
         <mt-tab-container-item id="1">
-          <ContentContainner v-for="m in 3" :key="m" :contentTitle="'一年级9月  入学教育'">
+          <!-- <ContentContainner v-for="m in 3" :key="m" :contentTitle="'一年级9月  入学教育'">
             <div slot="content" class="menu-box">
               <ul>
                 <li class="menu-item" v-for="n in 6" :key="n" @click="goStudy(m, n)"> 1—9—1 开启新生活—新生入学导航
@@ -27,10 +27,8 @@
                 </li>
               </ul>
             </div>
-            <!-- <div class="menu-box">
-              <p class="sub-list"></p>
-            </div> -->
-          </ContentContainner>
+          </ContentContainner> -->
+          <TreeMenu/>
         </mt-tab-container-item>
         <mt-tab-container-item id="2">
           <ContentContainner :contentTitle="'班主任主题班会课（二年级） '">
@@ -50,8 +48,9 @@
 import Resourse from '../../components/resourse/index'
 import MyVuePreview from '../../components/myVuePreview/myVuePreview'
 import ContentContainner from '../../components/contentContainner/contentContainner'
+import TreeMenu from '../../components/treeMenu/main'
 export default {
-  components: {Resourse, ContentContainner, MyVuePreview},
+  components: {Resourse, ContentContainner, MyVuePreview, TreeMenu},
   props: {},
   data () {
     return {

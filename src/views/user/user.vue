@@ -76,6 +76,7 @@ export default {
     padding: 20px 0;
     .user-avatar{
       width: 65px;
+      height: 65px;
       border-radius: 50%;
       margin-right: 11px;
     }

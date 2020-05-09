@@ -145,6 +145,7 @@ export default {
     padding: 16px 0;
     .left{
       width: 40px;
+      height: 40px;
       margin-right: 13px;
     }
     .right{

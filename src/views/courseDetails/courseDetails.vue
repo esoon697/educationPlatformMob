@@ -2,15 +2,15 @@
   <div class="courses-main">
     <div class="nav-box">
       <div class="nav-bar">
-        <div class="nav-item" v-for="coursesNav in coursesNavs" :key="coursesNav.navId" @click="getActive(coursesNav.navId)">
-          <span class="nav-text" :class="isActive==coursesNav.navId?'isActive':''">{{coursesNav.navName}}</span>
-          <img :src="isActive==coursesNav.navId?base+'courses_nav_icon_active.png':base+'courses_nav_icon.png'" alt="">
+        <div class="nav-item" v-for="(coursesNav, navId) in coursesNavs" :key="navId" @click="getActive(navId+1)">
+          <span class="nav-text" :class="isActive==navId+1?'isActive':''">{{coursesNav.courseTypeName}}</span>
+          <img :src="isActive==navId+1?base+'courses_nav_icon_active.png':base+'courses_nav_icon.png'" alt="">
           <!-- 下拉菜单 -->
           <transition name="fade-menu">
-            <div class="nav-menu" v-show="isActive==coursesNav.navId" :style="'width:'+navBoxWidth">
+            <div class="nav-menu" v-show="isActive==navId+1" :style="'width:'+navBoxWidth">
               <ul>
-                <li v-for="course in coursesNav.courses" :key="course.courseId" :class="isSelect==coursesNav.navId+'-'+course.courseId?'isSelect':''" @click="getSelect(coursesNav.navId, course.courseId)">
-                  <p>{{course.courseName}}</p>
+                <li v-for="course in coursesNav.courseEventList" :key="course.courEventId" :class="isSelect==navId+1+'-'+course.courEventId?'isSelect':''" @click="getSelect(navId+1, course.courEventId)">
+                  <p>{{course.openName}}</p>
                 </li>
               </ul>
             </div>
@@ -20,7 +20,7 @@
     </div>
     <div class="course-content-outer">
         <div class="content-box">
-          <div class="content-title">主题班会课（线上课程资源）</div>
+          <div class="content-title">{{detailsData.courTypeName}}</div>
           <div class="content-inner-box">
             <div class="content-resources">
               <!-- <div class="video-box" @click.prevent="videoPlay">
@@ -32,11 +32,17 @@
                 </div>
                 <div class="play-block"></div>
               </div> -->
-              <div class="video-box">
-                <div id='previewArea'></div>
+              <div v-if="detailsData.demonstrationUri" class="video-box">
+                <div v-if="detailsData.demonstrationUri.type !== 0" id='previewArea'></div>
+                <div v-else class="img-box">
+                  <img :src="detailsData.demonstrationUri.uri" alt="">
+                </div>
               </div>
-              <p class="course-title">班主任主题班会课（二年级）</p>
-              <div class="course-intro">《中职班主任主题班会课》共计68学时，按照中职学校1-5学期每个月的班主任重点工作进行编排，选择了68个贴合中职学生学习、生活</div>
+              <div class="go-study">
+                <a class="study-btn" href="javascript:;" @click="goStudy">开始学习</a>
+              </div>
+              <p class="course-title">{{detailsData.openName}}</p>
+              <div class="course-intro">{{detailsData.openDescription}}</div>
             </div>
             <div class="resources-load">
               <div class="lit-title">资源下载</div>
@@ -80,84 +86,13 @@ export default {
   props: {},
   data () {
     return {
-      coursesNavs: [
-        {
-          navId: 1,
-          navName: '班主任',
-          courses: [
-            {
-              courseId: 1,
-              courseName: '主题班会课（线上课程资源）'
-            },
-            {
-              courseId: 2,
-              courseName: '班会拓展课（线上课程资源）'
-            },
-            {
-              courseId: 3,
-              courseName: '班主任实务工具包（辅助资源）'
-            },
-            {
-              courseId: 4,
-              courseName: '班主任职业能力构建与提升线下培训'
-            },
-            {
-              courseId: 5,
-              courseName: '班主任好管家（软件）'
-            },
-            {
-              courseId: 6,
-              courseName: '班主任每周一测（软件）'
-            }
-          ]
-        },
-        {
-          navId: 2,
-          navName: '中职素养',
-          courses: [
-            {
-              courseId: 1,
-              courseName: '中职素养（线上课程资源）'
-            },
-            {
-              courseId: 2,
-              courseName: '中职素养（线上课程资源）'
-            },
-          ]
-        },
-        {
-          navId: 3,
-          navName: '基础课程',
-          courses: [
-            {
-              courseId: 1,
-              courseName: '基础课程（线上课程资源）'
-            }
-          ]
-        },
-        {
-          navId: 4,
-          navName: '专家名师',
-          courses: [
-            {
-              courseId: 1,
-              courseName: '专家名师（线上课程资源）'
-            },
-            {
-              courseId: 2,
-              courseName: '专家名师（线上课程资源）'
-            },
-            {
-              courseId: 3,
-              courseName: '专家名师（线上课程资源）'
-            }
-          ]
-        },
-      ],
+      coursesNavs: [],
       isActive: '',
       isSelect: '1-1',
       navBoxWidth: '',
-      isPlay: false
+      isPlay: false,
+      currentCourId: null,
+      detailsData: {}
     }
   },
   created () {
@@ -172,11 +107,31 @@ export default {
   computed: {},
   methods: {
     init () {
+      this.currentCourId = this.$route.query.id
+      this.coursesNavs = this.$route.query.coursesList
+      this.initPlayer()
+      this.getDetailsData()
+    },
+    initPlayer () {
       this.plPlayer = polyvObject('#previewArea').previewPlayer({
         'width': '100%',
         'height': '338',
         'vid': 'jl91nkk5m5027lc431cln7kc365nn2p37_l'
       })
+    },
+    getDetailsData () {
+      this.$api.getCourseDetails({
+        id: this.currentCourId
+      }).then(res => {
+        if (res.code == 200) {
+          this.detailsData = res.data
+          console.log(this.detailsData)
+          this.initPlayer()
+        }
+      })
+    },
+    goStudy () {
+      this.checkToken()
     },
     getActive (n) {
       console.log(n)
@@ -189,12 +144,60 @@ export default {
     getSelect (n, i) {
       console.log(n, i)
       this.isSelect = n + '-' + i
-      console.log(this.isSelect)
-      // if (this.isSelect === i) {
-      //   this.isSelect = ''
-      // } else {
-      //   this.isSelect = i
-      // }
+      this.currentCourId = i
+      console.log('currentCourIdddddddddddddd', this.currentCourId)
+      this.getDetailsData()
+    },
+    // init1 () {
+    //   // 获取token
+    //   let token = this.$route.query.token
+    //   // 获取用户头像
+    //   let headImgUrl = this.$route.query.headImgUrl
+    //   if (token) {
+    //     localStorage.setItem('token', token)
+    //   }
+    //   if (headImgUrl) {
+    //     localStorage.setItem('headImgUrl', headImgUrl)
+    //   }
+    //   headImgUrl = localStorage.getItem('headImgUrl')
+    //   this.$store.state.headImgUrl = headImgUrl
+    //   // token验证接口
+    //   this.checkToken()
+    // },
+    // 验证token是否失效
+    checkToken () {
+      let token = localStorage.getItem('token')
+      if (this.isblank(token)) {
+        console.log(token)
+        // window.location.href = 'http://portal.yazhuokj.com/login' + '?orient=personalCenter'
+        this.$MessageBox.confirm('登录已失效，是否重新登录?').then(() => {
+          window.location.href = 'http://portal.yazhuokj.com/login' + '?orient=educationPlatformMob'
+        }).catch(() => {
+          this.$Toast({
+            message: '操作成功',
+            duration: 3000
+          })
+        })
+      } else {
+        this.$api.checkTk({
+          jwt: token
+        }).then(res => {
+          if (res.code == 200 && res.data == 0) {
+            // this.$store.state.isLogin = true
+            // history.pushState({}, 'personalcenter', 'http://personal.yazhuokj.com/studyCenter/centerIndex')
+            this.$router.push({path: '/study', query: {id: this.currentCourId}})
+          } else {
+            this.$MessageBox.confirm('登录已失效，是否重新登录?').then(() => {
+              window.location.href = 'http://portal.yazhuokj.com/login' + '?orient=educationPlatformMob'
+            }).catch(() => {
+              this.$Toast({
+                message: '操作成功',
+                duration: 3000
+              })
+            })
+          }
+        })
+      }
     },
     videoPlay () {
       console.log('paly')
@@ -363,6 +366,34 @@ export default {
                 bottom: 25px;
                 left: 5px;
                 z-index: 10;
+              }
+            }
+            .img-box{
+              width: 100%;
+              img{
+                width: 100%;
+              }
+            }
+            .go-study{
+              display: flex;
+              justify-content: center;
+              width: 100%;
+              padding: 10px 0;
+              .study-btn{
+                width:90px;
+                height:30px;
+                text-align: center;
+                line-height: 30px;
+                font-size:14px;
+                font-family:Alibaba PuHuiTi;
+                font-weight:bold;
+                color:rgba(255,255,255,1);
+                background-color: #0089FF;
+                border-radius:14px;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+                cursor: pointer;
               }
             }
             .course-title{

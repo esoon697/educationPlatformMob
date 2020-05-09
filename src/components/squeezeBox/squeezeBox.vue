@@ -5,18 +5,26 @@
       <!-- 循环数据在点击调用changeli方法时将当前索引和本条数据传进去,并使用当前数据show的bool值添加或移除样式 -->
       <li v-for="(item,index) in headerData" :key="index" :class="[{active:item.show}]" @click.stop="changeli(index,item)">
         <!-- 在这里打印出boll值方便查看 -->
-        {{item.name}}{{item.show}}
+        <span class="level1">
+          {{item.name}}{{item.show}}
+        </span>
         <!-- 判断当前这条数据的bool值如果是true就打开二级菜单,如果是false就关闭二级菜单 -->
-        <ul v-show="item.show">
-          <!-- 循环二级菜单数据并使用.stop阻止冒泡 -->
-          <li v-for="(a,index) in item.list" :key="index" :class="[{activeItem:a.showItem}]" @click.stop="changeItem(index,a,item.list)">
-            {{a.name+index}}
-            <!-- 循环三级菜单数据并使用.stop阻止冒泡 -->
-            <ul v-show="a.showItem">
-              <li v-for="(b,index) in a.list" :key="index" v-on:click.stop="doThisItem(index)">{{b.name+index}}</li>
-            </ul>
-          </li>
-        </ul>
+        <transition name="fade-menu">
+          <ul v-show="item.show">
+            <!-- 循环二级菜单数据并使用.stop阻止冒泡 -->
+            <li v-for="(a,index) in item.list" :key="index" :class="[{activeItem:a.showItem}]" @click.stop="changeItem(index,a,item.list)">
+              <span class="level2">
+                {{a.name+index}}
+              </span>
+              <!-- 循环三级菜单数据并使用.stop阻止冒泡 -->
+              <transition name="fade-menu">
+                <ul v-show="a.showItem">
+                  <li v-for="(b,index) in a.list" :key="index" v-on:click.stop="doThisItem(index)">{{b.name+index}}</li>
+                </ul>
+              </transition>
+            </li>
+          </ul>
+        </transition>
       </li>
     </ul>
   </div>
@@ -68,45 +76,89 @@ export default {
 </script>
 <style lang="less" scoped>
   .header {
+    padding: 4% 4% 0 4%;
     width: 100%;
-    background-color: #ff5722;
-    color: #ffffff;
+    background-color: #F2F4F5;
+    font-family:Alibaba PuHuiTi;
+    color: rgba(18,31,44,1);
+    box-sizing: border-box;
     >ul {
       width: 100%;
-      transition: height 1s linear;
+      // background-color: #F2F4F5;
+      border-radius: 4%;
       >li {
         width: 100%;
-        border: 1px solid #ffffff;
-        cursor: pointer; // float: left;
-        color: 20px;
-        // text-align: center;
+        cursor: pointer;
         line-height: 60px;
+        border-radius: 3%;
+        font-size:16px;
+        font-family:Alibaba PuHuiTi;
+        font-weight:500;
+        background-color: #fff;
+        color:rgba(18,31,44,1);
+        margin-bottom: 1px;
+        padding: 0 10px;
+        border-bottom: 1px solid #F2F4F5;
+        box-sizing: border-box;
         &:hover {
-          background-color: #ff9800;
+          background-color: #aaa;
         }
         >ul {
           width: 100%;
-          background: red;
+          background-color: #fff;
           text-indent: 20px;
           li{
+            border-radius: 3%;
+            font-size:14px;
+            font-weight:400;
+            color:#7A8189;
             &:hover{
               background: #c31111;
+            }
+            ul{
+              background-color: #F2F4F5;
+              li{
+                text-indent: 40px;
+              }
             }
           }
         }
       }
       .active {
-        background-color: #ff9800;
-        .activeItem{
-          // background-color: green;
-          // height: 0px;
-          // opacity: 0;
+        // background-color: #F2F4F5;
+        .level1{
+          color: rgba(0,137,255,1);
+          display: block;
+          height: 100%;
+          width: 100%;
+          border-bottom: 1px solid #F2F4F5;
+          // border-bottom: 1px solid rgba(0,137,255,1);
+        }
+        ul{
           li{
-            background-color: green;
-            text-indent: 40px;
+            // background-color: #F2F4F5;
+          }
+        }
+        .activeItem{
+          .level2{
+            color: rgba(0,137,255,1);
+          }
+          ul{
+            // background-color: #F2F4F5;
+            li{
+              // text-indent: 40px;
+            }
           }
         }
       }
     }
+  }
+  .fade-menu-enter-active{
+    transition: all .7s
+  }
+  .fade-menu-enter{
+    transform: translateY(-20%);
+    // transform: scale(1, 0);
+    opacity: 0;
   }
 </style>

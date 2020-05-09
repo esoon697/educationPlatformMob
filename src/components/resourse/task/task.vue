@@ -82,7 +82,8 @@ export default {
 <style lang="less">
 .task-main{
   width: 100%;
-  height: 100%;
+  height: 99%;
+  overflow: hidden;
   // padding-bottom: 5%;
   .mint-radiolist, .mint-checklist{
     width: 100%;

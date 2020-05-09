@@ -42,14 +42,14 @@
             <i class="iconfont icon-right"></i>
           </div>
         </div>
-        <div class="content-outer-box" v-for="i in 3" :key="i">
+        <div class="content-outer-box" v-for="(courses, index) in coursesList" :key="index">
           <div class="content-box">
-            <div class="content-title">班主任成长梦工场</div>
+            <div class="content-title">{{courses.courseTypeName}}</div>
             <div class="content-inner-box">
-              <div class="content-card" v-for="n in 6" :key="n" @click="goCoursesDetails(n)">
+              <div class="content-card" v-for="(course, index) in courses.courseEventList" :key="index" @click="goCoursesDetails(course.courEventId)">
                 <img class="card-top" :src="base+'card_eg.jpg'" alt="">
-                <p class="card-mid">主题班会课（线上课程资源）</p>
-                <div class="card-bottom">68学时</div>
+                <p class="card-mid">{{course.openName}}</p>
+                <div class="card-bottom">{{course.courHour}}学时</div>
               </div>
             </div>
           </div>
@@ -124,7 +124,8 @@ export default {
           id: 3,
           url: this.base + 'home-banner3.jpg'
         }
-      ]
+      ],
+      coursesList: []
     }
   },
   created () {
@@ -150,6 +151,7 @@ export default {
         console.log(res)
         if (res.code == 200) {
           console.log(res.data)
+          this.coursesList = res.data
         }
       })
     },
@@ -166,8 +168,9 @@ export default {
         cancelButtonClass: 'iconfont icon-close'
       })
     },
-    goCoursesDetails (n) {
-      this.$router.push({path: './courseDetails', query: {id: n}})
+    goCoursesDetails (id) {
+      console.log(id)
+      this.$router.push({path: './courseDetails', query: {id: id, coursesList: this.coursesList}})
     }
   },
   watch: {}
@@ -332,6 +335,10 @@ export default {
             font-size:14px;
             line-height: 18px;
             margin: 5% 0;
+            width: 100%;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
           }
           .card-bottom{
             font-family:Alibaba PuHuiTi;

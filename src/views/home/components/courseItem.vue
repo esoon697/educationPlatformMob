@@ -37,7 +37,7 @@ export default {
 <style lang="less" scoped>
 .courseItem-main{
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   margin-bottom: 60px;
   .course-left{
     width: 40%;
