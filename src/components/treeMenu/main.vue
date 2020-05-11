@@ -81,11 +81,39 @@ export default {
   components: {
     myTree
   },
+  props: ['courId'],
   data () {
     return {
       theModel: myData
+      // courId: null
     }
-  }
+  },
+  created () {
+    this.init()
+  },
+  mounted () {},
+  computed: {},
+  methods: {
+    // 初始化数据
+    init () {
+      // this.courId = this.$route.query.courId
+      console.log('courseidddddddddddd', this.courId)
+      this.getCourseChapter()
+    },
+    // 获取章节数据
+    getCourseChapter () {
+      this.$api.getCourseChapter({
+        courId: this.courId,
+        level: 0
+      }).then(res => {
+        console.log(res)
+        if (res.code == 200) {
+          console.log(res.data)
+        }
+      })
+    }
+  },
+  watch: {}
 }
 </script>
 

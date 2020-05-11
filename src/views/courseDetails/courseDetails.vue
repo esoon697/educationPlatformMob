@@ -125,6 +125,7 @@ export default {
       }).then(res => {
         if (res.code == 200) {
           this.detailsData = res.data
+          this.courId = res.data.courId
           console.log(this.detailsData)
           this.initPlayer()
         }
@@ -185,13 +186,14 @@ export default {
           if (res.code == 200 && res.data == 0) {
             // this.$store.state.isLogin = true
             // history.pushState({}, 'personalcenter', 'http://personal.yazhuokj.com/studyCenter/centerIndex')
-            this.$router.push({path: '/study', query: {id: this.currentCourId}})
+            // this.$router.push({path: '/study', query: {id: this.currentCourId}})
+            this.$router.push({path: '/study', query: {courId: this.courId}})
           } else {
             this.$MessageBox.confirm('登录已失效，是否重新登录?').then(() => {
               window.location.href = 'http://portal.yazhuokj.com/login' + '?orient=educationPlatformMob'
             }).catch(() => {
               this.$Toast({
-                message: '操作成功',
+                message: '已取消',
                 duration: 3000
               })
             })

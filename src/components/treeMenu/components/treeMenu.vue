@@ -1,6 +1,6 @@
 <template>
  <li :style="indent">
-   <div class="node-row" :id="model.menuCode" @click="toggle">
+   <div class="node-row" @click="toggle">
     <span :class="[{'active-font': open}, fontStyle]" >
       <!-- <i v-if="isFolder" class="icon" :class="[open ? 'folder-open': 'folder']"></i> -->
       {{ model.menuName }}
@@ -18,13 +18,14 @@
  </li>
 </template>
 <script>
-let nodeRow = document.querySelectorAll('.node-row')
+// let nodeRow = document.querySelectorAll('.node-row')
 export default {
   name: 'treeMenu',
   props: ['model', 'depth'],
   data () {
     return {
       open: false
+      // isClickId: null
       // isFolder: true
     }
   },
@@ -44,19 +45,20 @@ export default {
   methods: {
     toggle: function (id) {
       console.log('idddddddd', id)
+      this.isClickId = id
       if (this.isFolder) {
         this.open = !this.open
       } else {
-        console.log(this.model)
-        console.log(event.target)
-        nodeRow.forEach((e) => {
-          // e.style = ''
-          // console.log(e)
-        })
-        console.log(event.target.className)
-        if (event.target.className == 'node-row') {
-          event.target.style.cssText = 'background: #eee'
-        }
+        // console.log(this.model)
+        // console.log(event.target)
+        // nodeRow.forEach((e) => {
+        //   // e.style = ''
+        //   // console.log(e)
+        // })
+        // console.log(event.target.className)
+        // if (event.target.className == 'node-row') {
+        //   event.target.style.cssText = 'background: #eee'
+        // }
       }
     }
   }
@@ -83,27 +85,25 @@ ul {
  background-image: url(/src/assets/file-text.png);
 } */
 .tree-menu li {
- line-height: 1.5;
+  line-height: 2;
+  font-size:16px;
+  font-family:Alibaba PuHuiTi;
 }
 .node-row{
   display: flex;
   justify-content: space-between;
   align-items: center;
-  // border-bottom: 1px solid #eee;
-  // margin-bottom: 1px;
-  // &:hover{
-  //   background-color: #eee;
-  // }
+  &:hover{
+    background-color: #F2F4F5;
+  }
 }
 .font1{
-  font-size:16px;
-  font-family:Alibaba PuHuiTi;
+  // font-size:16px;
+  // font-family:Alibaba PuHuiTi;
   // font-weight:500;
   color:rgba(18,31,44,1);
 }
 .font2{
-  font-size:16px;
-  font-family:Alibaba PuHuiTi;
   // font-weight:400;
   color:rgba(122,129,137,1);
 }
@@ -113,6 +113,9 @@ ul {
 .active-font{
   color: rgba(0,137,255,1);
 }
+// .isClick{
+//   background-color: #a1a;
+// }
 .fade-menu-enter-active{
   transition: all .7s
 }

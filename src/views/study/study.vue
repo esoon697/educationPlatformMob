@@ -28,7 +28,7 @@
               </ul>
             </div>
           </ContentContainner> -->
-          <TreeMenu/>
+          <TreeMenu :courId="courId"/>
         </mt-tab-container-item>
         <mt-tab-container-item id="2">
           <ContentContainner :contentTitle="'班主任主题班会课（二年级） '">
@@ -55,13 +55,19 @@ export default {
   data () {
     return {
       contentTitle: '',
-      selected: '1'
+      selected: '1',
+      courId: null
     }
   },
-  created () {},
+  created () {
+    this.init()
+  },
   mounted () {},
   computed: {},
   methods: {
+    init () {
+      this.courId = this.$route.query.courId
+    },
     goStudy (m, n) {
       console.log(m, n)
     }
