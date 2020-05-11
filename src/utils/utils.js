@@ -14,18 +14,18 @@ Vue.prototype.isblank = function (chr) {
   return false
 }
 Vue.prototype.storageGet = function (key, type = 'localStorage') {
-  if (type === 'localStorage') {
+  if (type == 'localStorage') {
     return JSON.parse(window.localStorage.getItem(key) || '[]')
-  } else if (type === 'sessionStorage') {
+  } else if (type == 'sessionStorage') {
     return JSON.parse(window.sessionStorage.getItem(key) || '[]')
   } else {
     alert('type error')
   }
 }
 Vue.prototype.storageSet = function (key, value, type = 'localStorage') {
-  if (type === 'localStorage') {
+  if (type == 'localStorage') {
     window.localStorage.setItem(key, JSON.stringify(value))
-  } else if (type === 'sessionStorage') {
+  } else if (type == 'sessionStorage') {
     window.sessionStorage.setItem(key, JSON.stringify(value))
   }
 }

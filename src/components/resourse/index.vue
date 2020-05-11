@@ -4,11 +4,11 @@
     <swiper ref="resourseSwiper" :options="swiperOptions" @slideChangeTransitionEnd="slideChangeTransitionEnd">
       <swiper-slide v-for="(resourse, index) in resourses" :key="index">
         <!-- 图片资源组件 -->
-        <ImageEl v-if="resourse.type==0" :url='resourse.url'/>
+        <ImageEl v-if="resourse.studyType==0" :url='resourse.resourceUri'/>
         <!-- 视频资源组件 -->
-        <Video v-if="resourse.type==1" :url='resourse.url' :index='index'/>
+        <Video v-if="resourse.studyType==1" :url='resourse.resourceUri' :index='index'/>
         <!-- 互动资源组件 -->
-        <Task v-if="resourse.type==2" :url='resourse.url' :taskType="resourse.taskType" :index="index"/>
+        <Task v-if="resourse.studyType==2" :url='resourse.resourceUri' :taskType="resourse.activeType" :index="index"/>
       </swiper-slide>
       <!-- 滚动条 -->
       <div class="swiper-scrollbar" slot="scrollbar"></div>
@@ -48,7 +48,8 @@ export default {
       courrentType: 1,
       isLast: false,
       // formData: [],
-      resourses: [
+      resourses: this.$store.state.processInfo,
+      resour: [
         {
           url: this.base + 'home-banner1.jpg',
           type: 0
@@ -82,7 +83,7 @@ export default {
           url: this.base + 'home-banner3.jpg',
           type: 0
         }
-      ],
+      ], // 选中章节process数据
       swiperOptions: {
         // height: 44,
         // 分页器配置
@@ -141,7 +142,8 @@ export default {
         observer: true,
         // 修改swiper的父元素时，自动初始化swiper
         observeParents: true
-      }
+      },
+      currentChapterId: null // 当前选中的章节Id
     }
   },
   created () {},
@@ -158,8 +160,9 @@ export default {
   methods: {
     // 初始化页面
     init () {
+      // this.resourses = this.$store.state.processInfo
+      console.log('this.resourses', this.resourses)
       this.swiper.scrollbar.$dragEl.css('background', '#0089FF')
-      // this.formData = this.storageGet('formData')
     },
     // 每页轮播切换结束时
     slideChangeTransitionEnd () {
@@ -179,7 +182,8 @@ export default {
       // 接口调用
       this.swiper.slideNext()
       if (this.isLast) {
-        this.$MessageBox.confirm('确定执行此操作?').then(action => {
+        this.$MessageBox.confirm('该章节已学习完，是否进入下一章?').then(action => {
+          this.$store.state.theModel.menuCode += 1
           this.$Toast({
             message: '登录已过期，请重新登录',
             iconClass: 'iconfont icon-yellow-warning',
@@ -190,6 +194,21 @@ export default {
           console.log(error)
         })
       }
+    }
+    // getProcessInfo () {
+    //   this.$api.getProcessInfo({
+    //     chapterId: this.$store.state.currentChapterId
+    //   }).then(res => {
+    //     if (res.code == 200) {
+    //       console.log(res.data)
+    //     }
+    //   })
+    // }
+  },
+  watch: {
+    resourses (val) {
+      console.log(val)
+      this.init()
     }
   }
 }

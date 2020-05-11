@@ -170,7 +170,7 @@ export default {
     },
     goCoursesDetails (id) {
       console.log(id)
-      this.$router.push({path: './courseDetails', query: {id: id, coursesList: this.coursesList}})
+      this.$router.push({path: './courseDetails', query: {id: id, coursesList: JSON.stringify(this.coursesList)}})
     }
   },
   watch: {}

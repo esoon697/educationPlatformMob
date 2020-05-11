@@ -24,42 +24,48 @@ export default {
   props: ['model', 'depth'],
   data () {
     return {
-      open: false
+      open: false // 章节阶段是否打开
       // isClickId: null
       // isFolder: true
     }
   },
   computed: {
+    // 是否存在子节点
     isFolder: function () {
       return this.model.children && this.model.children.length
     },
+    // 不同递归深度的样式
     indent () {
       // return { transform: `translate(${this.depth * 20}px)` }
       // return { marginLeft: `${this.depth * 20}px` }
       return { textIndent: `${this.depth * 20}px` }
     },
+    // 章节目录与根节点的字体样式
     fontStyle () {
       return this.isFolder ? 'font1' : 'font2'
     }
   },
   methods: {
-    toggle: function (id) {
-      console.log('idddddddd', id)
-      this.isClickId = id
+    toggle: function () {
       if (this.isFolder) {
         this.open = !this.open
       } else {
-        // console.log(this.model)
-        // console.log(event.target)
-        // nodeRow.forEach((e) => {
-        //   // e.style = ''
-        //   // console.log(e)
-        // })
-        // console.log(event.target.className)
-        // if (event.target.className == 'node-row') {
-        //   event.target.style.cssText = 'background: #eee'
-        // }
+        this.currentChapterId = this.model.menuCode
+        this.$store.state.currentChapterId = this.currentChapterId
+        console.log(this.currentChapterId)
+        this.getProcessInfo()
       }
+    },
+    // 获取process数据
+    getProcessInfo () {
+      this.$api.getProcessInfo({
+        chapterId: this.currentChapterId
+      }).then(res => {
+        if (res.code == 200) {
+          console.log(res.data)
+          this.$store.state.processInfo = res.data
+        }
+      })
     }
   }
 }
@@ -98,13 +104,9 @@ ul {
   }
 }
 .font1{
-  // font-size:16px;
-  // font-family:Alibaba PuHuiTi;
-  // font-weight:500;
   color:rgba(18,31,44,1);
 }
 .font2{
-  // font-weight:400;
   color:rgba(122,129,137,1);
 }
 .active-row{
@@ -113,9 +115,6 @@ ul {
 .active-font{
   color: rgba(0,137,255,1);
 }
-// .isClick{
-//   background-color: #a1a;
-// }
 .fade-menu-enter-active{
   transition: all .7s
 }

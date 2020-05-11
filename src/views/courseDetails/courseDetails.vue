@@ -88,7 +88,7 @@ export default {
     return {
       coursesNavs: [],
       isActive: '',
-      isSelect: '1-1',
+      isSelect: null,
       navBoxWidth: '',
       isPlay: false,
       currentCourId: null,
@@ -104,11 +104,17 @@ export default {
     let navBox = document.querySelector('.nav-box')
     this.navBoxWidth = navBox.clientWidth + 'px'
   },
-  computed: {},
+  computed: {
+    // isSelect () {
+    //   return '1-' + this.course.courEventId
+    // }
+  },
   methods: {
     init () {
       this.currentCourId = this.$route.query.id
-      this.coursesNavs = this.$route.query.coursesList
+      this.$store.state.courEventId = this.currentCourId
+      this.coursesNavs = JSON.parse(this.$route.query.coursesList)
+      this.isSelect = '1-' + this.currentCourId
       this.initPlayer()
       this.getDetailsData()
     },
@@ -126,6 +132,8 @@ export default {
         if (res.code == 200) {
           this.detailsData = res.data
           this.courId = res.data.courId
+          this.$store.state.detailsData = res.data
+          console.log('store', this.$store.state.detailsData)
           console.log(this.detailsData)
           this.initPlayer()
         }

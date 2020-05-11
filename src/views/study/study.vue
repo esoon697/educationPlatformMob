@@ -28,13 +28,13 @@
               </ul>
             </div>
           </ContentContainner> -->
-          <TreeMenu :courId="courId"/>
+          <TreeMenu/>
         </mt-tab-container-item>
         <mt-tab-container-item id="2">
-          <ContentContainner :contentTitle="'班主任主题班会课（二年级） '">
+          <ContentContainner :contentTitle="details.openName" v-if="details">
             <div slot="content" class="intro-box">
               <h2>简介</h2>
-              <p class="intro-text">《中职班主任主题班会课》共计68学时，按照中职学校1-5学期每个月的班主任重点工作进行编排，选择了68个贴合中职学生学习、生活、心理需求的典型主题，通过生动的微课、丰富的教师资源包，让每一节主题班会课都精彩纷呈。 课程参考全国班主任基本功大赛的评分标准，课程结构遵循“情景导入→认知→情感认同→运用→课后拓展”的设计思路进行编写，所有素材都来源于一线的中职学校，班主任在实际运用的时候可以根据自己的需求，结合不同的学情、专业，进行调整、编辑，更加接地气，具有实效性。以时间为顺序编排的主题班会课资源，不仅能为班主任提供了很好的带班指导和建议，同时也帮助学校在创新德育工作和班主任队管理方面提供了参考和抓手。</p>
+              <p class="intro-text" v-if="details">{{details.openDescription}}</p>
             </div>
           </ContentContainner>
         </mt-tab-container-item>
@@ -49,6 +49,7 @@ import Resourse from '../../components/resourse/index'
 import MyVuePreview from '../../components/myVuePreview/myVuePreview'
 import ContentContainner from '../../components/contentContainner/contentContainner'
 import TreeMenu from '../../components/treeMenu/main'
+import { mapState } from 'vuex'
 export default {
   components: {Resourse, ContentContainner, MyVuePreview, TreeMenu},
   props: {},
@@ -56,17 +57,29 @@ export default {
     return {
       contentTitle: '',
       selected: '1',
-      courId: null
+      courId: null,
+      details: null
     }
   },
   created () {
-    this.init()
   },
-  mounted () {},
-  computed: {},
+  mounted () {
+    this.$nextTick(() => {
+      this.init()
+    })
+  },
+  computed: {
+    ...mapState(['detailsData'])
+  },
   methods: {
     init () {
-      this.courId = this.$route.query.courId
+      // this.courId = this.$route.query.courId
+      if (this.detailsData.courId) {
+        this.storageSet('details', this.detailsData, 'sessionStorage')
+      }
+      // }
+      this.details = this.storageGet('details', 'sessionStorage')
+      this.$store.state.detailsData = this.details
     },
     goStudy (m, n) {
       console.log(m, n)
