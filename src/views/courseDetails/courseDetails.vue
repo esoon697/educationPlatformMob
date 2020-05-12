@@ -133,8 +133,6 @@ export default {
           this.detailsData = res.data
           this.courId = res.data.courId
           this.$store.state.detailsData = res.data
-          console.log('store', this.$store.state.detailsData)
-          console.log(this.detailsData)
           this.initPlayer()
         }
       })
@@ -154,7 +152,6 @@ export default {
       console.log(n, i)
       this.isSelect = n + '-' + i
       this.currentCourId = i
-      console.log('currentCourIdddddddddddddd', this.currentCourId)
       this.getDetailsData()
     },
     // init1 () {
@@ -179,7 +176,7 @@ export default {
       if (this.isblank(token)) {
         console.log(token)
         // window.location.href = 'http://portal.yazhuokj.com/login' + '?orient=personalCenter'
-        this.$MessageBox.confirm('登录已失效，是否重新登录?').then(() => {
+        this.$MessageBox.confirm('您还未登录，是否重新登录?').then(() => {
           window.location.href = 'http://portal.yazhuokj.com/login' + '?orient=educationPlatformMob'
         }).catch(() => {
           this.$Toast({
@@ -209,26 +206,26 @@ export default {
         })
       }
     },
-    videoPlay () {
-      console.log('paly')
-      let player = document.querySelector('#video')
-      console.log(player.currentSrc)
-      if (!player.currentSrc) {
-        this.$error('暂无资源，敬请期待！')
-        return
-      }
-      if (player.networkState === 3) {
-        this.$error('暂未找到视频资源')
-        return
-      }
-      if (player.paused) {
-        player.play()
-        this.isPlay = true
-      } else {
-        player.pause()
-        this.isPlay = false
-      }
-    },
+    // videoPlay () {
+    //   console.log('paly')
+    //   let player = document.querySelector('#video')
+    //   console.log(player.currentSrc)
+    //   if (!player.currentSrc) {
+    //     this.$error('暂无资源，敬请期待！')
+    //     return
+    //   }
+    //   if (player.networkState === 3) {
+    //     this.$error('暂未找到视频资源')
+    //     return
+    //   }
+    //   if (player.paused) {
+    //     player.play()
+    //     this.isPlay = true
+    //   } else {
+    //     player.pause()
+    //     this.isPlay = false
+    //   }
+    // },
     downLoad (n) {
       console.log('downLoad', n)
     }

@@ -38,7 +38,6 @@ import ImageEl from '../resourse/image/image'
 import Video from '../resourse/video/video'
 import Task from '../resourse/task/task'
 import { mapState } from 'vuex'
-// var active = 0
 export default {
   components: {ImageEl, Video, Task},
   // components: {Video, Task},
@@ -206,10 +205,6 @@ export default {
     // }
   },
   watch: {
-    resourses (val) {
-      console.log(val)
-      this.init()
-    }
   }
 }
 </script>

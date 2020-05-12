@@ -7,6 +7,7 @@
 </template>
 <script>
 import myTree from './components/treeMenu'
+import { mapState } from 'vuex'
 var myData = [
   {
     'id': '1',
@@ -95,7 +96,9 @@ export default {
       this.init()
     })
   },
-  computed: {},
+  computed: {
+    ...mapState(['detailsData', 'courEventId'])
+  },
   methods: {
     // 初始化数据
     init () {
@@ -103,8 +106,8 @@ export default {
       // console.log('init', this.$store)
       // console.log('this.courIddddddddddddddd', this.$store.state.detailsData.courId)
       // if (this.$store.state.detailsData) {
-      this.courId = this.$store.state.detailsData.courId
-      this.courEventId = this.$store.state.courEventId
+      this.courId = this.detailsData.courId
+      // this.courEventId = this.courEventId
       // }
       this.getCourseChapter()
     },
@@ -118,8 +121,8 @@ export default {
       }).then(res => {
         console.log(res)
         if (res.code == 200) {
-          console.log(res.data)
-          this.theModel = res.data
+          console.log('resdataaaaa', res.data)
+          this.theModel = res.data.chapters
           this.$store.state.theModel = this.theModel
         }
       })

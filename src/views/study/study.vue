@@ -31,10 +31,10 @@
           <TreeMenu/>
         </mt-tab-container-item>
         <mt-tab-container-item id="2">
-          <ContentContainner :contentTitle="details.openName" v-if="details">
+          <ContentContainner :contentTitle="detailsData.openName" v-if="detailsData">
             <div slot="content" class="intro-box">
               <h2>简介</h2>
-              <p class="intro-text" v-if="details">{{details.openDescription}}</p>
+              <p class="intro-text" v-if="detailsData">{{detailsData.openDescription}}</p>
             </div>
           </ContentContainner>
         </mt-tab-container-item>
@@ -57,8 +57,7 @@ export default {
     return {
       contentTitle: '',
       selected: '1',
-      courId: null,
-      details: null
+      courId: null
     }
   },
   created () {
@@ -69,18 +68,28 @@ export default {
     })
   },
   computed: {
-    ...mapState(['detailsData'])
+    ...mapState(['detailsData', 'courEventId'])
   },
   methods: {
     init () {
-      // this.courId = this.$route.query.courId
-      if (this.detailsData.courId) {
-        this.storageSet('details', this.detailsData, 'sessionStorage')
-      }
-      // }
-      this.details = this.storageGet('details', 'sessionStorage')
-      this.$store.state.detailsData = this.details
+      this.courId = this.detailsData.courId
+      // this.getCourseChapter()
     },
+    // 获取章节数据
+    // getCourseChapter () {
+    //   this.$api.getCourseChapter({
+    //     courId: this.courId,
+    //     courEventId: this.courEventId,
+    //     level: '0'
+    //   }).then(res => {
+    //     console.log(res)
+    //     if (res.code == 200) {
+    //       console.log('resdataaaaa', res.data)
+    //       this.theModel = res.data.chapters
+    //       this.$store.state.theModel = this.theModel
+    //     }
+    //   })
+    // },
     goStudy (m, n) {
       console.log(m, n)
     }
