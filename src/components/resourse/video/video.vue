@@ -27,11 +27,11 @@ export default {
     }
   },
   created () {
+  },
+  mounted () {
     this.$nextTick(() => {
       this.init()
     })
-  },
-  mounted () {
   },
   computed: {},
   methods: {

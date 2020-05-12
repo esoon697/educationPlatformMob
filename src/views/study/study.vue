@@ -73,23 +73,26 @@ export default {
   methods: {
     init () {
       this.courId = this.detailsData.courId
-      // this.getCourseChapter()
+      this.getCourseChapter()
     },
     // 获取章节数据
-    // getCourseChapter () {
-    //   this.$api.getCourseChapter({
-    //     courId: this.courId,
-    //     courEventId: this.courEventId,
-    //     level: '0'
-    //   }).then(res => {
-    //     console.log(res)
-    //     if (res.code == 200) {
-    //       console.log('resdataaaaa', res.data)
-    //       this.theModel = res.data.chapters
-    //       this.$store.state.theModel = this.theModel
-    //     }
-    //   })
-    // },
+    getCourseChapter () {
+      this.$api.getCourseChapter({
+        courId: this.courId,
+        courEventId: this.courEventId,
+        level: '0'
+      }).then(res => {
+        if (res.code == 200) {
+          console.log('resdataaaaa', res.data)
+          this.$store.state.theModel = res.data.chapters
+          this.$store.state.processInfo = res.data.initProcessInfo
+          this.$store.state.currentChapterId = res.data.currentChapterId
+          this.$store.state.currentProcessId = res.data.currentProcessInfoId
+          this.$store.state.courEventId = res.data.courseEventId
+          console.log('res.data.initProcessInfo', res.data.initProcessInfo)
+        }
+      })
+    },
     goStudy (m, n) {
       console.log(m, n)
     }

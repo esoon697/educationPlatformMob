@@ -5,7 +5,7 @@
         <img slot="icon" :src="selected=='/home'?base+'tabBar_cion1_active.png':base+'tabBar_cion1.png'">
         首页
       </mt-tab-item>
-      <mt-tab-item id="/courses">
+      <mt-tab-item id="/courses" @click="gotoNav('/courses')">
         <img slot="icon" :src="selected=='/courses'?base+'tabBar_cion2_active.png':base+'tabBar_cion2.png'">
         课程
       </mt-tab-item>
@@ -33,11 +33,16 @@ export default {
   created () {},
   mounted () {
     this.$nextTick(() => {
-      let nowPath = this.$route.path
-      this.selected = nowPath
+      // let nowPath = this.$route.path
+      this.selected = this.$route.path
+      // this.selected = nowPath
     })
   },
-  computed: {},
+  computed: {
+    currentPath () {
+      return this.$route.path
+    }
+  },
   methods: {
     // gotoNav (path) {
     //   console.log(path)
@@ -52,6 +57,7 @@ export default {
       switch (val) {
         case '/home':
           this.$router.push('/home')
+          this.selected = this.$route.path
           break
         case '/courses':
           this.$router.push('/courses')
@@ -63,6 +69,9 @@ export default {
           this.$router.push('/user')
           break
       }
+    },
+    currentPath (val) {
+      this.selected = val
     }
   }
 }

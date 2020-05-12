@@ -8,76 +8,6 @@
 <script>
 import myTree from './components/treeMenu'
 import { mapState } from 'vuex'
-var myData = [
-  {
-    'id': '1',
-    'menuName': '基础管理',
-    'menuCode': '10',
-    'children': [
-      {
-        'menuName': '用户管理',
-        'menuCode': '11'
-      },
-      {
-        'menuName': '角色管理',
-        'menuCode': '12',
-        'children': [
-          {
-            'menuName': '管理员',
-            'menuCode': '121'
-          },
-          {
-            'menuName': 'CEO',
-            'menuCode': '122'
-          },
-          {
-            'menuName': 'CFO',
-            'menuCode': '123'
-          },
-          {
-            'menuName': 'COO',
-            'menuCode': '124'
-          },
-          {
-            'menuName': '普通人',
-            'menuCode': '124'
-          }
-        ]
-      },
-      {
-        'menuName': '权限管理',
-        'menuCode': '13'
-      }
-    ]
-  },
-  {
-    'id': '2',
-    'menuName': '商品管理',
-    'menuCode': ''
-  },
-  {
-    'id': '3',
-    'menuName': '订单管理',
-    'menuCode': '30',
-    'children': [
-      {
-        'menuName': '订单列表',
-        'menuCode': '31'
-      },
-      {
-        'menuName': '退货列表',
-        'menuCode': '32',
-        'children': []
-      }
-    ]
-  },
-  {
-    'id': '4',
-    'menuName': '商家管理',
-    'menuCode': '',
-    'children': []
-  }
-]
 export default {
   components: {
     myTree
@@ -85,48 +15,38 @@ export default {
   // props: ['courId'],
   data () {
     return {
-      theModel: myData,
+      // theModel: myData,
       courId: null
     }
   },
   created () {
   },
   mounted () {
-    this.$nextTick(() => {
-      this.init()
-    })
+    // this.$nextTick(() => {
+    //   this.init()
+    // })
   },
   computed: {
-    ...mapState(['detailsData', 'courEventId'])
+    ...mapState(['theModel', 'currentChapterId'])
   },
   methods: {
     // 初始化数据
-    init () {
-      // this.courId = this.$route.query.courId
-      // console.log('init', this.$store)
-      // console.log('this.courIddddddddddddddd', this.$store.state.detailsData.courId)
-      // if (this.$store.state.detailsData) {
-      this.courId = this.detailsData.courId
-      // this.courEventId = this.courEventId
-      // }
-      this.getCourseChapter()
-    },
     // 获取章节数据
-    getCourseChapter () {
-      // console.log('this.$store.state.detailsData.courIdddddddddddddd', this.$store.state.detailsData.courId)
-      this.$api.getCourseChapter({
-        courId: this.courId,
-        courEventId: this.courEventId,
-        level: '0'
-      }).then(res => {
-        console.log(res)
-        if (res.code == 200) {
-          console.log('resdataaaaa', res.data)
-          this.theModel = res.data.chapters
-          this.$store.state.theModel = this.theModel
-        }
-      })
-    }
+    // getCourseChapter () {
+    //   // console.log('this.$store.state.detailsData.courIdddddddddddddd', this.$store.state.detailsData.courId)
+    //   this.$api.getCourseChapter({
+    //     courId: this.courId,
+    //     courEventId: this.courEventId,
+    //     level: '0'
+    //   }).then(res => {
+    //     console.log(res)
+    //     if (res.code == 200) {
+    //       console.log('resdataaaaa', res.data)
+    //       this.theModel = res.data.chapters
+    //       this.$store.state.theModel = this.theModel
+    //     }
+    //   })
+    // }
   },
   watch: {}
 }

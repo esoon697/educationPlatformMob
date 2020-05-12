@@ -1,6 +1,6 @@
 <template>
  <li :style="indent">
-   <div class="node-row" @click="toggle">
+   <div class="node-row" @click="toggle" :class="{'active-row':currentChapterId==model.menuCode}">
     <span :class="[{'active-font': open}, fontStyle]" >
       <!-- <i v-if="isFolder" class="icon" :class="[open ? 'folder-open': 'folder']"></i> -->
       {{ model.menuName }}
@@ -11,33 +11,33 @@
     </div>
    </div>
    <transition name="fade-menu">
-    <ul v-show="open" v-if="isFolder">
+    <ul v-show="open">
       <tree-menu v-for="(item, index) in model.children" :key="index" :model="item" :depth="depth+1"></tree-menu>
     </ul>
    </transition>
  </li>
 </template>
 <script>
-// let nodeRow = document.querySelectorAll('.node-row')
+import { mapState } from 'vuex'
 export default {
   name: 'treeMenu',
   props: ['model', 'depth'],
   data () {
     return {
-      open: false // 章节阶段是否打开
+      open: false, // 章节阶段是否打开
+      chapterId: null
       // isClickId: null
       // isFolder: true
     }
   },
   computed: {
+    ...mapState(['currentChapterId']),
     // 是否存在子节点
     isFolder: function () {
       return this.model.children && this.model.children.length
     },
     // 不同递归深度的样式
     indent () {
-      // return { transform: `translate(${this.depth * 20}px)` }
-      // return { marginLeft: `${this.depth * 20}px` }
       return { textIndent: `${this.depth * 20}px` }
     },
     // 章节目录与根节点的字体样式
@@ -46,26 +46,16 @@ export default {
     }
   },
   methods: {
+    init () {
+    },
     toggle: function () {
       if (this.isFolder) {
         this.open = !this.open
       } else {
-        this.currentChapterId = this.model.menuCode
-        this.$store.state.currentChapterId = this.currentChapterId
-        console.log(this.currentChapterId)
-        this.getProcessInfo()
+        this.chapterId = this.model.menuCode
+        this.$store.state.currentChapterId = this.chapterId
+        // this.getProcessInfo()
       }
-    },
-    // 获取process数据
-    getProcessInfo () {
-      this.$api.getProcessInfo({
-        chapterId: this.currentChapterId
-      }).then(res => {
-        if (res.code == 200) {
-          console.log(res.data)
-          this.$store.state.processInfo = res.data
-        }
-      })
     }
   }
 }
@@ -110,7 +100,11 @@ ul {
   color:rgba(122,129,137,1);
 }
 .active-row{
-  background-color: #eee;
+  background-color: #0089ff;
+  color: #fff;
+  .font2{
+    color: #fff;
+  }
 }
 .active-font{
   color: rgba(0,137,255,1);

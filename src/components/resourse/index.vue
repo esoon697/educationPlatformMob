@@ -1,15 +1,19 @@
 <template>
   <div class="resourse-main">
     <i class="iconfont icon-xingzhuang"></i>
-    <swiper ref="resourseSwiper" :options="swiperOptions" @slideChangeTransitionEnd="slideChangeTransitionEnd">
-      <swiper-slide v-for="(resourse, index) in resourses" :key="index">
-        <!-- 图片资源组件 -->
-        <ImageEl v-if="resourse.studyType==0" :url='resourse.resourceUri'/>
-        <!-- 视频资源组件 -->
-        <Video v-if="resourse.studyType==1" :url='resourse.resourceUri' :index='index'/>
-        <!-- 互动资源组件 -->
-        <Task v-if="resourse.studyType==2" :url='resourse.resourceUri' :taskType="resourse.activeType" :index="index"/>
-      </swiper-slide>
+    <swiper ref="resourseSwiper" :options="swiperOptions">
+      <template  v-if="resourses.length">
+        <swiper-slide v-for="(resourse, index) in resourses" :key="index">
+          <!-- 图片资源组件 -->
+          <ImageEl v-if="resourse.studyType==1" :url='resourse.resourceUri'/>
+          <!-- 视频资源组件 -->
+          <Video v-if="resourse.studyType==2" :url='resourse.resourceUri' :index='index'/>
+          <!-- 互动资源组件 -->
+          <Task v-if="resourse.studyType==3" :url='resourse.resourceUri' :taskType="resourse.activeType" :index="index"/>
+          <div class="resourse-bg" v-if="resourse.studyType===null">暂无数据</div>
+        </swiper-slide>
+      </template>
+      <div v-else class="resourse-bg">暂无数据</div>
       <!-- 滚动条 -->
       <div class="swiper-scrollbar" slot="scrollbar"></div>
       <!-- <div class="swiper-pagination" slot="pagination"></div> -->
@@ -23,8 +27,8 @@
     <!-- <div class="swiper-button-next" slot="button-next"></div> -->
     <!-- <div class="swiper-button-next"></div> -->
     <div class="btn-group">
-      <div class="prev-btn" @click="prev">上一个</div>
-      <div class="next-btn" @click="next">下一个</div>
+      <div ref="prevBtn" class="prev-btn" @click="prev">上一个</div>
+      <div ref="nextBtn" class="next-btn" @click="next">下一个</div>
     </div>
     <!-- <transition name="fade-bg">
       <div v-show="isActive" class="swiper-bg" @click="getActive('')">
@@ -40,51 +44,48 @@ import Task from '../resourse/task/task'
 import { mapState } from 'vuex'
 export default {
   components: {ImageEl, Video, Task},
-  // components: {Video, Task},
   props: {},
   data () {
     return {
       courrentType: 1,
-      isLast: false,
-      // formData: [],
-      resourses: this.$store.state.processInfo,
-      resour: [
+      // isLast: false,
+      // resourses: [],
+      resourses: [
         {
-          url: this.base + 'home-banner1.jpg',
-          type: 0
+          resourceUri: this.base + 'home-banner1.jpg',
+          studyType: 0
         },
         {
-          // url: 'http://182.148.48.236:54321/source/video_audio/first.mp4',
-          url: 'http://182.148.48.236:54321/source/video_audio/labone.mp4',
-          type: 1
+          // resourceUri: 'http://182.148.48.236:54321/source/video_audio/first.mp4',
+          resourceUri: 'http://182.148.48.236:54321/source/video_audio/labone.mp4',
+          studyType: 1
         },
         {
-          url: this.base + 'home-banner2.jpg',
-          type: 0
+          resourceUri: this.base + 'home-banner2.jpg',
+          studyType: 0
         },
         {
-          type: 2,
+          studyType: 2,
           taskType: 0
         },
         {
-          url: 'http://182.148.48.236:54321/source/video_audio/first.mp4',
-          type: 1
+          resourceUri: 'http://182.148.48.236:54321/source/video_audio/first.mp4',
+          studyType: 1
         },
         {
-          type: 2,
+          studyType: 2,
           taskType: 1
         },
         {
-          type: 2,
+          studyType: 2,
           taskType: 0
         },
         {
-          url: this.base + 'home-banner3.jpg',
-          type: 0
+          resourceUri: this.base + 'home-banner3.jpg',
+          studyType: 0
         }
       ], // 选中章节process数据
       swiperOptions: {
-        // height: 44,
         // 分页器配置
         pagination: {
           el: '.swiper-pagination',
@@ -127,7 +128,7 @@ export default {
         //   }
         // },
         // 自适应内容高度
-        // autoHeight: true,
+        autoHeight: true,
         // height: window.innerHeight,
         // 环状轮播
         // loop: true,
@@ -141,37 +142,56 @@ export default {
         observer: true,
         // 修改swiper的父元素时，自动初始化swiper
         observeParents: true
-      },
-      currentChapterId: null // 当前选中的章节Id
+      }
+      // currentChapterId: null // 当前选中的章节Id
     }
   },
-  created () {},
+  created () {
+    // this.$nextTick(() => {
+    //   this.init()
+    // })
+  },
   mounted () {
-    this.init()
+    this.$nextTick(() => {
+      this.init()
+    })
   },
   computed: {
     // 获取swiper对象
     swiper () {
       return this.$refs.resourseSwiper.$swiper
     },
-    ...mapState(['formData']) // state中formData对象
+    // isLast () {
+    //   console.log('this.swiper.activeIndex', this.swiper.activeIndex)
+    //   console.log('this.resourses.length - 1', this.resourses.length - 1)
+    //   return this.swiper.activeIndex == this.resourses.length - 1
+    // },
+    ...mapState(['processInfo', 'currentChapterId', 'currentProcessId']) // state中formData对象
   },
   methods: {
     // 初始化页面
     init () {
-      // this.resourses = this.$store.state.processInfo
-      console.log('this.resourses', this.resourses)
+      this.resources = this.processInfo
+      console.log('this.resourcesssssssssss', this.resources)
       this.swiper.scrollbar.$dragEl.css('background', '#0089FF')
+      let activeIndex = this.resourses.findIndex(e => {
+        console.log(e.processId)
+        console.log(this.currentProcessId)
+        return e.processId == this.currentProcessId
+      })
+      console.log('activeIndex', activeIndex)
+      this.swiper.slideTo(activeIndex, 1000, false)
     },
     // 每页轮播切换结束时
-    slideChangeTransitionEnd () {
-      if (this.swiper.activeIndex === this.resourses.length - 1) {
-        this.isLast = true
-        console.log('isLast', this.isLast)
-      } else {
-        this.isLast = false
-      }
-    },
+    // slideChangeTransitionStart () {
+    //   console.log(this.swiper.activeIndex)
+    //   if (this.swiper.activeIndex === this.resourses.length - 1) {
+    //     this.isLast = true
+    //     console.log('isLast', this.isLast)
+    //   } else {
+    //     this.isLast = false
+    //   }
+    // },
     // 上一页
     prev () {
       this.swiper.slidePrev()
@@ -179,32 +199,74 @@ export default {
     // 下一页
     next () {
       // 接口调用
-      this.swiper.slideNext()
+      this.isLast = this.swiper.activeIndex == this.resourses.length - 1
       if (this.isLast) {
         this.$MessageBox.confirm('该章节已学习完，是否进入下一章?').then(action => {
-          this.$store.state.theModel.menuCode += 1
-          this.$Toast({
-            message: '登录已过期，请重新登录',
-            iconClass: 'iconfont icon-yellow-warning',
-            duration: 3000
-          })
-          console.log('formData', this.formData)
+          this.getNextChapterInfo()
+          // this.$Toast({
+          //   message: '登录已过期，请重新登录',
+          //   iconClass: 'iconfont icon-yellow-warning',
+          //   duration: 3000
+          // })
+          // console.log('formData', this.formData)
         }).catch(error => {
           console.log(error)
         })
+      } else {
+        this.swiper.slideNext()
+        this.setStudyProcessLog()
       }
+    },
+    // 获取process数据
+    getProcessInfo () {
+      this.$api.getProcessInfo({
+        chapterId: this.currentChapterId
+      }).then(res => {
+        if (res.code == 200) {
+          console.log('this.$store.state.processInfooooooooo', res.data)
+          // this.$store.state.processInfo = res.data
+          this.resourses = res.data
+        }
+      })
+    },
+    // 记录ProcessId
+    setStudyProcessLog () {
+      let activeIndex = this.swiper.activeIndex
+      if (this.resourses.length || this.resourses[activeIndex]) {
+        this.currentProcessId = this.resourses[activeIndex].processId
+        console.log('this.currentProcessIdddddddd', this.currentProcessId)
+      }
+      this.$api.setStudyProcessLog({
+        courseEventId: this.courEventId,
+        chaId: this.currentChapterId,
+        processId: this.currentProcessId
+      }).then(res => {
+        if (res.code) {
+          console.log(res.code)
+        }
+      })
+    },
+    // 获取下一个章节数据
+    getNextChapterInfo () {
+      this.$api.getQueryProcessList({
+        chapterId: this.currentChapterId
+      }).then(res => {
+        if (res.code == 200) {
+          console.log(res.data)
+        }
+      })
     }
-    // getProcessInfo () {
-    //   this.$api.getProcessInfo({
-    //     chapterId: this.$store.state.currentChapterId
-    //   }).then(res => {
-    //     if (res.code == 200) {
-    //       console.log(res.data)
-    //     }
-    //   })
-    // }
   },
   watch: {
+    currentChapterId (val) {
+      // this.resourses = val
+      // console.log('val', val)
+      this.getProcessInfo()
+    },
+    processInfo (val) {
+      this.resourses = val
+      console.log(val)
+    }
   }
 }
 </script>
@@ -260,6 +322,17 @@ export default {
     background:rgba(0,0,0,1);
     opacity:0.5;
     z-index: 2;
+  }
+  .resourse-bg{
+    width: 100%;
+    min-height: 200px;
+    background-color: #000;
+    color: white;
+    line-height: 200px;
+    text-align: center;
+    font-size:18px;
+    font-family:Alibaba PuHuiTi;
+    font-weight:bold;
   }
   .fade-bg-enter-active{
     transition: all .5s

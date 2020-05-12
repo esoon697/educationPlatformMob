@@ -10,6 +10,10 @@ const api = {
   getCourseChapter: data => post('/course/courseChapter/listForStudy', data),
   // 获取课程process
   getProcessInfo: data => post('/course/processInfo/list', data),
+  // 记录课程process
+  setStudyProcessLog: data => post('/course/studyProcessLog/add', data),
+  // 下一章数据
+  getQueryProcessList: data => get('/course/processInfo/queryProcessList', data),
   // 验证token是否失效
   checkTk: data => get('http://api.yazhuokj.com/common/api/checkJWT', data),
   get: data => get('/study/finallydo', data)

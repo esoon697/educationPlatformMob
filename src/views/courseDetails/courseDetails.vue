@@ -33,7 +33,7 @@
                 <div class="play-block"></div>
               </div> -->
               <div v-if="detailsData.demonstrationUri" class="video-box">
-                <div v-if="detailsData.demonstrationUri.type !== 0" id='previewArea'></div>
+                <div v-if="detailsData.demonstrationUri.type !== 1" id='previewArea'></div>
                 <div v-else class="img-box">
                   <img :src="detailsData.demonstrationUri.uri" alt="">
                 </div>
@@ -96,11 +96,11 @@ export default {
     }
   },
   created () {
+  },
+  mounted () {
     this.$nextTick(() => {
       this.init()
     })
-  },
-  mounted () {
     let navBox = document.querySelector('.nav-box')
     this.navBoxWidth = navBox.clientWidth + 'px'
   },
@@ -133,9 +133,18 @@ export default {
           this.detailsData = res.data
           this.courId = res.data.courId
           this.$store.state.detailsData = res.data
+          console.log(this.detailsData)
+          this.removePlayer()
           this.initPlayer()
         }
       })
+    },
+    removePlayer () {
+      let parent = document.querySelector('.video-box')
+      let child = document.querySelector('#previewArea')
+      if (parent && child) {
+        parent.removeChild(child);
+      }
     },
     goStudy () {
       this.checkToken()
@@ -173,8 +182,8 @@ export default {
     // 验证token是否失效
     checkToken () {
       let token = localStorage.getItem('token')
+      console.log('token', token)
       if (this.isblank(token)) {
-        console.log(token)
         // window.location.href = 'http://portal.yazhuokj.com/login' + '?orient=personalCenter'
         this.$MessageBox.confirm('您还未登录，是否重新登录?').then(() => {
           window.location.href = 'http://portal.yazhuokj.com/login' + '?orient=educationPlatformMob'
@@ -192,7 +201,7 @@ export default {
             // this.$store.state.isLogin = true
             // history.pushState({}, 'personalcenter', 'http://personal.yazhuokj.com/studyCenter/centerIndex')
             // this.$router.push({path: '/study', query: {id: this.currentCourId}})
-            this.$router.push({path: '/study', query: {courId: this.courId}})
+            this.$router.push({path: '/study'})
           } else {
             this.$MessageBox.confirm('登录已失效，是否重新登录?').then(() => {
               window.location.href = 'http://portal.yazhuokj.com/login' + '?orient=educationPlatformMob'
