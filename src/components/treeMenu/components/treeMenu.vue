@@ -55,7 +55,19 @@ export default {
         this.chapterId = this.model.menuCode
         this.$store.state.currentChapterId = this.chapterId
         // this.getProcessInfo()
+        this.goTop()
       }
+    },
+    // 回到顶部
+    goTop () {
+      var timer = setInterval(function () {
+        let osTop = document.documentElement.scrollTop || document.body.scrollTop
+        let ispeed = Math.floor(-osTop / 5)
+        document.documentElement.scrollTop = document.body.scrollTop = osTop + ispeed
+        if (osTop === 0) {
+          clearInterval(timer)
+        }
+      }, 30)
     }
   }
 }
@@ -89,9 +101,6 @@ ul {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  &:hover{
-    background-color: #F2F4F5;
-  }
 }
 .font1{
   color:rgba(18,31,44,1);

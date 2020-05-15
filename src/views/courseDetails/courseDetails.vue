@@ -33,10 +33,10 @@
                 <div class="play-block"></div>
               </div> -->
               <div v-if="detailsData.demonstrationUri" class="video-box">
-                <div v-if="detailsData.demonstrationUri.type !== 1" id='previewArea'></div>
-                <div v-else class="img-box">
-                  <img :src="detailsData.demonstrationUri.uri" alt="">
+                <div v-if="detailsData.demonstrationUri.type==1" class="img-box">
+                  <img v-lazy="detailsData.demonstrationUri.uri" alt="">
                 </div>
+                <div v-if="detailsData.demonstrationUri.type==2" id='previewArea'></div>
               </div>
               <div class="go-study">
                 <a class="study-btn" href="javascript:;" @click="goStudy">开始学习</a>
@@ -59,7 +59,7 @@
               <ul>
                 <li class="member-info" v-for="n in 3" :key="n">
                   <div class="member">
-                    <img :src="base+'courses-avatar1.jpg'" alt="">
+                    <img v-lazy="base+'courses-avatar1.jpg'" alt="">
                     <p class="name">
                       <span>汪永智</span>
                       <span>教授</span>
@@ -79,7 +79,6 @@
   </div>
 </template>
 
-<script src='//player.polyv.net/script/polyvplayer.min.js'></script>
 <script>
 export default {
   components: {},
@@ -92,7 +91,12 @@ export default {
       navBoxWidth: '',
       isPlay: false,
       currentCourId: null,
-      detailsData: {}
+      detailsData: {},
+      vid: null,
+      ts: null,
+      sign: null,
+      playsafe: null,
+      plPlayer: null
     }
   },
   created () {
@@ -104,25 +108,53 @@ export default {
     let navBox = document.querySelector('.nav-box')
     this.navBoxWidth = navBox.clientWidth + 'px'
   },
-  computed: {
-    // isSelect () {
-    //   return '1-' + this.course.courEventId
-    // }
-  },
+  computed: {},
   methods: {
     init () {
       this.currentCourId = this.$route.query.id
       this.$store.state.courEventId = this.currentCourId
-      this.coursesNavs = JSON.parse(this.$route.query.coursesList)
+      this.coursesNavs = this.$store.state.coursesList
       this.isSelect = '1-' + this.currentCourId
-      this.initPlayer()
       this.getDetailsData()
     },
+    // initPlayer () {
+    //   let vid = 'a91fdd8c80f3017598339ebeb5e94903_a'
+    //   let secretkey = 'Q1d6dsaIiG'
+    //   let ts = new Date().getTime()
+    //   let sign = this.$md5(secretkey + vid + ts)
+    //   console.log('sign', sign)
+    //   this.plPlayer = polyvObject('#previewArea').videoPlayer({
+    //     'width': '100%',
+    //     'height': '240',
+    //     'forceH5': true,
+    //     'vid': vid,
+    //     'ts': ts,
+    //     'sign': sign,
+    //     // 'playsafe': this.token,
+    //     'df': 3
+    //   })
+    // },
     initPlayer () {
-      this.plPlayer = polyvObject('#previewArea').previewPlayer({
-        'width': '100%',
-        'height': '338',
-        'vid': 'jl91nkk5m5027lc431cln7kc365nn2p37_l'
+      this.$api.getvideoToken({
+        vid: this.vid
+      }).then(res => {
+        if (res.code == 200) {
+          console.log(res.data)
+          this.ts = res.data.ts
+          this.sign = res.data.sign
+          this.playsafe = res.data.token
+          this.plPlayer = polyvObject('#previewArea').videoPlayer({
+            'width': '100%',
+            'height': '240',
+            'forceH5': true,
+            'vid': this.vid,
+            'ts': this.ts,
+            'sign': this.sign,
+            'playsafe': this.playsafe,
+            'df': 3
+          })
+          // this.initPlayer()
+        }
       })
     },
     getDetailsData () {
@@ -133,18 +165,23 @@ export default {
           this.detailsData = res.data
           this.courId = res.data.courId
           this.$store.state.detailsData = res.data
-          console.log(this.detailsData)
-          this.removePlayer()
+          this.vid = res.data.demonstrationUri.uri
+          if (this.plPlayer) {
+            this.removePlayer()
+          }
           this.initPlayer()
+          // this.initPlayer()
         }
       })
     },
     removePlayer () {
-      let parent = document.querySelector('.video-box')
-      let child = document.querySelector('#previewArea')
-      if (parent && child) {
-        parent.removeChild(child);
-      }
+      // let parent = document.querySelector('.video-box')
+      // let child = document.querySelector('#previewArea')
+      // if (parent && child) {
+      //   alert('q')
+      //   parent.removeChild(child)
+      // }
+      this.plPlayer.destroy()
     },
     goStudy () {
       this.checkToken()
@@ -163,30 +200,18 @@ export default {
       this.currentCourId = i
       this.getDetailsData()
     },
-    // init1 () {
-    //   // 获取token
-    //   let token = this.$route.query.token
-    //   // 获取用户头像
-    //   let headImgUrl = this.$route.query.headImgUrl
-    //   if (token) {
-    //     localStorage.setItem('token', token)
-    //   }
-    //   if (headImgUrl) {
-    //     localStorage.setItem('headImgUrl', headImgUrl)
-    //   }
-    //   headImgUrl = localStorage.getItem('headImgUrl')
-    //   this.$store.state.headImgUrl = headImgUrl
-    //   // token验证接口
-    //   this.checkToken()
-    // },
     // 验证token是否失效
     checkToken () {
+      // token验证接口
+      let orient = 'http://' + window.location.host
       let token = localStorage.getItem('token')
       console.log('token', token)
       if (this.isblank(token)) {
         // window.location.href = 'http://portal.yazhuokj.com/login' + '?orient=personalCenter'
         this.$MessageBox.confirm('您还未登录，是否重新登录?').then(() => {
-          window.location.href = 'http://portal.yazhuokj.com/login' + '?orient=educationPlatformMob'
+          // window.location.href = 'http://portal.yazhuokj.com/login?orient=' + orient
+          // window.location.href = 'http://10.10.10.213:4400/login?orient=' + orient
+          window.location.href = 'http://portal.yazhuokj.com/login?orient=' + orient
         }).catch(() => {
           this.$Toast({
             message: '操作成功',
@@ -198,13 +223,11 @@ export default {
           jwt: token
         }).then(res => {
           if (res.code == 200 && res.data == 0) {
-            // this.$store.state.isLogin = true
-            // history.pushState({}, 'personalcenter', 'http://personal.yazhuokj.com/studyCenter/centerIndex')
-            // this.$router.push({path: '/study', query: {id: this.currentCourId}})
             this.$router.push({path: '/study'})
           } else {
             this.$MessageBox.confirm('登录已失效，是否重新登录?').then(() => {
-              window.location.href = 'http://portal.yazhuokj.com/login' + '?orient=educationPlatformMob'
+              // window.location.href = 'http://portal.yazhuokj.com/login' + '?orient=educationPlatformMob'
+              window.location.href = 'http://portal.yazhuokj.com/login?orient=' + orient
             }).catch(() => {
               this.$Toast({
                 message: '已取消',
@@ -358,7 +381,7 @@ export default {
             flex-direction: column;
             justify-content: center;
             align-items: flex-start;
-            margin-bottom: 3%;
+            margin-bottom: 6%;
             .video-box{
               width: 100%;
               position: relative;
@@ -372,6 +395,7 @@ export default {
                 transform: translate(-50%,-50%);
                 img{
                   width: 50px;
+                  height: 50px;
                 }
               }
               .play-block{
@@ -441,7 +465,7 @@ export default {
               line-height: 16px;
               font-weight:bold;
               color:rgba(18,31,44,1);
-              margin-bottom: 2%;
+              margin-bottom: 3%;
             }
           }
           .resources-load{
@@ -450,7 +474,7 @@ export default {
               display: flex;
               justify-content: space-between;
               align-items: center;
-              margin-bottom: 2%;
+              margin-bottom: 5%;
               .resource-name{
                 width: 80%;
                 font-size:13px;
@@ -478,7 +502,7 @@ export default {
               display: flex;
               justify-content: space-between;
               align-items: center;
-              margin-bottom: 2%;
+              margin-bottom: 5%;
               .member{
                 flex: 1;
                 margin-right: 20px;
@@ -534,5 +558,17 @@ export default {
     // transform: translateY(-100%);
     opacity: 0;
   }
+  // img[lazy=loading] {
+  //   width: 30px;
+  //   height: 30px;
+  // }
+  // img[lazy=error] {
+  //   width: 30px;
+  //   height: 30px;
+  // }
+  // img[lazy=loaded] {
+  //   width: 30px;
+  //   height: 30px;
+  // }
 }
 </style>

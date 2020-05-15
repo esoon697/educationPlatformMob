@@ -13,9 +13,13 @@ const api = {
   // 记录课程process
   setStudyProcessLog: data => post('/course/studyProcessLog/add', data),
   // 下一章数据
-  getQueryProcessList: data => get('/course/processInfo/queryProcessList', data),
+  getNextChapter: data => get('/course/courseChapter/getNextChapterId', data),
+  // 提交试题数据
+  activeSubmit: data => get('/course/activeSubmit/add', data),
   // 验证token是否失效
   checkTk: data => get('http://api.yazhuokj.com/common/api/checkJWT', data),
+  // 保利威视频权限验证
+  getvideoToken: data => get('/upload/getvideo/token', data),
   get: data => get('/study/finallydo', data)
 }
 

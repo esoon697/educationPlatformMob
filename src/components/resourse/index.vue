@@ -1,15 +1,21 @@
 <template>
   <div class="resourse-main">
     <i class="iconfont icon-xingzhuang"></i>
-    <swiper ref="resourseSwiper" :options="swiperOptions">
-      <template  v-if="resourses.length">
+    <swiper ref="resourseSwiper" :options="swiperOptions" @slideChange="slideChange">
+      <template  v-if="resourses&&resourses.length">
         <swiper-slide v-for="(resourse, index) in resourses" :key="index">
           <!-- 图片资源组件 -->
           <ImageEl v-if="resourse.studyType==1" :url='resourse.resourceUri'/>
           <!-- 视频资源组件 -->
-          <Video v-if="resourse.studyType==2" :url='resourse.resourceUri' :index='index'/>
+          <Video v-if="resourse.studyType==2" :url='resourse.resourceUri' :videoId = "resourse.processId" :index='index'/>
           <!-- 互动资源组件 -->
-          <Task v-if="resourse.studyType==3" :url='resourse.resourceUri' :taskType="resourse.activeType" :index="index"/>
+          <Task
+          v-if="resourse.studyType==3"
+          :url='resourse.resourceUri'
+          :taskType="resourse.activeType"
+          :taskContents="resourse.activeContents"
+          :taskTitle="resourse.activeTitle"
+          :index="index"/>
           <div class="resourse-bg" v-if="resourse.studyType===null">暂无数据</div>
         </swiper-slide>
       </template>
@@ -30,10 +36,6 @@
       <div ref="prevBtn" class="prev-btn" @click="prev">上一个</div>
       <div ref="nextBtn" class="next-btn" @click="next">下一个</div>
     </div>
-    <!-- <transition name="fade-bg">
-      <div v-show="isActive" class="swiper-bg" @click="getActive('')">
-      </div>
-    </transition> -->
   </div>
 </template>
 
@@ -147,9 +149,6 @@ export default {
     }
   },
   created () {
-    // this.$nextTick(() => {
-    //   this.init()
-    // })
   },
   mounted () {
     this.$nextTick(() => {
@@ -161,60 +160,57 @@ export default {
     swiper () {
       return this.$refs.resourseSwiper.$swiper
     },
-    // isLast () {
-    //   console.log('this.swiper.activeIndex', this.swiper.activeIndex)
-    //   console.log('this.resourses.length - 1', this.resourses.length - 1)
-    //   return this.swiper.activeIndex == this.resourses.length - 1
-    // },
-    ...mapState(['processInfo', 'currentChapterId', 'currentProcessId']) // state中formData对象
+    ...mapState(['processInfo', 'currentChapterId', 'currentProcessId', 'courEventId', 'formData']) // state中formData对象
   },
   methods: {
     // 初始化页面
     init () {
-      this.resources = this.processInfo
-      console.log('this.resourcesssssssssss', this.resources)
+      this.resourses = this.processInfo
+      console.log('this.resourcesssssssssss', this.resourses)
       this.swiper.scrollbar.$dragEl.css('background', '#0089FF')
+      if (!this.resourses) {
+        return
+      }
       let activeIndex = this.resourses.findIndex(e => {
-        console.log(e.processId)
-        console.log(this.currentProcessId)
         return e.processId == this.currentProcessId
       })
       console.log('activeIndex', activeIndex)
-      this.swiper.slideTo(activeIndex, 1000, false)
+      this.swiper.slideTo(activeIndex, 0, false)
     },
-    // 每页轮播切换结束时
-    // slideChangeTransitionStart () {
-    //   console.log(this.swiper.activeIndex)
-    //   if (this.swiper.activeIndex === this.resourses.length - 1) {
-    //     this.isLast = true
-    //     console.log('isLast', this.isLast)
-    //   } else {
-    //     this.isLast = false
-    //   }
-    // },
+    // 轮播切换时触发回调
+    slideChange () {
+      this.setStudyProcessLog()
+    },
     // 上一页
     prev () {
+      if (this.swiper.activeIndex === 0) {
+        this.$Toast({
+          message: '已经是第一页了',
+          duration: 2000
+        })
+        return
+      }
       this.swiper.slidePrev()
     },
     // 下一页
     next () {
       // 接口调用
+      if (!this.resourses) {
+        this.$Toast({
+          message: '暂无数据',
+          duration: 2000
+        })
+        return
+      }
       this.isLast = this.swiper.activeIndex == this.resourses.length - 1
       if (this.isLast) {
         this.$MessageBox.confirm('该章节已学习完，是否进入下一章?').then(action => {
           this.getNextChapterInfo()
-          // this.$Toast({
-          //   message: '登录已过期，请重新登录',
-          //   iconClass: 'iconfont icon-yellow-warning',
-          //   duration: 3000
-          // })
-          // console.log('formData', this.formData)
         }).catch(error => {
           console.log(error)
         })
       } else {
         this.swiper.slideNext()
-        this.setStudyProcessLog()
       }
     },
     // 获取process数据
@@ -224,49 +220,56 @@ export default {
       }).then(res => {
         if (res.code == 200) {
           console.log('this.$store.state.processInfooooooooo', res.data)
-          // this.$store.state.processInfo = res.data
+          this.$store.state.processInfo = res.data
           this.resourses = res.data
+          this.setStudyProcessLog()
         }
       })
     },
     // 记录ProcessId
     setStudyProcessLog () {
       let activeIndex = this.swiper.activeIndex
-      if (this.resourses.length || this.resourses[activeIndex]) {
-        this.currentProcessId = this.resourses[activeIndex].processId
+      if (this.resourses && this.resourses.length && this.resourses[activeIndex]) {
+        this.$store.state.currentProcessId = this.resourses[activeIndex].processId
         console.log('this.currentProcessIdddddddd', this.currentProcessId)
       }
       this.$api.setStudyProcessLog({
         courseEventId: this.courEventId,
         chaId: this.currentChapterId,
         processId: this.currentProcessId
-      }).then(res => {
-        if (res.code) {
-          console.log(res.code)
-        }
       })
     },
     // 获取下一个章节数据
     getNextChapterInfo () {
-      this.$api.getQueryProcessList({
+      this.$api.getNextChapter({
         chapterId: this.currentChapterId
       }).then(res => {
         if (res.code == 200) {
           console.log(res.data)
+          this.$store.state.currentChapterId = res.data.nextChapterId
         }
+      })
+    },
+    // 提交试题数据
+    activeSubmit () {
+      this.$api.activeSubmit({
+        activeAnswers: this.formData
       })
     }
   },
   watch: {
     currentChapterId (val) {
-      // this.resourses = val
-      // console.log('val', val)
+      this.$store.state.formData = []
+      this.$store.state.processInfo = []
       this.getProcessInfo()
-    },
-    processInfo (val) {
-      this.resourses = val
-      console.log(val)
+      this.setStudyProcessLog()
+      this.init()
     }
+    // processInfo (val) {
+    //   this.resourses = val
+    //   this.init()
+    //   console.log(val)
+    // }
   }
 }
 </script>

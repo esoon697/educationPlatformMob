@@ -9,6 +9,9 @@ import fastClick from 'fastclick'
 import 'lib-flexible/flexible.js'
 import VueAwesomeSwiper from 'vue-awesome-swiper'
 import 'swiper/css/swiper.css'
+import VueLazyload from 'vue-lazyload'
+import VuePreview from 'vue-preview'
+import md5 from 'js-md5'
 import './utils/utils'
 import {
   Header,
@@ -53,6 +56,28 @@ fastClick.attach(document.body)
 
 Vue.use(VueAwesomeSwiper)
 // Vue.component(VueAwesomeSwiper.name, VueAwesomeSwiper)
+
+Vue.prototype.$md5 = md5
+
+// 图片预览
+Vue.use(VuePreview, {
+  mainClass: 'pswp--minimal--dark',
+  barsSize: {top: 0, bottom: 0},
+  captionEl: false,
+  fullscreenEl: false,
+  shareEl: false,
+  bgOpacity: 0.85,
+  tapToClose: true,
+  tapToToggleControls: false
+})
+
+// 图片懒加载
+Vue.use(VueLazyload, {
+  preLoad: 1,
+  error: '../static/imgs/loadFail.jpg',
+  loading: '../static/imgs/loading.gif',
+  attempt: 1
+})
 
 Vue.config.productionTip = false
 

@@ -25,6 +25,7 @@ module.exports = {
     'generator-star-spacing': 'off',
     // allow debugger during development
     'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off',
-    "eqeqeq": 'off'  // eslint Expected '===' and instead saw '=='报错的解决
+    "eqeqeq": 'off',  // eslint Expected '===' and instead saw '=='报错的解决
+    'no-undef': 'off'
   }
 }

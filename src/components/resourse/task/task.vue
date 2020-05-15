@@ -2,17 +2,17 @@
   <div class="task-main">
     <mt-radio
       v-if="taskType === 0"
-      title="单选框列表大飒少aaaaaaaaaaaaaaaaaaaaaaaaaa时诵诗书"
+      :title="taskTitle"
       v-model="radioVal"
       @change="check1"
-      :options="['选项qqqqqqr1', '选项r2', '选项r3']">
+      :options="taskContents">
     </mt-radio>
     <mt-checklist
       v-else
-      title="复选框列表"
+      :title="taskTitle"
       v-model="checkVal"
       @change="check2"
-      :options="['选项A', '选项B', '选项C']">
+      :options="taskContents">
     </mt-checklist>
   </div>
 </template>
@@ -23,12 +23,11 @@
 import { mapState } from 'vuex'
 export default {
   components: {},
-  props: ['taskType', 'index'],
+  props: ['taskType', 'index', 'taskContents', 'taskTitle'],
   data () {
     return {
       radioVal: '',
       checkVal: []
-      // formData: []
     }
   },
   created () {},
@@ -55,7 +54,8 @@ export default {
         this.formData.push(radioObj)
       }
       console.log(this.formData)
-      this.storageSet('formData', this.formData)
+      this.$store.state.formData = this.formData
+      // this.storageSet('formData', this.formData)
     },
     check2 () {
       console.log('formData1', this.formData)
@@ -73,7 +73,8 @@ export default {
       } else {
         this.formData.push(checkObj)
       }
-      this.storageSet('formData', this.formData)
+      // this.storageSet('formData', this.formData)
+      this.$store.state.formData = this.formData
     }
   },
   watch: {}

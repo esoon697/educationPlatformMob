@@ -13,65 +13,75 @@
   </div>
 </template>
 
-<script src="https://player.polyv.net/script/polyvplayer.min.js"></script>
 <script>
+import { mapState } from 'vuex'
 export default {
   components: {},
-  props: ['url', 'index'],
+  props: ['url', 'index', 'videoId'],
   data () {
     return {
       isPlay: false,
       n: 0,
+      vid: this.url,
+      ts: null,
+      sign: null,
+      playsafe: null,
       plPlayer: null
-
     }
   },
   created () {
   },
   mounted () {
     this.$nextTick(() => {
-      this.init()
+      // this.init()
+      this.initPlayer()
+      this.destroyPlayer()
     })
   },
-  computed: {},
-  methods: {
-    init () {
-      this.plPlayer = polyvObject('#pl_video_player' + this.index).videoPlayer({
-        'width': '100%',
-        'height': '339',
-        'vid': 'a91fdd8c802e9c9e4051c34a0e02048d_a',
-        'forceH5': true,
-        // 'playsafe': ''
-        // 'ts': this.ts,
-        // 'sign': this.sign,
-        'df': 3
-      })
-    }
-    // videoPlay () {
-    //   let index = this.index
-    //   // let player = document.querySelectorAll('.video-player')[index]
-    //   let player = document.querySelector('#video' + index)
-    //   console.log(player)
-    //   if (!player.currentSrc) {
-    //     this.$error('暂无资源，敬请期待！')
-    //     return
-    //   }
-    //   if (player.networkState === 3) {
-    //     this.$error('暂未找到视频资源')
-    //     return
-    //   }
-    //   if (player.paused) {
-    //     // console.log(player.paused)
-    //     player.play()
-    //     this.isPlay = true
-    //   } else {
-    //     // console.log(player.paused)
-    //     player.pause()
-    //     this.isPlay = false
-    //   }
-    // },
+  computed: {
+    ...mapState(['currentProcessId'])
   },
-  watch: {}
+  methods: {
+    initPlayer () {
+      if (!this.vid) {
+        return
+      }
+      this.$api.getvideoToken({
+        vid: this.vid
+      }).then(res => {
+        if (res.code == 200) {
+          console.log(res.data)
+          this.ts = res.data.ts
+          this.sign = res.data.sign
+          this.playsafe = res.data.token
+          this.plPlayer = polyvObject('#pl_video_player' + this.index).videoPlayer({
+            'width': '100%',
+            'height': '240',
+            'vid': this.vid,
+            'forceH5': true,
+            'playsafe': this.playsafe,
+            'ts': this.ts,
+            'sign': this.sign,
+            'df': 3
+          })
+        }
+      })
+    },
+    // 销毁非当前轮播视频
+    destroyPlayer () {
+      console.log('video currentProcessId', this.currentProcessId)
+      if (this.videoId !== this.currentProcessId) {
+        if (this.plPlayer) {
+          this.plPlayer.HTML5.pause()
+        }
+      }
+    }
+  },
+  watch: {
+    currentProcessId () {
+      this.destroyPlayer()
+    }
+  }
 }
 </script>
 <style lang="less" scoped>

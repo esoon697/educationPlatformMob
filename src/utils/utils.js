@@ -29,3 +29,14 @@ Vue.prototype.storageSet = function (key, value, type = 'localStorage') {
     window.sessionStorage.setItem(key, JSON.stringify(value))
   }
 }
+// 回到顶部
+Vue.prototype.goTop = function () {
+  var timer = setInterval(function () {
+    let osTop = document.documentElement.scrollTop || document.body.scrollTop
+    let ispeed = Math.floor(-osTop / 5)
+    document.documentElement.scrollTop = document.body.scrollTop = osTop + ispeed
+    if (osTop === 0) {
+      clearInterval(timer)
+    }
+  }, 30)
+}

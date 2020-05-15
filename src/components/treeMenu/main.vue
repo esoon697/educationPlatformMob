@@ -8,6 +8,9 @@
 <script>
 import myTree from './components/treeMenu'
 import { mapState } from 'vuex'
+let node = null
+let endNode = null
+console.log('endNode', endNode)
 export default {
   components: {
     myTree
@@ -22,9 +25,12 @@ export default {
   created () {
   },
   mounted () {
-    // this.$nextTick(() => {
-    //   this.init()
-    // })
+    this.$nextTick(() => {
+      setTimeout(() => {
+        this.init()
+      }, 1000)
+    })
+    // this.init()
   },
   computed: {
     ...mapState(['theModel', 'currentChapterId'])
@@ -47,8 +53,30 @@ export default {
     //     }
     //   })
     // }
+    init () {
+      if (!node) {
+        node = document.querySelector('.active-row')
+      }
+      let parentNode = node.parentNode
+      if (parentNode.nodeName == 'UL' && parentNode.style.display == 'none') {
+        parentNode.style.display = 'block'
+        // parentNode.style.background = '#a11'
+      }
+      // console.log(endNode)
+      endNode = document.querySelector('.menu-box')
+      if (parentNode.nodeName == 'UL' && parentNode.className == endNode.className) {
+        return false
+      } else {
+        node = parentNode
+        this.init()
+      }
+    }
   },
-  watch: {}
+  watch: {
+    // theModel () {
+    //   this.init()
+    // }
+  }
 }
 </script>
 

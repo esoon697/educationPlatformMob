@@ -72,6 +72,7 @@ export default {
   },
   methods: {
     init () {
+      this.$store.state.theModel = null
       this.courId = this.detailsData.courId
       this.getCourseChapter()
     },
@@ -84,8 +85,12 @@ export default {
       }).then(res => {
         if (res.code == 200) {
           console.log('resdataaaaa', res.data)
+          if (!res.data.chapters.length) {
+            this.$Toast('该课程暂无数据')
+            return
+          }
           this.$store.state.theModel = res.data.chapters
-          this.$store.state.processInfo = res.data.initProcessInfo
+          // this.$store.state.processInfo = res.data.initProcessInfo
           this.$store.state.currentChapterId = res.data.currentChapterId
           this.$store.state.currentProcessId = res.data.currentProcessInfoId
           this.$store.state.courEventId = res.data.courseEventId

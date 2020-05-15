@@ -8,7 +8,7 @@
       </div>
     </div>
     <div class="user-banner">
-      <img :src="base+'home-banner1.jpg'" alt="">
+      <img v-lazy="base+'home-banner1.jpg'" alt="">
     </div>
     <div class="btn-group">
       <div class="home-btn">
@@ -92,6 +92,7 @@ export default {
     }
   },
   created () {
+    this.init()
   },
   mounted () {
     this.$nextTick(() => {
@@ -103,6 +104,14 @@ export default {
   },
   computed: {},
   methods: {
+    init () {
+      // 获取token
+      let token = this.$route.query.token
+      if (token) {
+        history.replaceState({}, 'educationPlatformMob', 'http://nys.yazhuokj.com/home')
+        localStorage.setItem('token', token)
+      }
+    },
     selectChange () {
       let target = event.target
       console.log(target.innerHTML)
@@ -169,6 +178,7 @@ export default {
   .user-banner{
     width: 100%;
     // margin-top: 16px;
+    min-height: 200px;
     img{
       width: 100%;
     }

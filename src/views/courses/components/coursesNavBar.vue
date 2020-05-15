@@ -13,7 +13,7 @@
           <div class="swiper">
             <mt-swipe :auto="3000" :speed="800">
               <mt-swipe-item v-for="(banner, index) in banners" :key="index">
-                <img class="home-banner" :src="banner.url" alt="">
+                <img class="home-banner" v-lazy="banner.url" alt="">
               </mt-swipe-item>
               <!-- <mt-swipe-item>2</mt-swipe-item>
               <mt-swipe-item>3</mt-swipe-item> -->
@@ -21,7 +21,7 @@
           </div>
         </div>
         <div class="notice-box">
-          <img class="notice-left" :src="base+'notice_left.png'">
+          <img class="notice-left" v-lazy="base+'notice_left.png'">
           <div class="notice-mid">
             <swiper ref="noticeSwiper" :options="swiperOptions">
               <swiper-slide v-for="n in 5" :key="n">
@@ -152,6 +152,7 @@ export default {
         if (res.code == 200) {
           console.log(res.data)
           this.coursesList = res.data
+          this.$store.state.coursesList = res.data
         }
       })
     },
@@ -170,7 +171,7 @@ export default {
     },
     goCoursesDetails (id) {
       console.log(id)
-      this.$router.push({path: './courseDetails', query: {id: id, coursesList: JSON.stringify(this.coursesList)}})
+      this.$router.push({path: './courseDetails', query: {id: id}})
     }
   },
   watch: {}

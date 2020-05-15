@@ -1,7 +1,7 @@
 <template>
   <div class="courseItem-main">
     <div class="course-left">
-      <img :src="base+'card_eg.jpg'" alt="">
+      <img v-lazy="base+'card_eg.jpg'" alt="">
       <div class="course-count" v-if="courseCount">{{courseCount}}节课</div>
       <div class="course-play" v-else>
         <img :src="base+'home_play_icon.png'" alt="">
