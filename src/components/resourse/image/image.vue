@@ -1,40 +1,65 @@
 <template>
-  <div class="image-main">
-    <img v-if="url" :src="url" alt="">
+  <div class="image-main" @click="imgPreview">
+    <!-- <img v-if="url" :src="url" alt=""> -->
+    <!-- <VuePreview v-if="url" :src="url"/> -->
+    <div v-if="url" class="img-box" :style="{backgroundImage:`url(${url})`}"></div>
     <div v-else class="img-bg">暂无数据</div>
   </div>
 </template>
 
 <script>
+import VuePreview from '../../vuePreview//vuePreview'
 export default {
-  components: {},
+  components: {VuePreview},
   props: ['url'],
   data () {
     return {
+      // url: 'http://182.148.48.236:54321/source/educationBackServer/images/responsibility_01.png'
     }
   },
   created () {},
-  mounted () {},
+  mounted () {
+    console.log(this.url)
+  },
   computed: {},
-  methods: {},
+  methods: {
+    // 预览图片
+    imgPreview () {
+      console.log(this.$store.state.isPreview)
+      let previewImgs = []
+      previewImgs.push(this.url)
+      this.$store.state.isPreview = true
+      this.$store.state.previewImgs = previewImgs
+    }
+  },
   watch: {}
 }
 </script>
 <style lang="less" scoped>
 .image-main{
+  width: 100%;
+  height: 260px;
   display: flex;
   justify-content: center;
   align-items: center;
+  .img-box{
+    width: 100%;
+    height: 260px;
+    background-color: #000;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+  }
   img{
     max-width: 100%;
     max-height: 300px;
   }
   .img-bg{
-    // width: 100px;
-    max-height: 300px;
+    width: 100%;
+    height: 260px;
     background-color: #000;
     color: white;
-    line-height: 300px;
+    line-height: 260px;
     text-align: center;
     font-size:18px;
     font-family:Alibaba PuHuiTi;

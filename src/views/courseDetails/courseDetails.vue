@@ -23,7 +23,7 @@
           <div class="content-title">{{detailsData.courTypeName}}</div>
           <div class="content-inner-box">
             <div class="content-resources">
-              <!-- <div class="video-box" @click.prevent="videoPlay">
+              <!-- <div class="preview-box" @click.prevent="videoPlay">
                 <video id="video" class="video-player" controls loop>
                   <source src="http://182.148.48.236:54321/source/video_audio/first.mp4" type="video/mp4" />
                 </video>
@@ -32,12 +32,16 @@
                 </div>
                 <div class="play-block"></div>
               </div> -->
-              <div v-if="detailsData.demonstrationUri" class="video-box">
+              <div v-if="detailsData.demonstrationUri" class="preview-box">
                 <div v-if="detailsData.demonstrationUri.type==1" class="img-box">
                   <img v-lazy="detailsData.demonstrationUri.uri" alt="">
                 </div>
-                <div v-if="detailsData.demonstrationUri.type==2" id='previewArea'></div>
+                <div v-if="detailsData.demonstrationUri.type==2" class="video-box">
+                  <div id='previewArea'></div>
+                  <div v-if="!plPlayer" class="resourse-bg">加载中</div>
+                </div>
               </div>
+              <div v-else class="resourse-bg">加载中</div>
               <div class="go-study">
                 <a class="study-btn" href="javascript:;" @click="goStudy">开始学习</a>
               </div>
@@ -175,7 +179,7 @@ export default {
       })
     },
     removePlayer () {
-      // let parent = document.querySelector('.video-box')
+      // let parent = document.querySelector('.preview-box')
       // let child = document.querySelector('#previewArea')
       // if (parent && child) {
       //   alert('q')
@@ -382,7 +386,7 @@ export default {
             justify-content: center;
             align-items: flex-start;
             margin-bottom: 6%;
-            .video-box{
+            .preview-box{
               width: 100%;
               position: relative;
               .video-player{
@@ -544,6 +548,17 @@ export default {
     opacity:0.5;
     z-index: 999;
   }
+  .resourse-bg{
+  width: 100%;
+  min-height: 200px;
+  background-color: #000;
+  color: white;
+  line-height: 200px;
+  text-align: center;
+  font-size:18px;
+  font-family:Alibaba PuHuiTi;
+  font-weight:bold;
+}
   .fade-menu-enter-active{
     transition: all .5s
   }

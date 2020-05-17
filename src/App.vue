@@ -2,16 +2,25 @@
   <div id="app">
     <router-view/>
     <TabBar/>
-    <!-- <MyVuePreview/> -->
+    <MyVuePreview v-if="isPreview"/>
   </div>
 </template>
 
 <script>
 import TabBar from './components/tabBar/tabBar'
 import MyVuePreview from './components/myVuePreview/myVuePreview'
+import {mapState} from 'vuex'
 export default {
   name: 'App',
   components: {TabBar, MyVuePreview},
+  data () {
+    return {
+      // isPreview: false
+    }
+  },
+  computed: {
+    ...mapState(['isPreview'])
+  },
   created () {
     // 在页面刷新时将vuex里的信息保存到localStorage里
     window.addEventListener('beforeunload', () => {

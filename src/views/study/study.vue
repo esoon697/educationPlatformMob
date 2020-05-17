@@ -39,19 +39,17 @@
           </ContentContainner>
         </mt-tab-container-item>
       </mt-tab-container>
-      <!-- <MyVuePreview/> -->
     </div>
 </template>
 
 <script>
 // import Video from '../../components/video/video'
 import Resourse from '../../components/resourse/index'
-import MyVuePreview from '../../components/myVuePreview/myVuePreview'
 import ContentContainner from '../../components/contentContainner/contentContainner'
 import TreeMenu from '../../components/treeMenu/main'
 import { mapState } from 'vuex'
 export default {
-  components: {Resourse, ContentContainner, MyVuePreview, TreeMenu},
+  components: {Resourse, ContentContainner, TreeMenu},
   props: {},
   data () {
     return {

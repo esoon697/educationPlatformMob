@@ -130,7 +130,7 @@ export default {
         //   }
         // },
         // 自适应内容高度
-        autoHeight: true,
+        // autoHeight: true,
         // height: window.innerHeight,
         // 环状轮播
         // loop: true,
@@ -328,10 +328,10 @@ export default {
   }
   .resourse-bg{
     width: 100%;
-    min-height: 200px;
+    height: 260px;
     background-color: #000;
     color: white;
-    line-height: 200px;
+    line-height: 260px;
     text-align: center;
     font-size:18px;
     font-family:Alibaba PuHuiTi;

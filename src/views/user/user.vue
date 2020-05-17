@@ -30,10 +30,9 @@
           </div>
         </mt-tab-container-item>
         <mt-tab-container-item id="2">
-          <SqueezeBox/>
         </mt-tab-container-item>
         <mt-tab-container-item id="3">
-          <mt-cell v-for="n in 6" :key="n" :title="'选项 ' + n" />
+          <VuePreview/>
         </mt-tab-container-item>
         <mt-tab-container-item id="4">
           <mt-cell v-for="n in 6" :key="n" :title="'选项 ' + n" />
@@ -44,9 +43,9 @@
 </template>
 
 <script>
-import SqueezeBox from '../../components/squeezeBox/squeezeBox'
+import VuePreview from '../../components//vuePreview//vuePreview'
 export default {
-  components: {SqueezeBox},
+  components: {VuePreview},
   props: [''],
   data () {
     return {

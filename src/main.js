@@ -11,7 +11,6 @@ import VueAwesomeSwiper from 'vue-awesome-swiper'
 import 'swiper/css/swiper.css'
 import VueLazyload from 'vue-lazyload'
 import VuePreview from 'vue-preview'
-import md5 from 'js-md5'
 import './utils/utils'
 import {
   Header,
@@ -56,8 +55,6 @@ fastClick.attach(document.body)
 
 Vue.use(VueAwesomeSwiper)
 // Vue.component(VueAwesomeSwiper.name, VueAwesomeSwiper)
-
-Vue.prototype.$md5 = md5
 
 // 图片预览
 Vue.use(VuePreview, {

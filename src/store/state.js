@@ -7,5 +7,7 @@ export default {
   currentProcessId: null, // 当前已学习processId
   theModel: null, // 学习章节列表
   processInfo: null, // 章节process数据
-  currentTaskInfo: null
+  currentTaskInfo: null,
+  isPreview: false,
+  previewImgs: null
 }

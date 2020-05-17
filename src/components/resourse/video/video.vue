@@ -21,7 +21,6 @@ export default {
   data () {
     return {
       isPlay: false,
-      n: 0,
       vid: this.url,
       ts: null,
       sign: null,
@@ -56,13 +55,14 @@ export default {
           this.playsafe = res.data.token
           this.plPlayer = polyvObject('#pl_video_player' + this.index).videoPlayer({
             'width': '100%',
-            'height': '240',
+            'height': '260',
             'vid': this.vid,
             'forceH5': true,
             'playsafe': this.playsafe,
             'ts': this.ts,
             'sign': this.sign,
-            'df': 3
+            'df': 3,
+            'autoplay': false
           })
         }
       })
@@ -70,9 +70,11 @@ export default {
     // 销毁非当前轮播视频
     destroyPlayer () {
       console.log('video currentProcessId', this.currentProcessId)
+      console.log('video videoId', this.videoId)
       if (this.videoId !== this.currentProcessId) {
         if (this.plPlayer) {
           this.plPlayer.HTML5.pause()
+          // this.plPlayer.destroy()
         }
       }
     }
@@ -80,6 +82,7 @@ export default {
   watch: {
     currentProcessId () {
       this.destroyPlayer()
+      // this.initPlayer()
     }
   }
 }

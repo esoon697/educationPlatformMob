@@ -1,9 +1,9 @@
 <template>
-  <div class="previewSwiper-main" v-if="bigshow" @click="bigshow=false"       >
+  <div class="previewSwiper-main" @click="closePreview">
     <swiper ref="previewSwiper" :options="previewOptions" style="height: 100%;padding:0">
-      <swiper-slide v-for="(img, index) in imgList" :key="index" style="margin:0">
+      <swiper-slide v-for="(img, index) in previewImgs" :key="index" style="margin:0">
         <div class="swiper-zoom-container">
-          <img :src="img.url">
+          <img :src="img">
         </div>
       </swiper-slide>
     </swiper>
@@ -12,6 +12,7 @@
 </template>
 
 <script>
+import {mapState} from 'vuex'
 export default {
   components: {},
   props: [],
@@ -42,19 +43,7 @@ export default {
         // observer: true,
         // 修改swiper的父元素时，自动初始化swiper
         // observeParents: true
-      },
-      imgList: [
-        {
-          url: this.base + 'home-banner1.jpg'
-        },
-        {
-          url: this.base + 'home-banner2.jpg'
-        },
-        {
-          url: this.base + 'home-banner3.jpg'
-        }
-      ],
-      bigshow: true
+      }
     }
   },
   created () {},
@@ -62,18 +51,18 @@ export default {
   computed: {
     swiper () {
       return this.$refs.previewSwiper.$swiper
-    }
+    },
+    ...mapState(['isPreview', 'previewImgs'])
   },
   methods: {
-    clickpicture () {
-      this.bigshow = true
-    },
     toggle () {
-      alert('11')
       this.swiper.zoom.toggle()
     },
     touchMove () {
       console.log(event)
+    },
+    closePreview () {
+      this.$store.state.isPreview = false
     }
   },
   watch: {}
