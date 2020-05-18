@@ -50,10 +50,6 @@ export default {
       if (!this.vid) {
         return
       }
-      // if (!this.childNode) {
-      //   this.parentNode = this.parentNode.appendChild(div)
-      //   this.parentNode.childNodes[0].id = 'pl_video_player' + this.index
-      // }
       if (this.videoId == this.currentProcessId) {
         this.$api.getvideoToken({
           vid: this.vid
@@ -68,11 +64,10 @@ export default {
               'height': '260',
               'vid': this.vid,
               'forceH5': true,
-              // 'playsafe': this.playsafe,
+              'playsafe': this.playsafe,
               'ts': this.ts,
               'sign': this.sign,
-              'df': 3,
-              'autoplay': true
+              'df': 3
             })
           }
         })
@@ -80,8 +75,8 @@ export default {
     },
     // 销毁非当前轮播视频
     destroyPlayer () {
-      console.log('video currentProcessId', this.currentProcessId)
-      console.log('video videoId', this.videoId)
+      // console.log('video currentProcessId', this.currentProcessId)
+      // console.log('video videoId', this.videoId)
       if (this.videoId !== this.currentProcessId) {
         if (this.plPlayer) {
           // this.plPlayer.HTML5.pause()
@@ -92,7 +87,8 @@ export default {
     }
   },
   watch: {
-    currentProcessId () {
+    currentProcessId (val) {
+      console.log(val)
       this.destroyPlayer()
       this.initPlayer()
     }

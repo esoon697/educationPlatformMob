@@ -33,8 +33,8 @@
     <!-- <div class="swiper-button-next" slot="button-next"></div> -->
     <!-- <div class="swiper-button-next"></div> -->
     <div class="btn-group">
-      <div ref="prevBtn" class="prev-btn" @click="prev">上一个</div>
-      <div ref="nextBtn" class="next-btn" @click="next">下一个</div>
+      <div ref="prevBtn" class="prev-btn" :class="{'disabled':isFirst}" @click="prev">上一个</div>
+      <div ref="nextBtn" class="next-btn" :class="{'disabled':isLast}" @click="next">下一个</div>
     </div>
   </div>
 </template>
@@ -50,7 +50,8 @@ export default {
   data () {
     return {
       courrentType: 1,
-      // isLast: false,
+      isFirst: false,
+      isLast: false,
       // resourses: [],
       resourses: [
         {
@@ -166,6 +167,8 @@ export default {
     // 初始化页面
     init () {
       this.resourses = this.processInfo
+      this.isFirst = true
+      this.isLast = false
       console.log('this.resourcesssssssssss', this.resourses)
       this.swiper.scrollbar.$dragEl.css('background', '#0089FF')
       if (!this.resourses) {
@@ -179,6 +182,16 @@ export default {
     },
     // 轮播切换时触发回调
     slideChange () {
+      if (this.swiper.activeIndex == 0) {
+        this.isFirst = true
+      } else {
+        this.isFirst = false
+      }
+      if (this.swiper.activeIndex == this.resourses.length - 1) {
+        this.isLast = true
+      } else {
+        this.isLast = false
+      }
       this.setStudyProcessLog()
     },
     // 上一页
@@ -202,8 +215,10 @@ export default {
         })
         return
       }
-      this.isLast = this.swiper.activeIndex == this.resourses.length - 1
+      // this.isLast = this.swiper.activeIndex == this.resourses.length - 1
       if (this.isLast) {
+        this.activeSubmit()
+        alert('2')
         this.$MessageBox.confirm('该章节已学习完，是否进入下一章?').then(action => {
           this.getNextChapterInfo()
         }).catch(error => {
@@ -222,7 +237,26 @@ export default {
           console.log('this.$store.state.processInfooooooooo', res.data)
           this.$store.state.processInfo = res.data
           this.resourses = res.data
-          this.setStudyProcessLog()
+          let taskList = this.resourses.map((e, index) => {
+            console.log('e', e)
+            if (e.studyType == 3) {
+              return {
+                chapterId: e.chapterId,
+                processId: e.processId,
+                activeType: e.activeType,
+                activeId: e.activeId,
+                activeIndex: index,
+                isComplete: false
+              }
+            }
+          }).filter(e => {
+            if (e) {
+              return e
+            }
+          })
+          console.log('taskList', taskList)
+          this.$store.state.taskList = taskList
+          // this.setStudyProcessLog()
         }
       })
     },
@@ -231,7 +265,6 @@ export default {
       let activeIndex = this.swiper.activeIndex
       if (this.resourses && this.resourses.length && this.resourses[activeIndex]) {
         this.$store.state.currentProcessId = this.resourses[activeIndex].processId
-        console.log('this.currentProcessIdddddddd', this.currentProcessId)
       }
       this.$api.setStudyProcessLog({
         courseEventId: this.courEventId,
@@ -252,9 +285,27 @@ export default {
     },
     // 提交试题数据
     activeSubmit () {
-      this.$api.activeSubmit({
-        activeAnswers: this.formData
+      let taskList = this.$store.state.taskList
+      console.log('activeSubmitactiveSubmit', taskList)
+      let nullTesk = taskList.find(e => {
+        return e.isComplete === false
       })
+      console.log(nullTesk)
+      if (nullTesk) {
+        // alert('1')
+        this.$MessageBox('hello')
+        this.$MessageBox.confirm('有未完成的作业，是否返回到该作业?').then(action => {
+          this.swiper.slideTo(nullTesk.activeIndex, 1000, false)
+          return false
+        }).catch(error => {
+          console.log(error)
+          return false
+        })
+      } else {
+        this.$api.activeSubmit({
+          activeAnswers: this.formData
+        })
+      }
     }
   },
   watch: {
@@ -265,11 +316,6 @@ export default {
       this.setStudyProcessLog()
       this.init()
     }
-    // processInfo (val) {
-    //   this.resourses = val
-    //   this.init()
-    //   console.log(val)
-    // }
   }
 }
 </script>
@@ -299,22 +345,40 @@ export default {
     border-bottom: 1px solid #F2F4F5;
     .prev-btn, .next-btn{
       padding: 8px 15px;
-      background-color: #aaa;
+      // background-color: #aaa;
       border-radius: 3px;
+      background-color: #0089FF;
+      color: #FFFFFF;
       cursor: pointer;
       &:active{
         background-color: #aaa;
         opacity: .8;
       }
     }
+    // .prev-btn{
+    //   padding: 8px 15px;
+    //   background-color: #aaa;
+    //   border-radius: 3px;
+    //   cursor: pointer;
+    //   &:active{
+    //     background-color: #aaa;
+    //     opacity: .8;
+    //   }
+    // }
     .prev-btn{
-      background-color: #EFEFEF;
-      color: #7D848B;
+      // background-color: #EFEFEF;
+      // color: #7D848B;
       margin-right: 5%;
     }
-    .next-btn{
-      background-color: #0089FF;
-      color: #FFFFFF;
+    // .next-btn{
+    //   background-color: #0089FF;
+    //   color: #FFFFFF;
+    // }
+    .active{
+    }
+    .disabled{
+      background-color: #EFEFEF;
+      color: #7D848B;
     }
   }
   .swiper-bg{

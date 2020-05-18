@@ -9,5 +9,6 @@ export default {
   processInfo: null, // 章节process数据
   currentTaskInfo: null,
   isPreview: false,
-  previewImgs: null
+  previewImgs: null,
+  taskList: null
 }

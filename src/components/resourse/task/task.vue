@@ -33,7 +33,7 @@ export default {
   created () {},
   mounted () {},
   computed: {
-    ...mapState(['formData'])
+    ...mapState(['formData', 'taskList'])
   },
   methods: {
     init () {
@@ -56,6 +56,7 @@ export default {
       console.log(this.formData)
       this.$store.state.formData = this.formData
       // this.storageSet('formData', this.formData)
+      this.isComplete()
     },
     check2 () {
       console.log('formData1', this.formData)
@@ -75,6 +76,16 @@ export default {
       }
       // this.storageSet('formData', this.formData)
       this.$store.state.formData = this.formData
+      this.isComplete()
+    },
+    isComplete () {
+     this.$store.state.taskList = this.taskList.forEach(e => {
+        if (e.activeIndex == this.index) {
+          console.log('isCompleteway', e)
+            e.isComplete = true
+        }
+      })
+      console.log(this.$store.state.taskList)
     }
   },
   watch: {}

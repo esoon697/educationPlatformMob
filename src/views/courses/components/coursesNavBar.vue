@@ -9,7 +9,7 @@
     <!-- tab-container -->
     <mt-tab-container v-model="selected">
       <mt-tab-container-item id="1">
-        <div v-if="!coursesList" class="courses-bg">加载中...</div>
+        <div v-if="!coursesList.length" class="courses-bg">加载中...</div>
         <template v-else>
           <div class="content-outer-box" v-for="(courses, index) in coursesList" :key="index">
             <div class="content-box">
@@ -117,16 +117,14 @@ export default {
       this.getEduInfo()
     },
     getEduInfo () {
-      setTimeout(() => {
-        this.$api.getEduInfo().then(res => {
-          console.log(res)
-          if (res.code == 200) {
-            console.log(res.data)
-            this.coursesList = res.data
-            this.$store.state.coursesList = res.data
-          }
-        })
-      }, 100000)
+      this.$api.getEduInfo().then(res => {
+        console.log(res)
+        if (res.code == 200) {
+          console.log(res.data)
+          this.coursesList = res.data
+          this.$store.state.coursesList = res.data
+        }
+      })
     },
     // showDetails (event) {
     //   let message = event.target.innerHTML
