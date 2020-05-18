@@ -1,8 +1,9 @@
 <template>
   <div class="image-main" @click="imgPreview">
-    <!-- <img v-if="url" :src="url" alt=""> -->
+    <img v-if="url" v-lazy="url" alt="" lazy="loading">
     <!-- <VuePreview v-if="url" :src="url"/> -->
-    <div v-if="url" class="img-box" :style="{backgroundImage:`url(${url})`}"></div>
+    <!-- <div v-if="url" class="img-box" v-lazy:background-image="url" lazy="loading"></div> -->
+    <!-- <div v-if="url" class="img-box" :style="{backgroundImage:`url(${url})`}"></div> -->
     <div v-else class="img-bg">暂无数据</div>
   </div>
 </template>
@@ -42,6 +43,7 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
+  background-color: #000;
   .img-box{
     width: 100%;
     height: 260px;
@@ -65,5 +67,9 @@ export default {
     font-family:Alibaba PuHuiTi;
     font-weight:bold;
   }
+  // img[lazy=loading] {
+  //   width: 100%;
+  //   height: 100%;
+  // }
 }
 </style>

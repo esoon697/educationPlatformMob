@@ -1,7 +1,7 @@
 <template>
   <div class="courseItem-main">
     <div class="course-left">
-      <img v-lazy="base+'card_eg.jpg'" alt="">
+      <img v-lazy="base+'card_eg.jpg'" alt="" lazy="loading">
       <div class="course-count" v-if="courseCount">{{courseCount}}节课</div>
       <div class="course-play" v-else>
         <img :src="base+'home_play_icon.png'" alt="">
@@ -89,6 +89,14 @@ export default {
       font-size:11px/1;
       color:rgba(0,137,255,1);
     }
+  }
+  img[lazy=loading] {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 20px;
+    height: 20px;
   }
 }
 </style>

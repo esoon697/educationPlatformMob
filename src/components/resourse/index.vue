@@ -19,7 +19,7 @@
           <div class="resourse-bg" v-if="resourse.studyType===null">暂无数据</div>
         </swiper-slide>
       </template>
-      <div v-else class="resourse-bg">暂无数据</div>
+      <div v-else class="resourse-bg">加载中</div>
       <!-- 滚动条 -->
       <div class="swiper-scrollbar" slot="scrollbar"></div>
       <!-- <div class="swiper-pagination" slot="pagination"></div> -->

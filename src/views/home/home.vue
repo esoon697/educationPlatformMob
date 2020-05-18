@@ -8,7 +8,40 @@
       </div>
     </div>
     <div class="user-banner">
-      <img v-lazy="base+'home-banner1.jpg'" alt="">
+      <!-- <img v-lazy="base+'home-banner1.jpg'" alt="" lazy="loading"> -->
+        <div class="swiper-box">
+          <div class="swiper">
+            <mt-swipe :auto="3000" :speed="800">
+              <mt-swipe-item v-for="(banner, index) in banners" :key="index">
+                <img class="home-banner" v-lazy="banner.url" alt="" lazy="loading">
+              </mt-swipe-item>
+              <!-- <mt-swipe-item>2</mt-swipe-item>
+              <mt-swipe-item>3</mt-swipe-item> -->
+            </mt-swipe>
+          </div>
+        </div>
+        <div class="notice-box">
+          <img class="notice-left" :src="base+'notice_left.png'">
+          <div class="notice-mid">
+            <swiper ref="noticeSwiper" :options="swiperOptions">
+              <swiper-slide v-for="n in 5" :key="n">
+                <span class="notice" @click="showDetails">{{'你好呀'+n}}</span>
+              </swiper-slide>
+              <!-- 滚动条 -->
+              <!-- <div class="swiper-scrollbar"></div> -->
+              <!-- 下一项 -->
+              <!-- <div class="swiper-button-next"></div> -->
+              <!-- 上一项 -->
+              <!-- <div class="swiper-button-prev"></div> -->
+              <!-- 标页码 -->
+              <!-- <div class="swiper-pagination"></div> -->
+              <!-- <div class="swiper-pagination" slot="pagination"></div> -->
+            </swiper>
+          </div>
+          <div class="notice-right">
+            <i class="iconfont icon-right"></i>
+          </div>
+        </div>
     </div>
     <div class="btn-group">
       <div class="home-btn">
@@ -88,7 +121,56 @@ export default {
       selectVal: '全部',
       isActive: false,
       showBtn: false,
-      scrollTop: 0
+      scrollTop: 0,
+      swiperOptions: {
+        // height: 44,
+        // 分页器配置
+        pagination: {
+          el: '.swiper-pagination',
+          clickable: true
+        },
+        // 设定初始化时slide的索引
+        initialSlide: 0,
+        // Slides的滑动方向，可设置水平(horizontal)或垂直(vertical)
+        direction: 'vertical',
+        // 自动切换图配置
+        autoplay: {
+          delay: 3000,
+          stopOnLastSlide: true,
+          disableOnInteraction: true
+        },
+        // 箭头配置
+        navigation: {
+          nextEl: '.swiper-button-next',
+          prevEl: '.swiper-button-prev'
+        },
+        // 环状轮播
+        loop: true,
+        // loopedSlides: 3,
+        // loopAdditionalSlides: 0,
+        // 一个屏幕展示的数量
+        slidesPerView: 1,
+        // 间距
+        spaceBetween: 50,
+        // 修改swiper自己或子元素时，自动初始化swiper
+        observer: true,
+        // 修改swiper的父元素时，自动初始化swiper
+        observeParents: true
+      },
+      banners: [
+        {
+          id: 1,
+          url: this.base + 'home-banner1.jpg'
+        },
+        {
+          id: 2,
+          url: this.base + 'home-banner2.jpg'
+        },
+        {
+          id: 3,
+          url: this.base + 'home-banner3.jpg'
+        }
+      ]
     }
   },
   created () {
@@ -102,7 +184,11 @@ export default {
   destroyed () {
     window.removeEventListener('scroll', this.scrollToTop, true)
   },
-  computed: {},
+  computed: {
+    swiper () {
+      return this.$refs.noticeSwiper.$swiper
+    }
+  },
   methods: {
     init () {
       // 获取token
@@ -141,12 +227,25 @@ export default {
           clearInterval(timer)
         }
       }, 30)
+    },
+    showDetails (event) {
+      let message = event.target.innerHTML
+      console.log(event.target.innerHTML)
+      this.$MessageBox({
+        title: '通知详情',
+        message: message,
+        showCancelButton: true,
+        // confirmButtonText: '',
+        cancelButtonText: '',
+        confirmButtonClass: 'confirm-button',
+        cancelButtonClass: 'iconfont icon-close'
+      })
     }
   },
   watch: {}
 }
 </script>
-<style lang="less" scoped>
+<style lang="less">
 .user-main{
   padding: 0 4%;
   .user-title{
@@ -178,9 +277,82 @@ export default {
   .user-banner{
     width: 100%;
     // margin-top: 16px;
-    min-height: 200px;
-    img{
+    // min-height: 200px;
+    // img{
+    //   width: 100%;
+    // }
+    .swiper-box{
       width: 100%;
+      height: 200px;
+      // height: 15%;
+      background-color: #fff;
+      padding: 4%;
+      box-sizing: border-box;
+      border-top: 1px solid rgba(227,229,230,1);
+      border-bottom: 1px solid rgba(227,229,230,1);
+      @media screen and (min-width: 1200px){
+        height: 360px;
+      }
+      @media screen and (min-width: 1460px){
+        height: 500px;
+      }
+      .swiper{
+        width: 100%;
+        height: 100%;
+        background-color: #aaa;
+        border-radius: 10px;
+        .home-banner{
+          width: 100%;
+          height: 100%;
+        }
+      }
+    }
+    .notice-box{
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 44px;
+      // overflow: hidden;
+      padding: 0 4%;
+      box-sizing: border-box;
+      .notice-left{
+        // flex: 1;
+        width: 59.5px;
+        height: 14px;
+      }
+      .notice-mid{
+        flex: 1;
+        // max-width: 75%;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        overflow: hidden;
+        .swiper-container{
+          width: 100%;
+        }
+        .notice{
+          display: inline-block;
+          width: 100%;
+          font-size: 18px;
+          font-family:Alibaba PuHuiTi;
+          font-weight:bold;
+          color:rgba(83,93,103,1);
+          line-height: 44px;
+          text-align: center;
+          white-space: nowrap;
+          text-overflow: ellipsis;
+          overflow: hidden;
+          padding: 0 10px;
+          box-sizing: border-box;
+          cursor: pointer;
+        }
+      }
+      .notice-right{
+        .iconfont{
+          font-size: 16px;
+        }
+      }
     }
   }
   .btn-group{
@@ -331,5 +503,24 @@ export default {
       width: 52px;
     }
   }
+  img[lazy=loading] {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 30px;
+    height: 30px;
+  }
+}
+.icon-close{
+  position: absolute;
+  top: 0;
+  right: 0;
+  color: red;
+  font-size: 32px;
+  width: auto;
+}
+.confirm-button{
+  font-size: 14px;
 }
 </style>

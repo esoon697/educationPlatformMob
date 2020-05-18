@@ -72,7 +72,7 @@ Vue.use(VuePreview, {
 Vue.use(VueLazyload, {
   preLoad: 1,
   error: '../static/imgs/loadFail.jpg',
-  loading: '../static/imgs/loading.gif',
+  loading: '../static/imgs/loading2.gif',
   attempt: 1
 })
 

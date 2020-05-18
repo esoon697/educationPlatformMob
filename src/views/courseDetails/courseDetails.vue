@@ -34,7 +34,7 @@
               </div> -->
               <div v-if="detailsData.demonstrationUri" class="preview-box">
                 <div v-if="detailsData.demonstrationUri.type==1" class="img-box">
-                  <img v-lazy="detailsData.demonstrationUri.uri" alt="">
+                  <img v-lazy="detailsData.demonstrationUri.uri" alt="" lazy="loading">
                 </div>
                 <div v-if="detailsData.demonstrationUri.type==2" class="video-box">
                   <div id='previewArea'></div>
@@ -63,7 +63,7 @@
               <ul>
                 <li class="member-info" v-for="n in 3" :key="n">
                   <div class="member">
-                    <img v-lazy="base+'courses-avatar1.jpg'" alt="">
+                    <img v-lazy="base+'courses-avatar1.jpg'" alt="" lazy="loading">
                     <p class="name">
                       <span>汪永智</span>
                       <span>教授</span>
@@ -149,7 +149,7 @@ export default {
           this.playsafe = res.data.token
           this.plPlayer = polyvObject('#previewArea').videoPlayer({
             'width': '100%',
-            'height': '240',
+            'height': '260',
             'forceH5': true,
             'vid': this.vid,
             'ts': this.ts,
@@ -389,33 +389,21 @@ export default {
             .preview-box{
               width: 100%;
               position: relative;
-              .video-player{
+              .video-box{
                 width: 100%;
-              }
-              .videoplaybtn {
-                position: absolute;
-                top: 50%;
-                left: 50%;
-                transform: translate(-50%,-50%);
-                img{
-                  width: 50px;
-                  height: 50px;
-                }
-              }
-              .play-block{
-                width: 20px;
-                height: 20px;
-                background: rgba(0, 0, 0, 0);
-                position: absolute;
-                bottom: 25px;
-                left: 5px;
-                z-index: 10;
+                height: 260px;
+                background-color: #000;
               }
             }
             .img-box{
               width: 100%;
+              height: 260px;
+              display: flex;
+              justify-content: center;
+              align-items: center;
               img{
-                width: 100%;
+                max-width: 100%;
+                max-height: 260px;
               }
             }
             .go-study{
@@ -550,10 +538,10 @@ export default {
   }
   .resourse-bg{
   width: 100%;
-  min-height: 200px;
+  height: 260px;
   background-color: #000;
   color: white;
-  line-height: 200px;
+  line-height: 260px;
   text-align: center;
   font-size:18px;
   font-family:Alibaba PuHuiTi;
@@ -573,17 +561,9 @@ export default {
     // transform: translateY(-100%);
     opacity: 0;
   }
-  // img[lazy=loading] {
-  //   width: 30px;
-  //   height: 30px;
-  // }
-  // img[lazy=error] {
-  //   width: 30px;
-  //   height: 30px;
-  // }
-  // img[lazy=loaded] {
-  //   width: 30px;
-  //   height: 30px;
-  // }
+  img[lazy=loading] {
+    width: 30px;
+    height: 30px;
+  }
 }
 </style>
