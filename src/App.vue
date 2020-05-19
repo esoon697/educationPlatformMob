@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <router-view/>
-    <TabBar/>
+    <TabBar v-if="isShowTabBar"/>
     <MyVuePreview v-if="isPreview"/>
   </div>
 </template>
@@ -16,6 +16,7 @@ export default {
   data () {
     return {
       // isPreview: false
+      isShowTabBar: true
     }
   },
   computed: {
@@ -28,6 +29,31 @@ export default {
     })
     // 在页面加载时读取localStorage里的状态信息
     localStorage.getItem('messageStore') && this.$store.replaceState(Object.assign(this.$store.state, JSON.parse(localStorage.getItem('messageStore'))))
+  },
+  mounted () {
+    this.queryorIentation()
+  },
+  methods: {
+    // 查询屏幕方向
+    queryorIentation () {
+      if (!/Android|webOS|iPhone|iPod|BlackBerry/i.test(navigator.userAgent)) {
+        // pc端
+        return
+      }
+      let that = this
+      var mql = window.matchMedia('(orientation: portrait)')
+      function onMatchMeidaChange (mql) {
+        if (mql.matches) {
+          // 竖屏
+          that.isShowTabBar = true
+        } else {
+          // 横屏
+          that.isShowTabBar = false
+        }
+      }
+      onMatchMeidaChange(mql)
+      mql.addListener(onMatchMeidaChange)
+    }
   }
 }
 </script>

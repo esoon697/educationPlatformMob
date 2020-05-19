@@ -53,41 +53,7 @@ export default {
       isFirst: false,
       isLast: false,
       // resourses: [],
-      resourses: [
-        {
-          resourceUri: this.base + 'home-banner1.jpg',
-          studyType: 0
-        },
-        {
-          // resourceUri: 'http://182.148.48.236:54321/source/video_audio/first.mp4',
-          resourceUri: 'http://182.148.48.236:54321/source/video_audio/labone.mp4',
-          studyType: 1
-        },
-        {
-          resourceUri: this.base + 'home-banner2.jpg',
-          studyType: 0
-        },
-        {
-          studyType: 2,
-          taskType: 0
-        },
-        {
-          resourceUri: 'http://182.148.48.236:54321/source/video_audio/first.mp4',
-          studyType: 1
-        },
-        {
-          studyType: 2,
-          taskType: 1
-        },
-        {
-          studyType: 2,
-          taskType: 0
-        },
-        {
-          resourceUri: this.base + 'home-banner3.jpg',
-          studyType: 0
-        }
-      ], // 选中章节process数据
+      resourses: [], // 选中章节process数据
       swiperOptions: {
         // 分页器配置
         pagination: {
@@ -116,19 +82,6 @@ export default {
         //   prevEl: '.swiper-button-prev',
         //   hideOnClick: true,
         //   disabledClass: 'my-button-disabled'
-        // },
-        // 滑到最后一个隐藏前进按钮
-        // on: {
-        //   slideChangeTransitionEnd: function () {
-        //     if (this.isEnd) {
-        //       console.log(this.navigation)
-        //       console.log(this.navigation.$nextEl)
-        //       // this.navigation.$nextEl.removeClass('swiper-button-next')
-        //       // this.navigation.$prevEl.removeClass('swiper-button-prev')
-        //     } else {
-        //       this.navigation.$nextEl.css('display', 'block')
-        //     }
-        //   }
         // },
         // 自适应内容高度
         // autoHeight: true,
@@ -171,13 +124,13 @@ export default {
       this.isLast = false
       console.log('this.resourcesssssssssss', this.resourses)
       this.swiper.scrollbar.$dragEl.css('background', '#0089FF')
+      // this.swiper.scrollbar.$dragEl.css('height', '10px')
       if (!this.resourses) {
         return
       }
       let activeIndex = this.resourses.findIndex(e => {
         return e.processId == this.currentProcessId
       })
-      console.log('activeIndex', activeIndex)
       this.swiper.slideTo(activeIndex, 0, false)
     },
     // 轮播切换时触发回调
@@ -215,11 +168,21 @@ export default {
         })
         return
       }
-      // this.isLast = this.swiper.activeIndex == this.resourses.length - 1
       if (this.isLast) {
-        this.activeSubmit()
-        alert('2')
+        let taskList = this.$store.state.taskList
+        this.nullTesk = taskList.find(e => {
+          return e.isComplete === false
+        })
+        if (this.nullTesk) {
+          this.$MessageBox.confirm('有未完成的作业，是否返回到该作业?').then(action => {
+            this.swiper.slideTo(this.nullTesk.activeIndex, 500, false)
+          }).catch(error => {
+            console.log(error)
+          })
+          return
+        }
         this.$MessageBox.confirm('该章节已学习完，是否进入下一章?').then(action => {
+          this.activeSubmit()
           this.getNextChapterInfo()
         }).catch(error => {
           console.log(error)
@@ -238,7 +201,6 @@ export default {
           this.$store.state.processInfo = res.data
           this.resourses = res.data
           let taskList = this.resourses.map((e, index) => {
-            console.log('e', e)
             if (e.studyType == 3) {
               return {
                 chapterId: e.chapterId,
@@ -256,7 +218,6 @@ export default {
           })
           console.log('taskList', taskList)
           this.$store.state.taskList = taskList
-          // this.setStudyProcessLog()
         }
       })
     },
@@ -284,28 +245,29 @@ export default {
       })
     },
     // 提交试题数据
+    //   activeSubmit () {
+    //     let taskList = this.$store.state.taskList
+    //     this.nullTesk = taskList.find(e => {
+    //       return e.isComplete === false
+    //     })
+    //     if (this.nullTesk) {
+    //       this.$MessageBox.confirm('有未完成的作业，是否返回到该作业?').then(action => {
+    //         this.swiper.slideTo(this.nullTesk.activeIndex, 500, false)
+    //       })
+    //       return
+    //     } else {
+    //       this.$api.activeSubmit({
+    //         activeAnswers: this.formData
+    //       })
+    //     }
+    //   }
+    // },
+    // 提交试题数据
     activeSubmit () {
-      let taskList = this.$store.state.taskList
-      console.log('activeSubmitactiveSubmit', taskList)
-      let nullTesk = taskList.find(e => {
-        return e.isComplete === false
+      console.log('this.formData', this.formData)
+      this.$api.activeSubmit({
+        activeAnswers: this.formData
       })
-      console.log(nullTesk)
-      if (nullTesk) {
-        // alert('1')
-        this.$MessageBox('hello')
-        this.$MessageBox.confirm('有未完成的作业，是否返回到该作业?').then(action => {
-          this.swiper.slideTo(nullTesk.activeIndex, 1000, false)
-          return false
-        }).catch(error => {
-          console.log(error)
-          return false
-        })
-      } else {
-        this.$api.activeSubmit({
-          activeAnswers: this.formData
-        })
-      }
     }
   },
   watch: {
@@ -322,10 +284,6 @@ export default {
 <style lang="less" scoped>
 .resourse-main{
   position: relative;
-  // .swiper-wrapper{
-  //   width: 100%;
-  //   height: 100%;
-  // }
   .my-button-disabled{
     display:none;
   }
@@ -338,14 +296,19 @@ export default {
   .swiper-button-hidden{
     opacity: 0;
   }
+  .swiper-container{
+    padding-bottom: 24px;
+    .swiper-scrollbar{
+      height: 20px;
+    }
+  }
   .btn-group{
     display: flex;
     justify-content: center;
-    padding: 2% 0;
+    padding: 3% 0 5%;
     border-bottom: 1px solid #F2F4F5;
     .prev-btn, .next-btn{
-      padding: 8px 15px;
-      // background-color: #aaa;
+      padding: 10px 25px;
       border-radius: 3px;
       background-color: #0089FF;
       color: #FFFFFF;
@@ -355,26 +318,8 @@ export default {
         opacity: .8;
       }
     }
-    // .prev-btn{
-    //   padding: 8px 15px;
-    //   background-color: #aaa;
-    //   border-radius: 3px;
-    //   cursor: pointer;
-    //   &:active{
-    //     background-color: #aaa;
-    //     opacity: .8;
-    //   }
-    // }
     .prev-btn{
-      // background-color: #EFEFEF;
-      // color: #7D848B;
-      margin-right: 5%;
-    }
-    // .next-btn{
-    //   background-color: #0089FF;
-    //   color: #FFFFFF;
-    // }
-    .active{
+      margin-right: 10%;
     }
     .disabled{
       background-color: #EFEFEF;

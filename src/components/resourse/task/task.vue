@@ -79,16 +79,22 @@ export default {
       this.isComplete()
     },
     isComplete () {
-     this.$store.state.taskList = this.taskList.forEach(e => {
+     this.$store.state.taskList.forEach(e => {
         if (e.activeIndex == this.index) {
-          console.log('isCompleteway', e)
+          if (this.radioVal || this.checkVal.length) {
             e.isComplete = true
+          } else {
+            e.isComplete = false
+          }
         }
       })
       console.log(this.$store.state.taskList)
     }
   },
-  watch: {}
+  watch: {
+    //  radioVal () {},
+    //  checkVal () {}
+  }
 }
 </script>
 <style lang="less">

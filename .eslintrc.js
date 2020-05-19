@@ -26,6 +26,7 @@ module.exports = {
     // allow debugger during development
     'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off',
     "eqeqeq": 'off',  // eslint Expected '===' and instead saw '=='报错的解决
-    'no-undef': 'off'
+    'no-undef': 'off',
+    'no-useless-return': 'off'
   }
 }

@@ -40,3 +40,13 @@ Vue.prototype.goTop = function () {
     }
   }, 30)
 }
+// 判断用户是PC端还是移动端
+Vue.prototype.judgeUserType = function () {
+  if (/Android|webOS|iPhone|iPod|BlackBerry/i.test(navigator.userAgent)) {
+    // 移动端
+    this.userAgent = 'app'
+  } else {
+    // pc端
+    this.userAgent = 'pc'
+  }
+}

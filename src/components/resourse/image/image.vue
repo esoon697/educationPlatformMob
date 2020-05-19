@@ -20,7 +20,6 @@ export default {
   },
   created () {},
   mounted () {
-    console.log(this.url)
   },
   computed: {},
   methods: {
@@ -54,7 +53,7 @@ export default {
   }
   img{
     max-width: 100%;
-    max-height: 300px;
+    max-height: 260px;
   }
   .img-bg{
     width: 100%;

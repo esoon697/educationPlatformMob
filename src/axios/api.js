@@ -15,7 +15,7 @@ const api = {
   // 下一章数据
   getNextChapter: data => get('/course/courseChapter/getNextChapterId', data),
   // 提交试题数据
-  activeSubmit: data => get('/course/activeSubmit/add', data),
+  activeSubmit: data => post('/course/activeSubmit/add', data),
   // 验证token是否失效
   checkTk: data => get('http://api.yazhuokj.com/common/api/checkJWT', data),
   // 保利威视频权限验证

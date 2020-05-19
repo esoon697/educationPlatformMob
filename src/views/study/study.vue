@@ -87,14 +87,65 @@ export default {
             this.$Toast('该课程暂无数据')
             return
           }
+          this.chapters = res.data.chapters
+          this.currentChapterId = res.data.currentChapterId
           this.$store.state.theModel = res.data.chapters
           // this.$store.state.processInfo = res.data.initProcessInfo
           this.$store.state.currentChapterId = res.data.currentChapterId
           this.$store.state.currentProcessId = res.data.currentProcessInfoId
           this.$store.state.courEventId = res.data.courseEventId
           console.log('res.data.initProcessInfo', res.data.initProcessInfo)
+          this.initTreeList()
         }
       })
+    },
+    // 初始化tree
+    initTreeList () {
+      this.findNode()
+      console.log('this.node', this.node)
+      let that = this
+      function findAllParent (node = that.node, tree = that.chapters, parentNodes = [], index = 0) {
+        // console.log('node111', node)
+        if (!node || node.parentId === 0 || index === 6) {
+          console.log('node111', node)
+          return
+        }
+        findParent(node, parentNodes, tree)
+        let parntNode = parentNodes[index]
+        findAllParent(parntNode, tree, parentNodes, ++index)
+        console.log('parentNodes', parentNodes)
+        return parentNodes
+      }
+      function findParent (node, parentNodes, tree) {
+        for (let i = 0; i < tree.length; i++) {
+          let item = tree[i]
+          if (item.parentId === node.parentId) {
+            parentNodes.push(item)
+            return
+          }
+          if (item.children && item.children.length > 0) {
+            findParent(node, parentNodes, item.children)
+          }
+        }
+      }
+      return findAllParent()
+    },
+    findNode () {
+      let that = this
+      function findNode (menuCode = that.currentChapterId, node = null, chapters = that.chapters) {
+        for (let i = 0; i < chapters.length; i++) {
+          let item = chapters[i]
+          if (item.menuCode === menuCode) {
+            that.node = item
+            console.log('nodeeeeeeeeee', that.node)
+            return node
+          }
+          if (item.children && item.children.length > 0) {
+            findNode(menuCode, node, item.children)
+          }
+        }
+      }
+      return findNode()
     },
     goStudy (m, n) {
       console.log(m, n)
