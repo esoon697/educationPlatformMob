@@ -31,7 +31,7 @@ export default {
     }
   },
   computed: {
-    ...mapState(['currentChapterId']),
+    ...mapState(['currentChapterId', 'activeList']),
     // 是否存在子节点
     isFolder: function () {
       return this.model.children && this.model.children.length
@@ -45,8 +45,17 @@ export default {
       return this.isFolder ? 'font1' : 'font2'
     }
   },
+  mounted () {
+    this.init()
+  },
   methods: {
     init () {
+      let isExist = this.activeList.findIndex(e => e.menuCode == this.model.menuCode)
+      if (isExist >= 0) {
+        this.open = true
+      } else {
+        this.open = false
+      }
     },
     toggle: function () {
       if (this.isFolder) {

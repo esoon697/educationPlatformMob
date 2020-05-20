@@ -7,8 +7,8 @@ export default {
   currentProcessId: null, // 当前已学习processId
   theModel: null, // 学习章节列表
   processInfo: null, // 章节process数据
-  currentTaskInfo: null,
-  isPreview: false,
-  previewImgs: null,
-  taskList: null
+  isPreview: false, // 图片预览状态
+  previewImgs: null, // 预览图片列表
+  taskList: null, // 当前章节互动列表
+  activeList: null // 打开状态的chapters节点
 }

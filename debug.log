@@ -4,3 +4,6 @@
 [0515/185415.799:ERROR:process_info.cc(359)] UncheckedAllocate
 [0515/191422.189:ERROR:process_info.cc(359)] UncheckedAllocate
 [0517/041108.272:ERROR:process_info.cc(359)] UncheckedAllocate
+[0520/150101.550:ERROR:process_info.cc(359)] UncheckedAllocate
+[0520/150101.619:ERROR:filesystem_win.cc(148)] DeleteFile C:\Users\gedef\AppData\Local\Google\Chrome\User Data\Crashpad\reports\e7d6cc90-1ba4-422a-90ff-b2a359cbc12c.dmp: 另一个程序正在使用此文件，进程无法访问。 (0x20)
+[0520/150101.989:ERROR:process_info.cc(359)] UncheckedAllocate

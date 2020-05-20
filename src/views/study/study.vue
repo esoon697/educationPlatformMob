@@ -55,7 +55,9 @@ export default {
     return {
       contentTitle: '',
       selected: '1',
-      courId: null
+      courId: null,
+      chapters: null,
+      currentChapterId: null
     }
   },
   created () {
@@ -95,39 +97,30 @@ export default {
           this.$store.state.currentProcessId = res.data.currentProcessInfoId
           this.$store.state.courEventId = res.data.courseEventId
           console.log('res.data.initProcessInfo', res.data.initProcessInfo)
-          let arr = this.initTreeList()
-          // let arr = this.initArr()
-          console.log('this.initTreeList()', arr)
-          for (let i = 0; i < arr.length; i++) {
-            arr = arr[i]
-          }
+          this.$store.state.activeList = this.initTreeList()
         }
       })
     },
     // 初始化tree
     initTreeList () {
       this.findNode()
-      console.log('this.node', this.node)
       let that = this
-      // let indexs = []
       function findAllParent (node = that.node, tree = that.chapters, parentNodes = [], index = 0, indexs = []) {
-        // console.log('node111', node)
-        if (!node || node.parentId === 0 || index === 5) {
+        if (!node || node.parentId === 0 || index === 10) {
           return
         }
         findParent(node, parentNodes, tree, indexs)
         let parntNode = parentNodes[index]
         findAllParent(parntNode, tree, parentNodes, ++index, indexs)
         console.log('parentNodes', parentNodes)
-        // return parentNodes
-        return indexs
+        return parentNodes
       }
       function findParent (node, parentNodes, tree, indexs) {
         for (let i = 0; i < tree.length; i++) {
           let item = tree[i]
           if (item.menuCode === node.parentId) {
             parentNodes.push(item)
-            indexs.push(i)
+            // indexs.push(i)
             return
           }
           if (item.children && item.children.length > 0) {
@@ -144,7 +137,6 @@ export default {
           let item = chapters[i]
           if (item.menuCode === menuCode) {
             that.node = item
-            console.log('nodeeeeeeeeee', that.node)
             return
           }
           if (item.children && item.children.length > 0) {
@@ -153,32 +145,6 @@ export default {
         }
       }
       return findNode()
-    },
-    initArr () {
-      // let arr = this.chapters
-      // let node = this.node
-      this.findNode()
-      console.log('node', this.node)
-      let that = this
-      function findParent (node = that.node, arr = that.chapters, indexs = []) {
-        if (!node || node.parentId === 0) {
-          return indexs
-        }
-        for (let i = 0; i < arr.length; i++) {
-          let item = arr[i]
-          console.log('item', item)
-          if (node.parentId === item.menuCode) {
-            console.log('i', i)
-            node = item
-            indexs.push(i)
-            return
-          }
-          if (item.children && item.children.length > 0) {
-            findParent(node, arr, indexs)
-          }
-        }
-      }
-      return findParent()
     },
     goStudy (m, n) {
       console.log(m, n)
