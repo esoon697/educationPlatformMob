@@ -1,12 +1,12 @@
 <template>
   <div class="user-main">
-    <div class="user-title">
+    <!-- <div class="user-title">
       <img class="left" :src="base+'logo.png'" alt="">
       <div class="right">
         <p class="up">四川亚卓教育科技股份有限公司</p>
         <p class="down">中职德育课程</p>
       </div>
-    </div>
+    </div> -->
     <div class="user-banner">
       <!-- <img v-lazy="base+'home-banner1.jpg'" alt="" lazy="loading"> -->
         <div class="swiper-box">
@@ -20,71 +20,81 @@
             </mt-swipe>
           </div>
         </div>
-        <div class="notice-box">
-          <img class="notice-left" :src="base+'notice_left.png'">
-          <div class="notice-mid">
-            <swiper ref="noticeSwiper" :options="swiperOptions">
-              <swiper-slide v-for="n in 5" :key="n">
-                <span class="notice" @click="showDetails">{{'你好呀'+n}}</span>
-              </swiper-slide>
-              <!-- 滚动条 -->
-              <!-- <div class="swiper-scrollbar"></div> -->
-              <!-- 下一项 -->
-              <!-- <div class="swiper-button-next"></div> -->
-              <!-- 上一项 -->
-              <!-- <div class="swiper-button-prev"></div> -->
-              <!-- 标页码 -->
-              <!-- <div class="swiper-pagination"></div> -->
-              <!-- <div class="swiper-pagination" slot="pagination"></div> -->
-            </swiper>
-          </div>
-          <div class="notice-right">
-            <i class="iconfont icon-right"></i>
-          </div>
-        </div>
+    </div>
+    <div class="search-box">
+      <div class="search-outer">
+        <input type="text" placeholder="请输入您要搜索的内容" @blur="showTabBar(true)" @focus="showTabBar(false)">
+        <img src="../../assets/home-search.png" alt="">
+      </div>
     </div>
     <div class="btn-group">
-      <div class="home-btn">
-        <div class="nav-btn"></div>
-        <p class="btn-name">首页</p>
+      <div class="nav-btn-box">
+        <!-- <div class="nav-btn"></div> -->
+        <img class="nav-btn" src="../../assets/home-icon1@2x.png" alt="">
+        <p class="btn-name">公告</p>
       </div>
-      <div class="course-btn nav-btn">
-        <div class="nav-btn"></div>
+      <div class="nav-btn-box">
+        <img class="nav-btn" src="../../assets/home-icon2@2x.png" alt="">
         <p class="btn-name">课程</p>
       </div>
-      <div class="study-btn nav-btn">
-        <div class="nav-btn"></div>
-        <p class="btn-name">学习</p>
+      <div class="nav-btn-box">
+        <img class="nav-btn" src="../../assets/home-icon3@2x.png" alt="">
+        <p class="btn-name">个人中心</p>
+      </div>
+      <div class="nav-btn-box">
+        <img class="nav-btn" src="../../assets/home-icon4@2x.png" alt="">
+        <p class="btn-name">在线帮助</p>
       </div>
     </div>
-    <div class="train-box">
+    <!-- <div class="notice-box">
+      <img class="notice-left" :src="base+'notice_left.png'">
+      <div class="notice-content">
+        <swiper ref="noticeSwiper" :options="swiperOptions">
+          <swiper-slide v-for="n in 5" :key="n">
+            <span class="notice" @click="showDetails">{{'你好呀'+n}}</span>
+          </swiper-slide>
+        </swiper>
+      </div>
+      <div class="notice-right">
+        <i class="iconfont icon-right"></i>
+      </div>
+    </div> -->
+    <div class="notice-box">
+      <div class="childHeader-main">
+        <!-- <div class="ch-left">{{chTitle}}</div> -->
+        <img class="ch-left" src="../../assets/home-notice@2x.png" alt="">
+        <div class="ch-right">全部</div>
+      </div>
+      <div class="notice-content">
+        <swiper ref="noticeSwiper" :options="swiperOptions">
+          <swiper-slide v-for="n in 5" :key="n">
+            <span class="notice" @click="showDetails">{{'亚卓教育——中等职业学校数字媒体开学了'+n}}</span>
+          </swiper-slide>
+        </swiper>
+      </div>
+    </div>
+    <!-- <div class="train-box">
       <ChildHeader :chTitle="'培训'"></ChildHeader>
       <CourseItem v-for="n in 4" :key="n" :courseCount="1"></CourseItem>
-    </div>
+    </div> -->
     <div class="course-box">
       <ChildHeader :chTitle="'课程'"></ChildHeader>
       <CourseItem v-for="n in 4" :key="n" :courseTime="'1:23:20'"></CourseItem>
     </div>
     <div class="rank-box">
       <ChildHeader :chTitle="'全员排行'">
-        <div slot="rank-select" class="select-box">
-          <!-- <select class="rank-select">
-            <option value="volvo">Volvo</option>
-            <option value="saab">Saab</option>
-            <option value="opel">Opel</option>
-            <option value="audi">Audi</option>
-          </select> -->
-          <div class="select-head" @click="selectChange">
-            <input class="select-input" type="text" readonly="readonly" v-model="selectVal">
-            <div class="select-icon"></div>
-          </div>
-          <ul class="select-body" v-show="isActive" @click="selectChange">
-            <li>技术部</li>
-            <li>课程部</li>
-            <li>财务部</li>
-          </ul>
-        </div>
       </ChildHeader>
+      <div class="select-box">
+        <div class="select-head" @click="selectChange">
+          <input class="select-input" type="text" readonly="readonly" v-model="selectVal">
+          <div class="select-icon"></div>
+        </div>
+        <ul class="select-body" v-show="isActive" @click="selectChange">
+          <li>技术部</li>
+          <li>课程部</li>
+          <li>财务部</li>
+        </ul>
+      </div>
       <div class="rank-body">
         <div class="rank-title">
           <img :src="base+'rank_left.png'" alt="">
@@ -136,22 +146,21 @@ export default {
         // 自动切换图配置
         autoplay: {
           delay: 3000,
-          stopOnLastSlide: true,
-          disableOnInteraction: true
+          disableOnInteraction: false
         },
         // 箭头配置
-        navigation: {
-          nextEl: '.swiper-button-next',
-          prevEl: '.swiper-button-prev'
-        },
+        // navigation: {
+        //   nextEl: '.swiper-button-next',
+        //   prevEl: '.swiper-button-prev'
+        // },
         // 环状轮播
         loop: true,
         // loopedSlides: 3,
         // loopAdditionalSlides: 0,
         // 一个屏幕展示的数量
-        slidesPerView: 1,
+        slidesPerView: 3,
         // 间距
-        spaceBetween: 50,
+        // spaceBetween: 50,
         // 修改swiper自己或子元素时，自动初始化swiper
         observer: true,
         // 修改swiper的父元素时，自动初始化swiper
@@ -200,10 +209,11 @@ export default {
     },
     selectChange () {
       let target = event.target
-      console.log(target.innerHTML)
+      console.log(target)
       if (target.innerHTML) {
         this.selectVal = target.innerHTML
       }
+      console.log(this.isActive)
       this.isActive = !this.isActive
     },
     scrollToTop () {
@@ -240,6 +250,9 @@ export default {
         confirmButtonClass: 'confirm-button',
         cancelButtonClass: 'iconfont icon-close'
       })
+    },
+    showTabBar (val) {
+      this.$store.state.isShowTabBar = val
     }
   },
   watch: {}
@@ -286,10 +299,10 @@ export default {
       height: 200px;
       // height: 15%;
       background-color: #fff;
-      padding: 4%;
+      padding: 4% 0;
       box-sizing: border-box;
-      border-top: 1px solid rgba(227,229,230,1);
-      border-bottom: 1px solid rgba(227,229,230,1);
+      // border-top: 1px solid rgba(227,229,230,1);
+      // border-bottom: 1px solid rgba(227,229,230,1);
       @media screen and (min-width: 1200px){
         height: 360px;
       }
@@ -301,56 +314,59 @@ export default {
         height: 100%;
         background-color: #aaa;
         border-radius: 10px;
+        overflow: hidden;
         .home-banner{
           width: 100%;
           height: 100%;
         }
       }
     }
-    .notice-box{
+  }
+  .search-box{
+    width: 100%;
+    margin: 15px 0 20px;
+    .search-outer{
       width: 100%;
+      height: 29px;
       display: flex;
-      justify-content: center;
       align-items: center;
-      height: 44px;
-      // overflow: hidden;
-      padding: 0 4%;
+      border:1px solid #D2D2D2;
+      border-radius:15px;
       box-sizing: border-box;
-      .notice-left{
-        // flex: 1;
-        width: 59.5px;
-        height: 14px;
-      }
-      .notice-mid{
+      overflow: hidden;
+      padding: 0 10px;
+      input{
         flex: 1;
-        // max-width: 75%;
         height: 100%;
-        display: flex;
-        justify-content: center;
-        overflow: hidden;
-        .swiper-container{
-          width: 100%;
+        outline: none;
+        padding-right: 10px;
+        &::-webkit-input-placeholder{
+          font-size:12px;
+          font-family:AlibabaPuHuiTiL;
+          font-weight:400;
+          line-height: 1;
+          color:rgba(147,149,153,1);
         }
-        .notice{
-          display: inline-block;
-          width: 100%;
-          font-size: 18px;
-          font-family:Alibaba PuHuiTi;
-          font-weight:bold;
-          color:rgba(83,93,103,1);
-          line-height: 44px;
-          text-align: center;
-          white-space: nowrap;
-          text-overflow: ellipsis;
-          overflow: hidden;
-          padding: 0 10px;
-          box-sizing: border-box;
-          cursor: pointer;
+        &:-moz-placeholder{
+          font-size:12px;
+          font-family:AlibabaPuHuiTiL;
+          font-weight:400;
+          line-height: 1;
+          color:rgba(147,149,153,1);
         }
-      }
-      .notice-right{
-        .iconfont{
-          font-size: 16px;
+        &::-moz-placeholder{
+          font-size:12px;
+          font-family:AlibabaPuHuiTiL;
+          font-weight:400;
+          line-height: 1;
+          color:rgba(147,149,153,1);
+        }
+        &:-ms-input-placeholder{
+          font-size:12px;
+          font-family:AlibabaPuHuiTiL;
+          font-weight:400;
+          line-height: 1;
+          color:rgba(147,149,153,1);
         }
       }
     }
@@ -358,34 +374,140 @@ export default {
   .btn-group{
     display: flex;
     justify-content: space-around;
-    padding: 20px 0 30px;
-    border-bottom: 1px solid rgba(237,237,238,1);
+    padding-bottom: 30px;
+    border-bottom: 1px solid #EDEDEE;
     .nav-btn{
-      width: 48px;
-      height: 48px;
-      border-radius: 13px;
-      // border: 1px solid;
-      box-shadow:0px 1px 6px 0px rgba(179,215,255,0.73);
+      width: 53px;
+      height: 53px;
     }
     .btn-name{
       font-size:12px/1;
       font-family:Alibaba PuHuiTi;
       font-weight:bold;
       color:rgba(126,129,133,1);
-      margin-top: 12px;
+      margin-top: 5px;
       text-align: center;
     }
   }
-  .train-box{}
+  // .notice-box{
+  //   width: 100%;
+  //   display: flex;
+  //   justify-content: center;
+  //   align-items: center;
+  //   height: 44px;
+  //   // overflow: hidden;
+  //   padding: 0 4%;
+  //   box-sizing: border-box;
+  //   .notice-left{
+  //     // flex: 1;
+  //     width: 59.5px;
+  //     height: 14px;
+  //   }
+  //   .notice-content{
+  //     flex: 1;
+  //     // max-width: 75%;
+  //     height: 100%;
+  //     display: flex;
+  //     justify-content: center;
+  //     overflow: hidden;
+  //     .swiper-container{
+  //       width: 100%;
+  //     }
+  //     .notice{
+  //       display: inline-block;
+  //       width: 100%;
+  //       font-size: 18px;
+  //       font-family:Alibaba PuHuiTi;
+  //       font-weight:bold;
+  //       color:rgba(83,93,103,1);
+  //       line-height: 44px;
+  //       text-align: center;
+  //       white-space: nowrap;
+  //       text-overflow: ellipsis;
+  //       overflow: hidden;
+  //       padding: 0 10px;
+  //       box-sizing: border-box;
+  //       cursor: pointer;
+  //     }
+  //   }
+  //   .notice-right{
+  //     .iconfont{
+  //       font-size: 16px;
+  //     }
+  //   }
+  // }
+  .notice-box{
+    width: 100%;
+    height: 200px;
+    overflow: hidden;
+    box-sizing: border-box;
+    .childHeader-main{
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size:15px;
+      font-family:Alibaba PuHuiTi;
+      font-weight:400;
+      padding: 20px 0 10px;
+      .ch-left{
+        height: 14px;
+      }
+      .ch-right{
+        color: #0089FF;
+        &:active{
+          opacity: .8;
+          color: #666;
+        }
+      }
+    }
+    // .notice-left{
+    //   // flex: 1;
+    //   width: 59.5px;
+    //   height: 14px;
+    // }
+    .notice-content{
+      height: calc(100% - 55px);
+      display: flex;
+      justify-content: center;
+      overflow: hidden;
+      .swiper-container{
+        width: 100%;
+      }
+      .notice{
+        display: inline-block;
+        width: 100%;
+        font-size: 15px;
+        font-family:Alibaba PuHuiTi;
+        // font-weight:bold;
+        color:rgba(83,93,103,1);
+        line-height: 48px;
+        text-align: center;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        padding: 0 10px;
+        border-bottom: 1px solid #EDEDEE;
+        box-sizing: border-box;
+        cursor: pointer;
+      }
+    }
+    .notice-right{
+      .iconfont{
+        font-size: 16px;
+      }
+    }
+  }
   .course-box{
     border-bottom: 1px solid rgba(237,237,238,1);
   }
   .rank-box{
     .select-box{
-      position: relative;
-      left: 20%;
+      // position: relative;
+      // left: 20%;
+      padding-bottom: 20px;
       .select-head{
-        width: 100px;
+        width: 140px;
         height: 26px;
         display: flex;
         justify-content: space-between;
@@ -396,11 +518,14 @@ export default {
         border-radius:13px;
         .select-input{
           width: 100%;
+          height: 100%;
           outline: none;
           font-size:15px;
           font-family:Alibaba PuHuiTi;
           font-weight:400;
           color:rgba(126,129,133,1);
+          border-right: 1px solid #E4E5E5;
+          margin-right: 8px;
         }
       }
       .select-icon{
@@ -412,10 +537,10 @@ export default {
         // background-color: rgba(126,129,133,1);
       }
       .select-body{
-        width: 90%;
+        width: 40%;
         position: absolute;
-        top: 30px;
-        transform: translate(5%);
+        // top: 30px;
+        // transform: translateY(5%);
         box-shadow:0px 1px 3px 0px rgba(126,129,133,1);
         border-radius: 13PX;
         background-color: #fff;
@@ -498,9 +623,11 @@ export default {
     .goTop-btn{
       width: 52px;
       margin-bottom: 10px;
+      opacity: .6;
     }
     .add-btn{
       width: 52px;
+      opacity: .8;
     }
   }
   img[lazy=loading] {

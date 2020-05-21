@@ -39,7 +39,6 @@ export default {
     // 初始化数据
     // 获取章节数据
     // getCourseChapter () {
-    //   // console.log('this.$store.state.detailsData.courIdddddddddddddd', this.$store.state.detailsData.courId)
     //   this.$api.getCourseChapter({
     //     courId: this.courId,
     //     courEventId: this.courEventId,

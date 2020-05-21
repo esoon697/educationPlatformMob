@@ -76,6 +76,11 @@ Vue.use(VueLazyload, {
   attempt: 1
 })
 
+router.beforeEach((to, from, next) => {
+  store.dispatch('CLEANLOADING')
+  next()
+})
+
 Vue.config.productionTip = false
 
 const base = 'http://182.148.48.236:54321/source/educationPlatformMob/'
