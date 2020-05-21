@@ -1,6 +1,7 @@
 // 状态对象
 export default {
   loading: 0, // 全局loading状态
+  isLogin: false, // 登录状态
   formData: [],
   detailsData: {}, // 课程详情数据
   courEventId: null, // 课程id

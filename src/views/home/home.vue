@@ -206,6 +206,27 @@ export default {
         history.replaceState({}, 'educationPlatformMob', 'http://nys.yazhuokj.com/home')
         localStorage.setItem('token', token)
       }
+      this.checkToken()
+    },
+    // 验证token是否失效
+    checkToken () {
+      // token验证接口
+      let token = localStorage.getItem('token')
+      console.log('token', token)
+      if (this.isblank(token)) {
+        this.$store.state.isLogin = false
+      } else {
+        this.$api.checkTk({
+          jwt: token
+        }).then(res => {
+          if (res.code == 200 && res.data == 0) {
+            // this.$router.push({path: '/study'})
+            this.$store.state.isLogin = true
+          } else {
+            this.$store.state.isLogin = false
+          }
+        })
+      }
     },
     selectChange () {
       let target = event.target

@@ -207,7 +207,7 @@ export default {
     // 验证token是否失效
     checkToken () {
       // token验证接口
-      let orient = 'http://' + window.location.host
+      // let orient = 'http://' + window.location.host
       let token = localStorage.getItem('token')
       console.log('token', token)
       if (this.isblank(token)) {
@@ -215,7 +215,7 @@ export default {
         this.$MessageBox.confirm('您还未登录，是否重新登录?').then(() => {
           // window.location.href = 'http://portal.yazhuokj.com/login?orient=' + orient
           // window.location.href = 'http://10.10.10.213:4400/login?orient=' + orient
-          window.location.href = 'http://portal.yazhuokj.com/login?orient=' + orient
+          window.location.href = 'http://portal.yazhuokj.com/login?orient=' + this.orient
         }).catch(() => {
           this.$Toast({
             message: '操作成功',
@@ -231,7 +231,7 @@ export default {
           } else {
             this.$MessageBox.confirm('登录已失效，是否重新登录?').then(() => {
               // window.location.href = 'http://portal.yazhuokj.com/login' + '?orient=educationPlatformMob'
-              window.location.href = 'http://portal.yazhuokj.com/login?orient=' + orient
+              window.location.href = 'http://portal.yazhuokj.com/login?orient=' + this.orient
             }).catch(() => {
               this.$Toast({
                 message: '已取消',

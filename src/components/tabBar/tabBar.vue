@@ -1,19 +1,19 @@
 <template>
   <div class="tabBar-main">
     <mt-tabbar v-model="selected" fixed>
-      <mt-tab-item id="/home" @click="gotoNav('/home')">
+      <mt-tab-item id="/home">
         <img slot="icon" :src="selected=='/home'?base+'tabBar_cion1_active.png':base+'tabBar_cion1.png'">
         首页
       </mt-tab-item>
-      <mt-tab-item id="/courses" @click="gotoNav('/courses')">
+      <mt-tab-item id="/courses">
         <img slot="icon" :src="selected=='/courses'?base+'tabBar_cion2_active.png':base+'tabBar_cion2.png'">
         课程
       </mt-tab-item>
-      <mt-tab-item id="/study" @click="gotoNav('/study')">
+      <mt-tab-item id="/study">
         <img slot="icon" :src="selected=='/study'?base+'tabBar_cion3_active.png':base+'tabBar_cion3.png'">
         学习
       </mt-tab-item>
-      <mt-tab-item id="/user" @click="gotoNav('/user')">
+      <mt-tab-item id="/user">
         <img slot="icon" :src="selected=='/user'?base+'tabBar_cion4_active.png':base+'tabBar_cion4.png'">
         我的
       </mt-tab-item>
@@ -33,9 +33,7 @@ export default {
   created () {},
   mounted () {
     this.$nextTick(() => {
-      // let nowPath = this.$route.path
       this.selected = this.$route.path
-      // this.selected = nowPath
     })
   },
   computed: {
@@ -43,15 +41,7 @@ export default {
       return this.$route.path
     }
   },
-  methods: {
-    // gotoNav (path) {
-    //   console.log(path)
-    //   let nowPath = this.$route.path
-    //   if (nowPath !== path) {
-    //     this.$router.replace(path)
-    //   }
-    // }
-  },
+  methods: {},
   watch: {
     selected (val) {
       switch (val) {
@@ -61,12 +51,15 @@ export default {
           break
         case '/courses':
           this.$router.push('/courses')
+          this.selected = this.$route.path
           break
         case '/study':
           this.$router.push('/study')
+          this.selected = this.$route.path
           break
         case '/user':
           this.$router.push('/user')
+          this.selected = this.$route.path
           break
       }
     },
