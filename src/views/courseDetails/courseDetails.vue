@@ -84,6 +84,14 @@
 </template>
 
 <script>
+// let targetURL = null
+// if (process.env.NODE_ENV == 'development') {
+//   // dev开发环境
+//   targetURL = 'http://10.10.10.213:5000/login'
+// } else if (process.env.NODE_ENV == 'production') {
+//   // build生产环境
+//   targetURL = 'http://portal.yazhuokj.com/login'
+// }
 export default {
   components: {},
   props: {},
@@ -121,23 +129,6 @@ export default {
       this.isSelect = '1-' + this.currentCourId
       this.getDetailsData()
     },
-    // initPlayer () {
-    //   let vid = 'a91fdd8c80f3017598339ebeb5e94903_a'
-    //   let secretkey = 'Q1d6dsaIiG'
-    //   let ts = new Date().getTime()
-    //   let sign = this.$md5(secretkey + vid + ts)
-    //   console.log('sign', sign)
-    //   this.plPlayer = polyvObject('#previewArea').videoPlayer({
-    //     'width': '100%',
-    //     'height': '240',
-    //     'forceH5': true,
-    //     'vid': vid,
-    //     'ts': ts,
-    //     'sign': sign,
-    //     // 'playsafe': this.token,
-    //     'df': 3
-    //   })
-    // },
     initPlayer () {
       this.$api.getvideoToken({
         vid: this.vid
@@ -157,7 +148,6 @@ export default {
             'playsafe': this.playsafe,
             'df': 3
           })
-          // this.initPlayer()
         }
       })
     },
@@ -179,12 +169,6 @@ export default {
       })
     },
     removePlayer () {
-      // let parent = document.querySelector('.preview-box')
-      // let child = document.querySelector('#previewArea')
-      // if (parent && child) {
-      //   alert('q')
-      //   parent.removeChild(child)
-      // }
       this.plPlayer.destroy()
     },
     goStudy () {
@@ -207,15 +191,11 @@ export default {
     // 验证token是否失效
     checkToken () {
       // token验证接口
-      // let orient = 'http://' + window.location.host
       let token = localStorage.getItem('token')
       console.log('token', token)
       if (this.isblank(token)) {
-        // window.location.href = 'http://portal.yazhuokj.com/login' + '?orient=personalCenter'
         this.$MessageBox.confirm('您还未登录，是否重新登录?').then(() => {
-          // window.location.href = 'http://portal.yazhuokj.com/login?orient=' + orient
-          // window.location.href = 'http://10.10.10.213:4400/login?orient=' + orient
-          window.location.href = 'http://portal.yazhuokj.com/login?orient=' + this.orient
+          window.location.href = this.targetURL + '?orient=' + this.orient
         }).catch(() => {
           this.$Toast({
             message: '操作成功',
@@ -230,8 +210,7 @@ export default {
             this.$router.push({path: '/study'})
           } else {
             this.$MessageBox.confirm('登录已失效，是否重新登录?').then(() => {
-              // window.location.href = 'http://portal.yazhuokj.com/login' + '?orient=educationPlatformMob'
-              window.location.href = 'http://portal.yazhuokj.com/login?orient=' + this.orient
+              window.location.href = this.targetURL + '?orient=' + this.orient
             }).catch(() => {
               this.$Toast({
                 message: '已取消',

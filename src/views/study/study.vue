@@ -72,6 +72,10 @@ export default {
   },
   methods: {
     init () {
+      let isLogin = localStorage.getItem('isLogin')
+      if (isLogin) {
+        this.$store.state.isLogin = isLogin
+      }
       this.$store.state.theModel = null
       this.courId = this.detailsData.courId
       this.getCourseChapter()

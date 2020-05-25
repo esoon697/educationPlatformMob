@@ -123,6 +123,14 @@
 <script>
 import ChildHeader from './components/childHeader'
 import CourseItem from './components/courseItem'
+// let currentURL = null
+// if (process.env.NODE_ENV == 'development') {
+//   // dev开发环境
+//   currentURL = 'http://nys.yazhuokj.com/home'
+// } else if (process.env.NODE_ENV == 'production') {
+//   // build生产环境
+//   currentURL = 'http://edu.yazhuokj.com/home'
+// }
 export default {
   components: {ChildHeader, CourseItem},
   props: {},
@@ -203,8 +211,8 @@ export default {
       // 获取token
       let token = this.$route.query.token
       if (token) {
-        history.replaceState({}, 'educationPlatformMob', 'http://nys.yazhuokj.com/home')
         localStorage.setItem('token', token)
+        history.replaceState({}, 'educationPlatformMob', this.currentURL)
       }
       this.checkToken()
     },
@@ -215,15 +223,17 @@ export default {
       console.log('token', token)
       if (this.isblank(token)) {
         this.$store.state.isLogin = false
+        this.storageSet('isLogin', false)
       } else {
         this.$api.checkTk({
           jwt: token
         }).then(res => {
           if (res.code == 200 && res.data == 0) {
-            // this.$router.push({path: '/study'})
             this.$store.state.isLogin = true
+            this.storageSet('isLogin', true)
           } else {
             this.$store.state.isLogin = false
+            this.storageSet('isLogin', false)
           }
         })
       }
@@ -234,7 +244,6 @@ export default {
       if (target.innerHTML) {
         this.selectVal = target.innerHTML
       }
-      console.log(this.isActive)
       this.isActive = !this.isActive
     },
     scrollToTop () {

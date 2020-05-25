@@ -76,15 +76,35 @@ Vue.use(VueLazyload, {
   attempt: 1
 })
 
+let targetURL = null
+let currentURL = null
+if (process.env.NODE_ENV == 'development') {
+  // dev开发环境
+  targetURL = 'http://10.10.10.213:5000/login'
+  currentURL = 'http://nys.yazhuokj.com/home'
+  Vue.prototype.targetURL = targetURL
+  Vue.prototype.currentURL = currentURL
+} else if (process.env.NODE_ENV == 'production') {
+  // build生产环境
+  targetURL = 'http://portal.yazhuokj.com/login'
+  currentURL = 'http://edu.yazhuokj.com/home'
+  Vue.prototype.targetURL = targetURL
+  Vue.prototype.currentURL = currentURL
+}
+const orient = 'http://' + window.location.host
+Vue.prototype.orient = orient
+
 router.beforeEach((to, from, next) => {
   store.dispatch('CLEANLOADING')
   console.log(to.meta.requiresAuth)
   if (to.meta.requiresAuth) {
-    if (store.state.isLogin) {
+    let isLogin = Vue.prototype.storageGet('isLogin')
+    console.log('isLogin', isLogin)
+    if (isLogin == true) {
       next()
     } else {
       MessageBox.confirm('您还未登录，是否重新登录?').then(() => {
-        window.location.href = 'http://portal.yazhuokj.com/login?orient=' + orient
+        window.location.href = targetURL + '?orient=' + orient
       }).catch((e) => {
         console.log(e)
       })
@@ -99,9 +119,6 @@ Vue.config.productionTip = false
 
 const base = 'http://182.148.48.236:54321/source/educationPlatformMob/'
 Vue.prototype.base = base
-
-const orient = 'http://' + window.location.host
-Vue.prototype.orient = orient
 
 /* eslint-disable no-new */
 new Vue({

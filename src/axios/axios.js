@@ -24,7 +24,8 @@ if (process.env.NODE_ENV == 'development') {
 } else if (process.env.NODE_ENV == 'production') {
   // build生产环境
   // config.baseURL = 'xxx'
-  config.baseURL = 'http://10.10.10.240:8001'
+  config.baseURL = 'http://api.yazhuokj.com'
+  // config.baseURL = 'http://api.yazhuo.com'
 }
 
 const _axios = axios.create(config)
