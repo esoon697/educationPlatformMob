@@ -20,7 +20,9 @@ const api = {
   checkTk: data => get('http://api.yazhuokj.com/common/api/checkJWT', data),
   // 保利威视频权限验证
   getvideoToken: data => get('/upload/getvideo/token', data),
-  get: data => get('/study/finallydo', data)
+  get: data => get('/study/finallydo', data),
+  // 钉钉code免登
+  postDingLogin: data => get('http://cgh.yazhuokj.com/login/ding', data)
 }
 
 export default api

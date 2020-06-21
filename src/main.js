@@ -12,6 +12,7 @@ import 'swiper/css/swiper.css'
 import VueLazyload from 'vue-lazyload'
 import VuePreview from 'vue-preview'
 import './utils/utils'
+import * as dd from 'dingtalk-jsapi'
 import {
   Header,
   Navbar,
@@ -49,6 +50,8 @@ Vue.prototype.$Toast = Toast
 
 // 将api挂载到vue的原型上
 Vue.prototype.$api = api
+
+Vue.prototype.$dd = dd // 将api挂载到vue的原型上
 
 // 解决移动端点击事件300ms延迟问题
 fastClick.attach(document.body)
