@@ -79,10 +79,32 @@ Vue.use(VueLazyload, {
   attempt: 1
 })
 
+router.beforeEach((to, from, next) => {
+  store.dispatch('CLEANLOADING')
+  console.log(to.meta.requiresAuth)
+  if (to.meta.requiresAuth) {
+    if (store.state.isLogin) {
+      next()
+    } else {
+      MessageBox.confirm('您还未登录，是否重新登录?').then(() => {
+        window.location.href = 'http://portal.yazhuokj.com/login?orient=' + orient
+      }).catch((e) => {
+        console.log(e)
+      })
+      next({path: '/courses'})
+    }
+  } else {
+    next()
+  }
+})
+
 Vue.config.productionTip = false
 
 const base = 'http://182.148.48.236:54321/source/educationPlatformMob/'
 Vue.prototype.base = base
+
+const orient = 'http://' + window.location.host
+Vue.prototype.orient = orient
 
 /* eslint-disable no-new */
 new Vue({

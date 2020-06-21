@@ -3,24 +3,29 @@
     <router-view/>
     <TabBar v-if="isShowTabBar"/>
     <MyVuePreview v-if="isPreview"/>
+    <!-- <div class="whole-loading" v-if="loading">loading...</div> -->
+    <div class="whole-loading" v-if="loading">
+      <img src="../static/imgs/loading_transparency.gif" alt="">
+    </div>
   </div>
 </template>
 
 <script>
 import TabBar from './components/tabBar/tabBar'
 import MyVuePreview from './components/myVuePreview/myVuePreview'
-import {mapState} from 'vuex'
+import {mapState, mapGetters} from 'vuex'
 export default {
   name: 'App',
   components: {TabBar, MyVuePreview},
   data () {
     return {
       // isPreview: false
-      isShowTabBar: true
+      // isShowTabBar: true
     }
   },
   computed: {
-    ...mapState(['isPreview'])
+    ...mapState(['isPreview', 'isShowTabBar']),
+    ...mapGetters(['loading'])
   },
   created () {
     // 在页面刷新时将vuex里的信息保存到localStorage里
@@ -45,10 +50,10 @@ export default {
       function onMatchMeidaChange (mql) {
         if (mql.matches) {
           // 竖屏
-          that.isShowTabBar = true
+          that.$store.state.isShowTabBar = true
         } else {
           // 横屏
-          that.isShowTabBar = false
+          that.$store.state.isShowTabBar = false
         }
       }
       onMatchMeidaChange(mql)
@@ -64,6 +69,22 @@ export default {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   padding-bottom: 55px;
+  .whole-loading{
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    margin: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    // background-color: #000;
+    // font-family: Alibaba PuHuiTi;
+    // color: #7d848b;
+    // font-size: 18px;
+    z-index: 99999;
+  }
 }
 .mint-toast-icon{
   font-size: 30px;

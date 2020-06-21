@@ -9,8 +9,8 @@
     <!-- tab-container -->
     <mt-tab-container v-model="selected">
       <mt-tab-container-item id="1">
-        <div v-if="!coursesList.length" class="courses-bg">加载中...</div>
-        <template v-else>
+        <!-- <div v-if="!coursesList.length" class="courses-bg">加载中...</div> -->
+        <template>
           <div class="content-outer-box" v-for="(courses, index) in coursesList" :key="index">
             <div class="content-box">
               <div class="content-title">{{courses.courseTypeName}}</div>
@@ -322,16 +322,15 @@ export default {
       }
     }
   }
-  .courses-bg{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-family: Alibaba PuHuiTi;
-    // font-weight: bold;
-    color: #7d848b;
-    font-size: 14px;
-    height: 100vh;
-  }
+  // .courses-bg{
+  //   display: flex;
+  //   justify-content: center;
+  //   align-items: center;
+  //   font-family: Alibaba PuHuiTi;
+  //   color: #7d848b;
+  //   font-size: 14px;
+  //   height: 100vh;
+  // }
   .help-box{
     display: flex;
     justify-content: center;

@@ -3,6 +3,8 @@ import axios from 'axios'
 // import qs from 'qs'
 import router from '../router'
 import Vue from 'vue'
+import store from '../store'
+// import Vuex from 'vuex'
 // import { Message } from 'ant-design-vue'
 // Vue.use(Message)
 // Vue.prototype.$message = Message
@@ -11,6 +13,8 @@ let config = {
   timeout: 60 * 1000 // Timeout
   // withCredentials: true, // Check cross-site Access-Control
 }
+
+let self = Vue.prototype
 
 if (process.env.NODE_ENV == 'development') {
   // dev开发环境
@@ -31,6 +35,7 @@ _axios.defaults.headers.common['Authorization'] = localStorage.getItem('token')
 
 _axios.interceptors.request.use(
   function (config) {
+    store.dispatch('SetLoding', true)
     // Do something before request is sent
     if (localStorage.getItem('token')) {
       config.headers.common['Authorization'] = localStorage.getItem('token')
@@ -47,11 +52,10 @@ _axios.interceptors.request.use(
   }
 )
 
-let self = Vue.prototype
-
 // Add a response interceptor
 _axios.interceptors.response.use(
   function (response) {
+    store.dispatch('SetLoding', false)
     if (response.status == 200) {
       // 接口状态正常
       return Promise.resolve(response)
@@ -68,6 +72,17 @@ _axios.interceptors.response.use(
         }
       )
     } else {
+      // 如果数据请求失败
+      // let message = ''
+      // let prefix = res.config.method !== 'get' ? '操作失败：' : '请求失败：'
+      // switch (response.status) {
+      //   case 400: message = prefix + '请求参数缺失'; break
+      //   case 401: message = prefix + '认证未通过'; break
+      //   case 404: message = prefix + '此数据不存在'; break
+      //   case 406: message = prefix + '条件不满足'; break
+      //   default: message = prefix + '服务器出错了'; break
+      // }
+      // let error = new Error(message)
       // 接口状态异常
       self.$Toast({
         message: response.data.message + '接口状态异常',
@@ -77,6 +92,7 @@ _axios.interceptors.response.use(
     }
   },
   function (err) {
+    store.dispatch('SetLoding', false)
     self.$Toast({
       message: err,
       iconClass: 'iconfont icon-red-error'
