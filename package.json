@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "axios": "^0.19.2",
+    "dingtalk-jsapi": "^2.11.2",
     "fastclick": "^1.0.6",
     "lib-flexible": "^0.3.2",
     "mint-ui": "^2.2.13",
