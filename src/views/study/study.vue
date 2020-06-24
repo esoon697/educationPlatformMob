@@ -72,10 +72,10 @@ export default {
   },
   methods: {
     init () {
-      let isLogin = localStorage.getItem('isLogin')
-      if (isLogin) {
-        this.$store.state.isLogin = isLogin
-      }
+      // let isLogin = localStorage.getItem('isLogin')
+      // if (isLogin) {
+      //   this.$store.state.isLogin = isLogin
+      // }
       this.$store.state.theModel = null
       this.courId = this.detailsData.courId
       this.getCourseChapter()
@@ -92,6 +92,8 @@ export default {
           if (!res.data.chapters.length) {
             this.$Toast('该课程暂无数据')
             return
+          } else {
+            // this.$Toast(res.message)
           }
           this.chapters = res.data.chapters
           this.currentChapterId = res.data.currentChapterId

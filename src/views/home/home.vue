@@ -192,6 +192,7 @@ export default {
   },
   created () {
     // this.init()
+    // window.localStorage.clear()
     this.dingdingInt()
   },
   mounted () {
@@ -208,6 +209,7 @@ export default {
     }
   },
   methods: {
+    // 普通登录初始化
     init () {
       // 获取token
       let token = this.$route.query.token
@@ -282,6 +284,7 @@ export default {
         cancelButtonClass: 'iconfont icon-close'
       })
     },
+    // 钉钉免登
     dingdingInt () {
       let dd = this.$dd
       const host = window.location.host
@@ -317,7 +320,7 @@ export default {
         if (res.code === 200) {
           console.log(res)
           // window.location.href = this.ipUrl
-          localStorage.setItem('token', res.token)
+          localStorage.setItem('token', res.message)
         } else {
           window.location.href = this.ipUrl
         }

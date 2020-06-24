@@ -22,7 +22,7 @@ const api = {
   getvideoToken: data => get('/upload/getvideo/token', data),
   get: data => get('/study/finallydo', data),
   // 钉钉code免登
-  postDingLogin: data => get('http://cgh.yazhuokj.com/login/ding', data)
+  postDingLogin: data => get('/dinglogin/login/ding', data)
 }
 
 export default api

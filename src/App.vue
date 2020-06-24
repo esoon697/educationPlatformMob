@@ -37,6 +37,7 @@ export default {
   },
   mounted () {
     this.queryorIentation()
+    this.loadingTimeout()
   },
   methods: {
     // 查询屏幕方向
@@ -58,6 +59,14 @@ export default {
       }
       onMatchMeidaChange(mql)
       mql.addListener(onMatchMeidaChange)
+    },
+    loadingTimeout () {
+      if (this.$store.state.loading !== 0) {
+        let timer = setTimeout(() => {
+          this.$store.dispatch('SetLoding', 0)
+          clearTimeout(timer)
+        }, 5 * 1000)
+      }
     }
   }
 }

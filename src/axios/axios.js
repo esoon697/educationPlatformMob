@@ -18,9 +18,10 @@ let self = Vue.prototype
 
 if (process.env.NODE_ENV == 'development') {
   // dev开发环境
-  config.baseURL = 'api'
+  // config.baseURL = 'api'
   // config.baseURL = 'http://10.10.10.211:7004'
   // config.baseURL = 'http://10.10.10.240:8001'
+  config.baseURL = 'http://api.yazhuokj.com'
 } else if (process.env.NODE_ENV == 'production') {
   // build生产环境
   // config.baseURL = 'xxx'
@@ -32,11 +33,11 @@ const _axios = axios.create(config)
 
 // _axios.defaults.headers.post['Content-Type'] = "application/x-www-form-urlencoded"
 // _axios.defaults.headers.post['Content-Type'] = "application/json; charset=utf-8"
-_axios.defaults.headers.common['Authorization'] = localStorage.getItem('token')
+// _axios.defaults.headers.common['Authorization'] = localStorage.getItem('token')
 
 _axios.interceptors.request.use(
   function (config) {
-    store.dispatch('SetLoding', true)
+    store.dispatch('SetLoding', 1)
     // Do something before request is sent
     if (localStorage.getItem('token')) {
       config.headers.common['Authorization'] = localStorage.getItem('token')
@@ -49,6 +50,7 @@ _axios.interceptors.request.use(
   },
   function (error) {
     // Do something with request error
+    store.dispatch('SetLoding', 0)
     return Promise.reject(error)
   }
 )
@@ -56,7 +58,7 @@ _axios.interceptors.request.use(
 // Add a response interceptor
 _axios.interceptors.response.use(
   function (response) {
-    store.dispatch('SetLoding', false)
+    store.dispatch('SetLoding', 0)
     if (response.status == 200) {
       // 接口状态正常
       return Promise.resolve(response)
@@ -85,6 +87,7 @@ _axios.interceptors.response.use(
       // }
       // let error = new Error(message)
       // 接口状态异常
+      store.dispatch('SetLoding', 0)
       self.$Toast({
         message: response.data.message + '接口状态异常',
         iconClass: 'iconfont icon-red-error'
@@ -93,7 +96,7 @@ _axios.interceptors.response.use(
     }
   },
   function (err) {
-    store.dispatch('SetLoding', false)
+    store.dispatch('SetLoding', 0)
     self.$Toast({
       message: err,
       iconClass: 'iconfont icon-red-error'

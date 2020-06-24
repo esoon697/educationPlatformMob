@@ -97,26 +97,26 @@ if (process.env.NODE_ENV == 'development') {
 const orient = 'http://' + window.location.host
 Vue.prototype.orient = orient
 
-router.beforeEach((to, from, next) => {
-  store.dispatch('CLEANLOADING')
-  console.log(to.meta.requiresAuth)
-  if (to.meta.requiresAuth) {
-    let isLogin = Vue.prototype.storageGet('isLogin')
-    console.log('isLogin', isLogin)
-    if (isLogin == true) {
-      next()
-    } else {
-      MessageBox.confirm('您还未登录，是否重新登录?').then(() => {
-        window.location.href = targetURL + '?orient=' + orient
-      }).catch((e) => {
-        console.log(e)
-      })
-      next({path: '/courses'})
-    }
-  } else {
-    next()
-  }
-})
+// router.beforeEach((to, from, next) => {
+//   store.dispatch('CLEANLOADING')
+//   console.log(to.meta.requiresAuth)
+//   if (to.meta.requiresAuth) {
+//     let isLogin = Vue.prototype.storageGet('isLogin')
+//     console.log('isLogin', isLogin)
+//     if (isLogin == true) {
+//       next()
+//     } else {
+//       MessageBox.confirm('您还未登录，是否重新登录?').then(() => {
+//         window.location.href = targetURL + '?orient=' + orient
+//       }).catch((e) => {
+//         console.log(e)
+//       })
+//       next({path: '/courses'})
+//     }
+//   } else {
+//     next()
+//   }
+// })
 
 Vue.config.productionTip = false
 

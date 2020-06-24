@@ -51,8 +51,8 @@
             <div class="resources-load">
               <div class="lit-title">资源下载</div>
               <ul>
-                <li class="resource" v-for="n in 3" :key="n">
-                  <p class="resource-name">1-10-2 技行天下——自信心重构课前资源.rar</p>
+                <li class="resource" v-for="(courseResourcePackage,index) in courseResourcePackages" :key="index">
+                  <p class="resource-name">{{courseResourcePackage.resourceName}}</p>
                   <!-- <mt-button type="primary" size="small">下载</mt-button> -->
                   <a class="load-btn" href="javascript:;" @click="downLoad(n)">下载</a>
                 </li>
@@ -61,15 +61,15 @@
             <div class="team-info">
               <div class="lit-title">团队信息</div>
               <ul>
-                <li class="member-info" v-for="n in 3" :key="n">
+                <li class="member-info" v-for="(courExpert, index) in courExperts" :key="index">
                   <div class="member">
-                    <img v-lazy="base+'courses-avatar1.jpg'" alt="" lazy="loading">
+                    <img v-lazy="courExpert.infmImgUri" alt="" lazy="loading">
                     <p class="name">
-                      <span>汪永智</span>
-                      <span>教授</span>
+                      <span>{{courExpert.infmTitle}}</span>
+                      <span>{{courExpert.title}}</span>
                     </p>
                   </div>
-                  <p class="member-intro">中国职教学会德育工作委员会副主任，中国职教学会班主任与师德建设研究中心主任。</p>
+                  <p class="member-intro">{{courExpert.infmContent}}</p>
                 </li>
               </ul>
             </div>
@@ -104,6 +104,8 @@ export default {
       isPlay: false,
       currentCourId: null,
       detailsData: {},
+      courExperts: {},
+      courseResourcePackages: {},
       vid: null,
       ts: null,
       sign: null,
@@ -140,7 +142,7 @@ export default {
           this.playsafe = res.data.token
           this.plPlayer = polyvObject('#previewArea').videoPlayer({
             'width': '100%',
-            'height': '260',
+            'height': '260px',
             'forceH5': true,
             'vid': this.vid,
             'ts': this.ts,
@@ -156,15 +158,16 @@ export default {
         id: this.currentCourId
       }).then(res => {
         if (res.code == 200) {
-          this.detailsData = res.data
-          this.courId = res.data.courId
-          this.$store.state.detailsData = res.data
-          this.vid = res.data.demonstrationUri.uri
+          this.detailsData = res.data.detail
+          this.courExperts = res.data.courExpert
+          this.courseResourcePackages = res.data.courseResourcePackages
+          this.courId = this.detailsData.courId
+          this.$store.state.detailsData = res.data.detail
+          this.vid = this.detailsData.demonstrationUri.uri
           if (this.plPlayer) {
             this.removePlayer()
           }
           this.initPlayer()
-          // this.initPlayer()
         }
       })
     },
@@ -172,7 +175,8 @@ export default {
       this.plPlayer.destroy()
     },
     goStudy () {
-      this.checkToken()
+      this.$router.push({path: '/study'})
+      // this.checkToken()
     },
     getActive (n) {
       console.log(n)
@@ -367,10 +371,11 @@ export default {
             margin-bottom: 6%;
             .preview-box{
               width: 100%;
+              height: 100%;
               position: relative;
               .video-box{
                 width: 100%;
-                height: 260px;
+                // height: 260px;
                 background-color: #000;
               }
             }
@@ -475,7 +480,7 @@ export default {
               align-items: center;
               margin-bottom: 5%;
               .member{
-                flex: 1;
+                width: 25%;
                 margin-right: 20px;
                 display: flex;
                 img{
