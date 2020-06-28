@@ -16,7 +16,7 @@
               <div class="content-title">{{courses.courseTypeName}}</div>
               <div class="content-inner-box">
                 <div class="content-card" v-for="(course, index) in courses.courseEventList" :key="index" @click="goCoursesDetails(course.courEventId)">
-                  <img class="card-top" :src="base+'card_eg.jpg'" alt="">
+                  <img class="card-top" :src="course.coverUri" alt="">
                   <p class="card-mid">{{course.openName}}</p>
                   <div class="card-bottom">{{course.courHour}}学时</div>
                 </div>

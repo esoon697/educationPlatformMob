@@ -22,7 +22,7 @@ export default {
   computed: {},
   methods: {
     goAll () {
-      alert('all!!!!!', this.allType)
+      this.$router.push({path: './courses'})
     }
   },
   watch: {}

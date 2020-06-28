@@ -1,19 +1,19 @@
 <template>
-  <div class="courseItem-main">
+  <div class="courseItem-main" @click="goCoursesDetails(initCourse.courEventId)">
     <div class="course-left">
-      <img v-lazy="base+'card_eg.jpg'" alt="" lazy="loading">
-      <div class="course-count" v-if="courseCount">{{courseCount}}节课</div>
-      <div class="course-play" v-else>
+      <img v-lazy="initCourse.coverUri" alt="" lazy="loading">
+      <!-- <div class="course-count" v-if="courseCount">{{initCourse}}节课</div> -->
+      <!-- <div class="course-play">
         <img :src="base+'home_play_icon.png'" alt="">
-      </div>
+      </div> -->
     </div>
     <div class="course-right">
-      <p class="course-title">4招搞掂培训需求调查</p>
+      <p class="course-title">{{initCourse.openName}}</p>
       <div class="course-content">
-        <span>课程概述：通过本系列课程学习，...</span>
+        <span>{{initCourse.openDescription}}</span>
       </div>
-      <div class="course-time" v-if="courseTime">
-        <span>时长：1:23:20</span>
+      <div class="course-time" v-if="initCourse.courHour">
+        <span>{{initCourse.courHour}}学时</span>
       </div>
     </div>
   </div>
@@ -22,7 +22,7 @@
 <script>
 export default {
   components: {},
-  props: ['courseCount', 'courseTime'],
+  props: ['initCourse'],
   data () {
     return {
     }
@@ -30,14 +30,19 @@ export default {
   created () {},
   mounted () {},
   computed: {},
-  methods: {},
+  methods: {
+    goCoursesDetails (id) {
+      console.log(id)
+      this.$router.push({path: './courseDetails', query: {id: id}})
+    }
+  },
   watch: {}
 }
 </script>
 <style lang="less" scoped>
 .courseItem-main{
   display: flex;
-  justify-content: center;
+  justify-content: flex-start;
   margin-bottom: 60px;
   .course-left{
     width: 40%;
@@ -71,19 +76,25 @@ export default {
     }
   }
   .course-right{
+    width: 60%;
     font-family:Alibaba PuHuiTi;
     font-weight:400;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
     .course-title{
-      font-size:15px/1;
+      font-size:15px;
       color:rgba(17,32,45,1);
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
     }
     .course-content{
-      font-size:13px/1;
+      font-size:13px;
+      line-height: 1.8;
       color:rgba(126,129,133,1);
-      margin: 16px 0;
+      margin: 10px 0;
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 2;
+      overflow: hidden;
     }
     .course-time{
       font-size:11px/1;

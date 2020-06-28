@@ -20,7 +20,7 @@ if (process.env.NODE_ENV == 'development') {
   // dev开发环境
   // config.baseURL = 'api'
   // config.baseURL = 'http://10.10.10.211:7004'
-  // config.baseURL = 'http://10.10.10.240:8001'
+  // config.baseURL = 'http://10.10.10.211:8001'
   config.baseURL = 'http://api.yazhuokj.com'
 } else if (process.env.NODE_ENV == 'production') {
   // build生产环境

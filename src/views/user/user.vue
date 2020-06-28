@@ -1,9 +1,9 @@
 <template>
   <div class="user-main">
     <div class="user-head">
-      <img class="user-avatar" :src="base+'rank-avatar1.jpg'" alt="">
+      <img class="user-avatar" :src="userData.avatar?userData.avatar:base+'rank-avatar1.jpg'" alt="">
       <div class="user-info">
-        <p class="user-name">四川亚卓教育科技股份有限公司</p>
+        <p class="user-name">{{userData.name}}</p>
         <p class="user-course">共学0.07分钟</p>
       </div>
     </div>
@@ -43,7 +43,8 @@
 </template>
 
 <script>
-import VuePreview from '../../components//vuePreview//vuePreview'
+import VuePreview from '../../components/vuePreview/vuePreview'
+import {mapState} from 'vuex'
 export default {
   components: {VuePreview},
   props: [''],
@@ -53,7 +54,9 @@ export default {
     }
   },
 
-  computed: {},
+  computed: {
+    ...mapState(['userData'])
+  },
 
   created () {},
 

@@ -13,5 +13,6 @@ export default {
   previewImgs: null, // 预览图片列表
   taskList: null, // 当前章节互动列表
   activeList: null, // 打开状态的chapters节点
-  isShowTabBar: true
+  isShowTabBar: true,
+  userData: null // 钉钉用户信息
 }

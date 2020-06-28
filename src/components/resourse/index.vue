@@ -124,7 +124,6 @@ export default {
       this.isLast = false
       console.log('this.resourcesssssssssss', this.resourses)
       this.swiper.scrollbar.$dragEl.css('background', '#0089FF')
-      // this.swiper.scrollbar.$dragEl.css('height', '10px')
       if (!this.resourses) {
         return
       }

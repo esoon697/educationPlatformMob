@@ -92,8 +92,6 @@ export default {
           if (!res.data.chapters.length) {
             this.$Toast('该课程暂无数据')
             return
-          } else {
-            // this.$Toast(res.message)
           }
           this.chapters = res.data.chapters
           this.currentChapterId = res.data.currentChapterId

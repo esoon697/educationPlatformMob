@@ -78,8 +78,8 @@
       <CourseItem v-for="n in 4" :key="n" :courseCount="1"></CourseItem>
     </div> -->
     <div class="course-box">
-      <ChildHeader :chTitle="'课程'"></ChildHeader>
-      <CourseItem v-for="n in 4" :key="n" :courseTime="'1:23:20'"></CourseItem>
+      <ChildHeader :chTitle="'推荐课程'"></ChildHeader>
+      <CourseItem v-for="(initCourse, index) in initCourses" :key="index" :initCourse="initCourse"></CourseItem>
     </div>
     <div class="rank-box">
       <ChildHeader :chTitle="'全员排行'">
@@ -187,13 +187,15 @@ export default {
           id: 3,
           url: this.base + 'home-banner3.jpg'
         }
-      ]
+      ],
+      initCourses: []
     }
   },
   created () {
     // this.init()
     // window.localStorage.clear()
     this.dingdingInt()
+    this.getEduInfo()
   },
   mounted () {
     this.$nextTick(() => {
@@ -284,11 +286,20 @@ export default {
         cancelButtonClass: 'iconfont icon-close'
       })
     },
+    // 获取首页课程数据
+    getEduInfo () {
+      this.$api.getEduInfo().then(res => {
+        if (res.code === 200) {
+          console.log('getEduInfo', res.data)
+          this.initCourses = res.data[0].courseEventList
+        }
+      })
+    },
     // 钉钉免登
     dingdingInt () {
       let dd = this.$dd
       const host = window.location.host
-      this.ipUrl = 'http://' + host + '/home'
+      this.ipUrl = 'http://' + host + '/mobile'
       let that = this
       dd.ready(function () {
         var strs
@@ -297,6 +308,8 @@ export default {
           var str = url.substr(1)
           strs = str.split('=')
           that.corpId = strs[1]
+        } else {
+          return
         }
         dd.runtime.permission.requestAuthCode({
           corpId: that.corpId,
@@ -320,9 +333,10 @@ export default {
         if (res.code === 200) {
           console.log(res)
           // window.location.href = this.ipUrl
+          history.pushState({}, this.ipUrl)
           localStorage.setItem('token', res.message)
-        } else {
-          window.location.href = this.ipUrl
+          this.$store.state.userData = res.data
+          this.getEduInfo()
         }
       })
     },
