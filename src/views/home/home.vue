@@ -28,20 +28,20 @@
       </div>
     </div>
     <div class="btn-group">
-      <div class="nav-btn-box">
+      <div class="nav-btn-box" @click="goNav('/blank')">
         <!-- <div class="nav-btn"></div> -->
         <img class="nav-btn" src="../../assets/home-icon1@2x.png" alt="">
         <p class="btn-name">公告</p>
       </div>
-      <div class="nav-btn-box">
+      <div class="nav-btn-box" @click="goNav('/courses')">
         <img class="nav-btn" src="../../assets/home-icon2@2x.png" alt="">
         <p class="btn-name">课程</p>
       </div>
-      <div class="nav-btn-box">
+      <div class="nav-btn-box" @click="goNav('/user')">
         <img class="nav-btn" src="../../assets/home-icon3@2x.png" alt="">
         <p class="btn-name">个人中心</p>
       </div>
-      <div class="nav-btn-box">
+      <div class="nav-btn-box" @click="goNav('/blank')">
         <img class="nav-btn" src="../../assets/home-icon4@2x.png" alt="">
         <p class="btn-name">在线帮助</p>
       </div>
@@ -86,13 +86,13 @@
       </ChildHeader>
       <div class="select-box">
         <div class="select-head" @click="selectChange">
-          <input class="select-input" type="text" readonly="readonly" v-model="selectVal">
+          <input class="select-input" type="text" readonly="readonly" v-model="selectLabel">
           <div class="select-icon"></div>
         </div>
         <ul class="select-body" v-show="isActive" @click="selectChange">
-          <li>技术部</li>
-          <li>课程部</li>
-          <li>财务部</li>
+          <li v-for="item in selectOptions" :key="item.value" @click="getSelectVal(item)">{{item.label}}</li>
+          <!-- <li>课程部</li>
+          <li>财务部</li> -->
         </ul>
       </div>
       <div class="rank-body">
@@ -136,7 +136,8 @@ export default {
   props: {},
   data () {
     return {
-      selectVal: '全部',
+      selectLabel: '全部',
+      selectVal: '0',
       isActive: false,
       showBtn: false,
       scrollTop: 0,
@@ -188,7 +189,25 @@ export default {
           url: this.base + 'home-banner3.jpg'
         }
       ],
-      initCourses: []
+      initCourses: [],
+      selectOptions: [
+        {
+          label: '全部',
+          value: '0'
+        },
+        {
+          label: '技术部',
+          value: '1'
+        },
+        {
+          label: '课程部',
+          value: '2'
+        },
+        {
+          label: '制作部',
+          value: '3'
+        }
+      ]
     }
   },
   created () {
@@ -244,12 +263,16 @@ export default {
       }
     },
     selectChange () {
-      let target = event.target
-      console.log(target)
-      if (target.innerHTML) {
-        this.selectVal = target.innerHTML
-      }
+      // let target = event.target
+      // console.log(target)
+      // if (target.innerHTML) {
+      //   this.selectLabel = target.innerHTML
+      // }
       this.isActive = !this.isActive
+    },
+    getSelectVal (item) {
+      this.selectLabel = item.label
+      this.selectVal = item.value
     },
     scrollToTop () {
       const _this = this
@@ -272,6 +295,10 @@ export default {
           clearInterval(timer)
         }
       }, 30)
+    },
+    // 首页跳转按钮
+    goNav (path) {
+      this.$router.push(path)
     },
     showDetails (event) {
       let message = event.target.innerHTML
@@ -604,6 +631,7 @@ export default {
         border:1px solid rgba(228,229,229,1);
         padding: 0 10px;
         box-sizing: border-box;
+        overflow: hidden;
         border-radius:13px;
         .select-input{
           width: 100%;
@@ -613,7 +641,7 @@ export default {
           font-family:Alibaba PuHuiTi;
           font-weight:400;
           color:rgba(126,129,133,1);
-          border-right: 1px solid #E4E5E5;
+          // border-right: 1px solid #E4E5E5;
           margin-right: 8px;
         }
       }
@@ -630,11 +658,13 @@ export default {
         position: absolute;
         // top: 30px;
         // transform: translateY(5%);
+        list-style: none;
         box-shadow:0px 1px 3px 0px rgba(126,129,133,1);
         border-radius: 13PX;
         background-color: #fff;
         z-index: 3;
         li{
+          width: 100%;
           text-align: center;
           height: 25px;
           line-height: 25px;

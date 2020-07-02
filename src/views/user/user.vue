@@ -1,9 +1,9 @@
 <template>
   <div class="user-main">
     <div class="user-head">
-      <img class="user-avatar" :src="userData.avatar?userData.avatar:base+'rank-avatar1.jpg'" alt="">
+      <img class="user-avatar" :src="userData&&userData.avatar?userData.avatar:base+'rank-avatar1.jpg'" alt="">
       <div class="user-info">
-        <p class="user-name">{{userData.name}}</p>
+        <p class="user-name">{{userData?userData.name:'游客'}}</p>
         <p class="user-course">共学0.07分钟</p>
       </div>
     </div>

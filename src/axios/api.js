@@ -19,6 +19,7 @@ const api = {
   // 验证token是否失效
   checkTk: data => get('http://api.yazhuokj.com/common/api/checkJWT', data),
   // 保利威视频权限验证
+  getvideoToken1: data => get('/upload/getvideo/tokenmobile', data),
   getvideoToken: data => get('/upload/getvideo/token', data),
   get: data => get('/study/finallydo', data),
   // 钉钉code免登

@@ -132,7 +132,7 @@ export default {
       this.getDetailsData()
     },
     initPlayer () {
-      this.$api.getvideoToken({
+      this.$api.getvideoToken1({
         vid: this.vid
       }).then(res => {
         if (res.code == 200) {
@@ -142,12 +142,12 @@ export default {
           this.playsafe = res.data.token
           this.plPlayer = polyvObject('#previewArea').videoPlayer({
             'width': '100%',
-            'height': '260px',
-            'forceH5': true,
+            'height': '225px',
+            // 'forceH5': true,
             'vid': this.vid,
             'ts': this.ts,
             'sign': this.sign,
-            'playsafe': this.playsafe,
+            // 'playsafe': this.playsafe,
             'df': 3
           })
         }
@@ -522,10 +522,10 @@ export default {
   }
   .resourse-bg{
   width: 100%;
-  height: 260px;
+  height: 225px;
   background-color: #000;
   color: white;
-  line-height: 260px;
+  line-height: 225px;
   text-align: center;
   font-size:18px;
   font-family:Alibaba PuHuiTi;

@@ -5,6 +5,7 @@ import Courses from '@/views/courses/courses'
 import Study from '@/views/study/study'
 import User from '@/views/user/user'
 import CourseDetails from '@/views/courseDetails/courseDetails'
+import BlankPage from '@/views/blankPage/blankPage'
 
 // 解决vue路由跳转相同的地址，即在当前路由下重复当前路由报错
 const routerPush = Router.prototype.push
@@ -43,6 +44,11 @@ export default new Router({
       path: '/courseDetails',
       name: 'CourseDetails',
       component: CourseDetails
+    },
+    {
+      path: '/blank',
+      name: 'BlankPage',
+      component: BlankPage
     }
   ]
 })
